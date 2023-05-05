@@ -74,3 +74,46 @@ When("I click the internal tags new tag button", async function () {
     let element = await this.driver.$(`a.gh-btn.gh-btn-green.gh-btn-lg.ember-view`);
     return await element.click();
 });
+
+
+// Feature posts
+
+When("I click posts button", async function () {
+  let element = await this.driver.$("#ember28");
+  return await element.click();
+});
+
+When("I click New post button", async function () {
+  let element = await this.driver.$("a.gh-btn.gh-btn-green");
+  return await element.click();
+});
+
+When("I enter in the post name {string}", async function (value) {
+  let element = await this.driver.$("textarea.gh-editor-title");
+  return await element.setValue(value);
+});
+
+When("I click on the editor", async function () {
+  let element = await this.driver.$("article.koenig-editor");
+  return await element.click();
+});
+
+When("I click in the publish option", async function () {
+  let element = await this.driver.$("div.gh-publishmenu-trigger");
+  return await element.click();
+});
+
+When("I Select the set it live now option", async function () {
+  let element = await this.driver.$("div.gh-publishmenu-radio-button");
+  return await element.click();
+});
+
+When("I click in the publish button", async function () {
+  let element = await this.driver.$("button.gh-publishmenu-button");
+  return await element.click();
+});
+
+When("I click post button", async function () {
+  let element = await this.driver.$("a.blue.link.fw4");
+  return await element.click();
+});

@@ -54,3 +54,23 @@ When("I click the tag {string} button", async function (value) {
     let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
     return await element.click();
 });
+
+When("I click the delete tag button", async function () {
+    let element = await this.driver.$("button.gh-btn.gh-btn-red.gh-btn-icon.mb15");
+    return await element.click();
+});
+
+When("I click the confirm delete tag button", async function () {
+    let element = await this.driver.$("button.gh-btn.gh-btn-red.gh-btn-icon.ember-view");
+    return await element.click();
+});
+
+When("I click the internal tags button", async function () {
+    let element = await this.driver.$("div.gh-contentfilter button:not(.gh-btn-group-selected)");
+    return await element.click();
+});
+
+When("I click the internal tags new tag button", async function () {
+    let element = await this.driver.$(`a.gh-btn.gh-btn-green.gh-btn-lg.ember-view`);
+    return await element.click();
+});

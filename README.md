@@ -9,14 +9,14 @@ Funcionalidades bajo prueba
 
 Escenarios de prueba.
 
-Creación, edición Tags
+** Creación, edición Tags **
 
  Login en la pagina, listar etiquetas y crear una etiqueta nueva
  Login en la pagina, listar etiquetas, crear una etiqueta nueva y luego editarla
  Login en la pagina, listar etiquetas, crear una etiqueta nueva y luego borrarla
  Login en la pagina, listar etiquetas y crear una etiqueta INTERNA nueva
 
-Gestión de Staff
+** Gestión de Staff ** 
 
   Login en la pagina, ver los usuarios de staff y editar el usuario Ghost
   Login en la pagina, ver los usuarios de staff y editar la contraseña del usuario Ghost
@@ -24,7 +24,7 @@ Gestión de Staff
   Login en la pagina, ver los usuarios de staff e invitar a un nuevo usuario
 
 
-INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS
+** INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS **
 
 KRAKEN
 

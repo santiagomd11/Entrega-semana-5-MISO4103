@@ -1,5 +1,5 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
-
+const assert = require('assert')
 When("I enter email {string}", async function (email) {
   let element = await this.driver.$("#ember8");
   return await element.setValue(email);
@@ -25,12 +25,32 @@ Then("I click New Tags button", async function () {
   return await element.click();
 });
 
-Then("I enter the name input field {string}", async function (name) {
+When("I enter the name input field {string}", async function (value) {
   let element = await this.driver.$("input#tag-name");
-  return await element.setValue(name);
+  return await element.setValue(value);
 });
 
-Then("I send the message", async function () {
-  let element = await this.driver.$("span.x3nfvp2:nth-child(3)");
-  return await element.click();
+When("I enter the slug input field {string}", async function (value) {
+    let element = await this.driver.$("input#tag-slug");
+    return await element.setValue(value);
+});
+
+When("I enter the color input field {string}", async function (value) {
+    let element = await this.driver.$(`input[name="accent-color"]`);
+    return await element.setValue(value);
+});
+
+When("I enter the description input field {string}", async function (value) {
+    let element = await this.driver.$("textarea#tag-description");
+    return await element.setValue(value);
+});
+
+When("I click save button", async function () {
+    let element = await this.driver.$("button.gh-btn.gh-btn-blue.gh-btn-icon.ember-view");
+    return await element.click();
+});
+
+When("I click the tag {string} button", async function (value) {
+    let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
+    return await element.click();
 });

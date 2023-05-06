@@ -29,6 +29,10 @@ Funcionalidades bajo prueba
 KRAKEN
 
   1. Pararse en la carpeta de PruebasKraken desde el directorio raíz sería cd PruebasKraken
-  2. Tener corriendo en la máquina local Ghost, para la correcta ejecución de las pruebas es importante que el usuario creado en Ghost tenga unas credenciales que correspondan con las especificadas en la pruebas
+  2. Tener corriendo en la máquina local Ghost, para la correcta ejecución de las pruebas es importante que el usuario creado en Ghost tenga unas credenciales que correspondan con las especificadas en la pruebas:
+      ```
+        email: myjachis@gmail.com
+        password: Mr.hellno19 
+      ```
   3. Correr el comando npx kraken-node run
   

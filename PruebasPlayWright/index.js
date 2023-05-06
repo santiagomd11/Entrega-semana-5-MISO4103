@@ -66,22 +66,43 @@ async function testScenario1(page){
 }
 
 async function testScenario2(page){
-//Scenario 2: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y crear un usuario nuevo
+  //Scenario 2: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y crear un usuario nuevo
   await login(page)
 
-//Go to users (staff)
+  //Go to users (staff)
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:'./staffpage.png'})
-  
-}
 
+  //Click on create user
+  await page.click('css=.gh-btn.gh-btn-green')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./createUser.png'})
+  console.log('Clicked on create new user')
+
+  //Fill new user email new-user-email
+  await page.type('css=#new-user-email', 'kmilo2106@gmail.com');
+  await page.screenshot({path:'./fillnewUserEmail.png'})
+  await page.getByRole('button', { name: 'Send invitation now' }).click();
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./clickSendInvite.png'})
+  await page.getByRole('button', { title: 'Close' }).click();
+  await page.screenshot({path:'./newUserList.png'})
+  console.log('Added new user')
+
+   //Borrar usuario para no generar conflictos
+   await page.click('a[href="#revoke"]');
+   await new Promise(r => setTimeout(r, 2000));
+   await page.screenshot({path:'./userListAfterDelete.png'})
+   console.log('Deleted user')
+
+}
 
 async function testScenario3(page){
   //Scenario 3: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios, y editar un usuario
   await login(page)
 
-//Go to users (staff)
+  //Go to users (staff)
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:'./staffpage.png'})
@@ -90,14 +111,41 @@ async function testScenario3(page){
   await page.click('a[href="#/staff/ghost/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:'./ghostuser.png'})
+
+
 }
 
 async function testScenario4(page){
   //Scenario 4: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y eliminar un usuario
   await login(page)
 
-//Go to users (staff)
+  //Go to users (staff)
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:'./staffpage.png'})
+
+  //Click on create user
+  await page.click('css=.gh-btn.gh-btn-green')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./createUser.png'})
+  console.log('Clicked on create new user')
+
+  //Fill new user email new-user-email
+  await page.type('css=#new-user-email', 'kmilo2106@gmail.com');
+  await page.screenshot({path:'./fillnewUserEmail.png'})
+  await page.getByRole('button', { name: 'Send invitation now' }).click();
+  console.log('Clicked on send invitation')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./clickSendInvite.png'})
+  await page.getByTitle('Close').click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./userListAfterAdd.png'})
+  console.log('Added new user')
+
+  //Delete user
+  await page.click('a[href="#revoke"]');
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./userListAfterDelete.png'})
+  console.log('Deleted user')
+
 }

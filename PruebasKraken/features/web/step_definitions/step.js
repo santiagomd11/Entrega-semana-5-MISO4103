@@ -153,7 +153,7 @@ When("I click in the Schedule button", async function () {
   return await element.click();
 });
 
-When("And I click in the post to delete", async function () {
+When("I click in the post to delete", async function () {
   let element = await this.driver.$("h3.gh-content-entry-title");
   return await element.click();
 });
@@ -260,5 +260,53 @@ When("I enter in the invite form email {string}", async function (email) {
 
 When("I click the send invitation button", async function () {
   let element = await this.driver.$("div.modal-footer button.gh-btn.gh-btn-green");
+  return await element.click();
+});
+
+// *********************** PAGES FEATURE *********************************
+
+When("I click pages button", async function () {
+  let element = await this.driver.$(`a[href="#/pages/"].ember-view`);
+  return await element.click();
+});
+
+When("I click New page button", async function () {
+  let element = await this.driver.$("a.gh-btn.gh-btn-green");
+  return await element.click();
+});
+
+When("I enter in the page name {string}", async function (value) {
+  let element = await this.driver.$("textarea.gh-editor-title");
+  return await element.setValue(value);
+});
+
+When("I click page button", async function () {
+  let element = await this.driver.$("a.blue.link.fw4");
+  return await element.click();
+});
+
+When("I click in the page for the test", async function () {
+  let element = await this.driver.$("h3.gh-content-entry-title");
+  return await element.click();
+});
+
+When("I enter in the page body {string}", async function (value) {
+  let element = await this.driver.$("article.koenig-editor");
+  return await element.setValue(value);
+});
+
+When("I click in the page to delete", async function () {
+  let element = await this.driver.$("h3.gh-content-entry-title");
+  return await element.click();
+});
+
+
+When("I click on Delete Page", async function () {
+  let element = await this.driver.$("button.settings-menu-delete-button");
+  return await element.click();
+});
+
+When("I click on Delete Page confirmation", async function () {
+  let element = await this.driver.$("button.gh-btn.gh-btn-red.gh-btn-icon.ember-view");
   return await element.click();
 });

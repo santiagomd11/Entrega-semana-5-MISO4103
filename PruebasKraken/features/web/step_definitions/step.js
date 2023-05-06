@@ -76,7 +76,7 @@ When("I click the internal tags new tag button", async function () {
 });
 
 
-// Feature posts
+// *********************** POSTS FEATURE *********************************
 
 When("I click posts button", async function () {
   let element = await this.driver.$("#ember28");
@@ -115,6 +115,61 @@ When("I click in the publish button", async function () {
 
 When("I click post button", async function () {
   let element = await this.driver.$("a.blue.link.fw4");
+  return await element.click();
+});
+
+When("I click in the post for the test", async function () {
+  let element = await this.driver.$("h3.gh-content-entry-title");
+  return await element.click();
+});
+
+When("I enter in the post body {string}", async function (value) {
+  let element = await this.driver.$("article.koenig-editor");
+  return await element.setValue(value);
+});
+
+When("I click in the update option", async function () {
+  let element = await this.driver.$("div.gh-publishmenu-trigger");
+  return await element.click();
+});
+
+When("I click in the Published option", async function () {
+  let element = await this.driver.$("div.gh-publishmenu-radio.active");
+  return await element.click();
+});
+
+When("I click in the update button", async function () {
+  let element = await this.driver.$("button.gh-publishmenu-button");
+  return await element.click();
+});
+
+When("I Select the Schedule it for later option", async function () {
+  let element = await this.driver.$("div.gh-date-time-picker-time");
+  return await element.click();
+});
+
+When("I click in the Schedule button", async function () {
+  let element = await this.driver.$("button.gh-publishmenu-button");
+  return await element.click();
+});
+
+When("And I click in the post to delete", async function () {
+  let element = await this.driver.$("h3.gh-content-entry-title");
+  return await element.click();
+});
+
+When("I click in the settings button", async function () {
+  let element = await this.driver.$("button.post-settings");
+  return await element.click();
+});
+
+When("I click on Delete Post", async function () {
+  let element = await this.driver.$("button.settings-menu-delete-button");
+  return await element.click();
+});
+
+When("I click on Delete Post confirmation", async function () {
+  let element = await this.driver.$("button.gh-btn.gh-btn-red.gh-btn-icon.ember-view");
   return await element.click();
 });
 

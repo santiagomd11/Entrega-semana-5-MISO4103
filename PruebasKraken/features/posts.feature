@@ -10,15 +10,12 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts y crear un po
   And I click login button
   And I wait for 2 seconds 
   And I click posts button
-  And I wait for 2 seconds 
   And I click New post button
   And I enter in the post name "test name"
   And I click on the editor
   And I click in the publish option 
-  And I wait for 3 seconds
   And I Select the set it live now option 
   And I click in the publish button 
-  And I wait for 3 seconds 
   And I click post button
   And I wait for 3 seconds 
 
@@ -32,26 +29,21 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts, crear un pos
   And I click login button
   And I wait for 2 seconds 
   And I click posts button
-  And I wait for 2 seconds 
+  And I wait for 4 seconds 
   And I click New post button
   And I enter in the post name "test name"
   And I click on the editor
   And I click in the publish option 
   And I Select the set it live now option 
   And I click in the publish button 
-  And I wait for 3 seconds 
   And I click post button
-  And I wait for 3 seconds 
   And I click in the post for the test
   And I enter in the post name "test name modificado"
-  And I wait for 3 seconds
   And I click on the editor
   And I enter in the post body "My new post body"
   And I click in the update option
-  And I wait for 3 seconds
   And I click in the Published option 
   And I click in the update button
-  And I wait for 3 seconds
   And I click post button
   And I wait for 3 seconds
 
@@ -66,16 +58,13 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts, crear un pos
   And I click login button
   And I wait for 2 seconds 
   And I click posts button
-  And I wait for 2 seconds 
+  And I wait for 7 seconds 
   And I click New post button
   And I enter in the post name "test name scheduled"
-  And I wait for 3 seconds
   And I click on the editor
   And I click in the publish option 
-  And I wait for 3 seconds
   And I Select the Schedule it for later option 
   And I click in the Schedule button 
-  And I wait for 3 seconds 
   And I click post button
   And I wait for 3 seconds 
 
@@ -89,7 +78,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts, crear un pos
   And I click login button
   And I wait for 2 seconds 
   And I click posts button
-  And I wait for 2 seconds 
+  And I wait for 10 seconds 
   And I click New post button
   And I enter in the post name "borrar"
   And I click on the editor

@@ -88,6 +88,26 @@ When("I click New post button", async function () {
   return await element.click();
 });
 
+When("I click draft button", async function () {
+  let element = await this.driver.$(`a.ember-view[href="#/posts/?type=draft"]`);
+  return await element.click();
+});
+
+When("I click new draft post button", async function () {
+  let element = await this.driver.$(`a.ember-view.gh-btn.gh-btn-green`);
+  return await element.click();
+});
+
+When("I click the back button", async function () {
+  let element = await this.driver.$(`a.blue.link`);
+  return await element.click();
+});
+
+When("I click the post", async function (value) {
+  let element = await this.driver.$(`a.permalink[title="Edit this post"]`);
+  return await element.click();
+});
+
 When("I enter in the post name {string}", async function (value) {
   let element = await this.driver.$("textarea.gh-editor-title");
   return await element.setValue(value);

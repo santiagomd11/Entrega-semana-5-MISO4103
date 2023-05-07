@@ -24,15 +24,48 @@ const url = 'http://localhost:2368/ghost';
     //Login
     await login(page);
 
-    //Go to users (staff)
-    await page.click('a[href="#/staff/"]')
+    //Go to tags page
+    await page.click('a[href="#/tags/"]')
     await new Promise(r => setTimeout(r, 2000));
-    await page.screenshot({path:'./staffpage.png'})
+    await page.screenshot({path:'./tagsPage.png'})
+    console.log('Clicked on tags page')
 
-    //Go to user ghost
-    await page.click('a[href="#/staff/ghost/"]')
+    //Go to internal tags page
+    await page.getByRole('button', { name: 'Internal tags' }).click();
+    await new Promise(r => setTimeout(r, 1000));
+    await page.screenshot({path:'./internalTagsPage.png'})
+    console.log('Clicked on internal tags page')
+
+    //Go to new tag page
+    await page.click('a[href="#/tags/new/"]')
+    await new Promise(r => setTimeout(r, 1000));
+    await page.screenshot({path:'./newTagPage.png'})
+    console.log('Clicked on create new internal tag')
+
+    //Fill new tag fields
+    await page.fill('input#tag-name', '#NewInternalTag');
+    await page.fill('input#tag-slug', 'NewInternalTag-Slug');
+    await page.getByPlaceholder("abcdef").fill("ff00ff");
+    await page.fill('textarea#tag-description', 'lorem ipsum...');
+    await new Promise(r => setTimeout(r, 1000));
+    await page.screenshot({path:'./newInternalTagFilled.png'})
+    console.log('Filled new internal tag details')
+
+    //Save new Tag
+    await page.getByRole('button', { name: 'Save' }).click();
+    await new Promise(r => setTimeout(r, 1000));
+    await page.screenshot({path:'./newInternalTagSaved.png'})
+    console.log('Saved new internal tag');
+
+    //Delete tag (cleanup)
+    await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
+    await new Promise(r => setTimeout(r, 1000));
+    await page.getByRole('button', { name: 'Delete', exact: true }).click();
     await new Promise(r => setTimeout(r, 2000));
-    await page.screenshot({path:'./ghostuser.png'})
+    await page.screenshot({path:'./newInternalTagDeleted.png'})
+    console.log('Deleted new internal tag');
+    
+    await logout(page);
 
     //Finalizar la prueba
     await browser.close();
@@ -46,8 +79,16 @@ async function login(page){
   await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Mr.hellno.19');
   await page.click('css=.login.gh-btn.gh-btn-blue')
   await new Promise(r => setTimeout(r, 7000));
-  console.log(`clicked on login button, URL is now ${page.url()}`)
-  await page.screenshot({path:'./loginbutton.png'})
+  console.log(`Clicked on login button, URL is now ${page.url()}`)
+  await page.screenshot({path:'./loginbutton.png'});
+}
+
+async function logout(page){
+  await page.click('span.gh-user-name.mb1');
+  await page.click('a[href="#/signout/"]')
+  console.log('Logged out');
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./logoutscreen.png'});
 }
 
 async function testScenario1(page){
@@ -60,9 +101,12 @@ async function testScenario1(page){
   await page.screenshot({path:'./staffpage.png'})
 
   //Go to user ghost
-  await page.click('a[href="#/staff/ghost/"]')
+  await page.locator('css=h3.apps-card-app-title').filter({ hasText: 'Ghost' }).click()
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:'./ghostuser.png'})
+  console.log('Clicked on ghost user')
+
+  await logout(page);
 }
 
 async function testScenario2(page){
@@ -90,12 +134,13 @@ async function testScenario2(page){
   await page.screenshot({path:'./newUserList.png'})
   console.log('Added new user')
 
-   //Borrar usuario para no generar conflictos
-   await page.click('a[href="#revoke"]');
-   await new Promise(r => setTimeout(r, 2000));
-   await page.screenshot({path:'./userListAfterDelete.png'})
-   console.log('Deleted user')
+  //Borrar usuario para no generar conflictos
+  await page.click('a[href="#revoke"]');
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./userListAfterDelete.png'})
+  console.log('Deleted user')
 
+  await logout(page);
 }
 
 async function testScenario3(page){
@@ -108,11 +153,41 @@ async function testScenario3(page){
   await page.screenshot({path:'./staffpage.png'})
 
   //Go to user ghost
-  await page.click('a[href="#/staff/ghost/"]')
+  await page.locator('css=h3.apps-card-app-title').filter({ hasText: 'Ghost' }).click()
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:'./ghostuser.png'})
+  console.log('Clicked on ghost user')
 
+  //Edit fields
+  await page.fill('css=#user-slug', 'ghost_edited');
+  await page.fill('css=#user-email', 'ghost-author_edited@example.com');
+  await page.locator('select#new-user-role').selectOption({ label: 'Contributor' })
+  await page.fill('css=#user-location', 'The Internet_edited');
+  await page.fill('css=#user-website', 'https://ghost-edited.org');
+  await page.fill('css=#user-bio', 'You can delete this user to remove all the welcome posts _edited');
+  await page.screenshot({path:'./editedUserFields.png'})
+  console.log('Edited user fields')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.getByRole('button', { name: 'Save' }).click();
+  
+  await page.reload()
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./editedUserSave.png'});
+  console.log('Saved edited user');
 
+  //Deshacer cambios para quedar con los valores iniciales
+  await page.fill('css=#user-slug', 'ghost');
+  await page.fill('css=#user-email', 'ghost-author@example.com');
+  await page.locator('select#new-user-role').selectOption({ label: 'Author' })
+  await page.fill('css=#user-location', 'The Internet');
+  await page.fill('css=#user-website', 'https://ghost.org');
+  await page.fill('css=#user-bio', 'You can delete this user to remove all the welcome posts');
+  await page.screenshot({path:'./editedUserFields_rollback.png'})
+  console.log('Rolled back edited user fields')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.getByRole('button', { name: 'Save' }).click();
+  
+  await logout(page);
 }
 
 async function testScenario4(page){
@@ -146,6 +221,192 @@ async function testScenario4(page){
   await page.click('a[href="#revoke"]');
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:'./userListAfterDelete.png'})
-  console.log('Deleted user')
+  console.log('Deleted user');
 
+  await logout(page);
+}
+
+async function testScenario5(page){
+  //Scenario 5: Como usuario quiero loguearme en la pagina, listar etiquetas y crear una etiqueta
+  await login()
+
+  //Go to tags page
+  await page.click('a[href="#/tags/"]')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./tagsPage.png'})
+  console.log('Clicked on tags page')
+
+  //Go to new tag page
+  await page.click('a[href="#/tags/new/"]')
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagPage.png'})
+  console.log('Clicked on create new tag')
+
+  //Fill new tag fields
+  await page.fill('input#tag-name', 'NewTag');
+  await page.fill('input#tag-slug', 'NewTag-Slug');
+  await page.getByPlaceholder("abcdef").fill("00ff00");
+  await page.fill('textarea#tag-description', 'lorem ipsum...');
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagFilled.png'})
+  console.log('Filled new tag details')
+
+  //Save new Tag
+  await page.getByRole('button', { name: 'Save' }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagSaved.png'})
+  console.log('Saved new tag');
+
+  //Delete tag (cleanup)
+  await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./newTagDeleted.png'})
+  console.log('Deleted new tag');
+}
+
+async function testScenario6(page){
+  //Scenario 6: Como usuario quiero loguearme en la pagina, listar etiquetas, crear una etiqueta y editarla
+  await login(page);
+
+  //Go to tags page
+  await page.click('a[href="#/tags/"]')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./tagsPage.png'})
+  console.log('Clicked on tags page')
+
+  //Go to new tag page
+  await page.click('a[href="#/tags/new/"]')
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagPage.png'})
+  console.log('Clicked on create new tag')
+
+  //Fill new tag fields
+  await page.fill('input#tag-name', 'NewTag');
+  await page.fill('input#tag-slug', 'NewTag-Slug');
+  await page.getByPlaceholder("abcdef").fill("00ff00");
+  await page.fill('textarea#tag-description', 'lorem ipsum...');
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagFilled.png'})
+  console.log('Filled new tag details')
+
+  //Save new Tag
+  await page.getByRole('button', { name: 'Save' }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagSaved.png'})
+  console.log('Saved new tag');
+
+  //Edit new tag
+  await page.fill('input#tag-name', 'NewTag_edited');
+  await page.fill('input#tag-slug', 'NewTag-Slug_edited');
+  await page.getByPlaceholder("abcdef").fill("0000ff");
+  await page.fill('textarea#tag-description', 'lorem ipsum... edited');
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagEdited.png'})
+  console.log('Edited new tag details')
+
+  //Save edited Tag
+  await page.getByRole('button', { name: 'Save' }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagEditedSaved.png'})
+  console.log('Saved new tag');
+
+  //Delete tag (cleanup)
+  await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./newTagDeleted.png'})
+  console.log('Deleted new tag');
+  
+  await logout(page);
+}
+
+async function testScenario7(page){
+  //Como usuario quiero loguearme en la pagina, listar etiquetas, crear una etiqueta y borrar una etiqueta
+  await login()
+
+  //Go to tags page
+  await page.click('a[href="#/tags/"]')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./tagsPage.png'})
+  console.log('Clicked on tags page')
+
+  //Go to new tag page
+  await page.click('a[href="#/tags/new/"]')
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagPage.png'})
+  console.log('Clicked on create new tag')
+
+  //Fill new tag fields
+  await page.fill('input#tag-name', 'NewTag');
+  await page.fill('input#tag-slug', 'NewTag-Slug');
+  await page.getByPlaceholder("abcdef").fill("00ff00");
+  await page.fill('textarea#tag-description', 'lorem ipsum...');
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagFilled.png'})
+  console.log('Filled new tag details')
+
+  //Save new Tag
+  await page.getByRole('button', { name: 'Save' }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagSaved.png'})
+  console.log('Saved new tag');
+
+  //Delete tag (cleanup)
+  await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./newTagDeleted.png'})
+  console.log('Deleted new tag');
+}
+
+async function testScenario8(page){
+  //Scenario 8: Como usuario quiero loguearme en la pagina, listar etiquetas y crear una etiqueta interna
+  await login(page);
+
+  //Go to tags page
+  await page.click('a[href="#/tags/"]')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./tagsPage.png'})
+  console.log('Clicked on tags page')
+
+  //Go to internal tags page
+  await page.getByRole('button', { name: 'Internal tags' }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./internalTagsPage.png'})
+  console.log('Clicked on internal tags page')
+
+  //Go to new tag page
+  await page.click('a[href="#/tags/new/"]')
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newTagPage.png'})
+  console.log('Clicked on create new internal tag')
+
+  //Fill new tag fields
+  await page.fill('input#tag-name', '#NewInternalTag');
+  await page.fill('input#tag-slug', 'NewInternalTag-Slug');
+  await page.getByPlaceholder("abcdef").fill("ff00ff");
+  await page.fill('textarea#tag-description', 'lorem ipsum...');
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newInternalTagFilled.png'})
+  console.log('Filled new internal tag details')
+
+  //Save new Tag
+  await page.getByRole('button', { name: 'Save' }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:'./newInternalTagSaved.png'})
+  console.log('Saved new internal tag');
+
+  //Delete tag (cleanup)
+  await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:'./newInternalTagDeleted.png'})
+  console.log('Deleted new internal tag');
+  
+  await logout(page);
 }

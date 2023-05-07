@@ -34,7 +34,7 @@ KRAKEN
         email: myjachis@gmail.com
         password: Mr.hellno19 
       ```
-  4. Dado que kraken tiene porblemas al correr los escenarios de cada feature de manera secuencial, se siguio la recomendacion que se menciono en slack: https://uniandes-miso.slack.com/archives/C04V1M6EC3Y/p1683384377176309?thread_ts=1683383737.972989&cid=C04V1M6EC3Y. Por lo cual, puede encontrar las features siguiendo el path ./features/features. Selecciona la feature que quiere ejecutar y la coloca al nivel de ./features . En caso de que ya haya una feature debe moverla al directorio ./features/features y dejar solo la feature que que quiere ejecutar en ./features
+  4. Dado que kraken tiene problemas al correr los escenarios de cada feature de manera secuencial, se siguio la recomendacion que se menciono en slack: https://uniandes-miso.slack.com/archives/C04V1M6EC3Y/p1683384377176309?thread_ts=1683383737.972989&cid=C04V1M6EC3Y. Por lo cual, puede encontrar las features siguiendo el path ./features/features. Selecciona la feature que quiere ejecutar y la coloca al nivel de ./features . En caso de que ya haya una feature debe moverla al directorio ./features/features y dejar solo la feature que que quiere ejecutar en ./features
   4. Correr el comando npx kraken-node run
 
 PLAYWRIGHT

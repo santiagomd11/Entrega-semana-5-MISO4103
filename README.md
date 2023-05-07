@@ -35,4 +35,10 @@ KRAKEN
         password: Mr.hellno19 
       ```
   3. Correr el comando npx kraken-node run
-  
+
+PLAYWRIGHT
+ 1. Clonar repositorio
+ 2. Ir a la carpeta "PruebasPlayWright" (e.g. `cd Entrega-semana-5-MISO4103/PruebasPlayWright`)
+ 3. Ejecutar el comando `npm install playwright`
+ 4. Ejecutar el comando `node index.js`
+

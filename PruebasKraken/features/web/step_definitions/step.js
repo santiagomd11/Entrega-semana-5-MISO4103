@@ -118,11 +118,6 @@ When("I click post button", async function () {
   return await element.click();
 });
 
-When("I click in the post for the test", async function () {
-  let element = await this.driver.$("h3.gh-content-entry-title");
-  return await element.click();
-});
-
 When("I enter in the post body {string}", async function (value) {
   let element = await this.driver.$("article.koenig-editor");
   return await element.setValue(value);
@@ -153,8 +148,9 @@ When("I click in the Schedule button", async function () {
   return await element.click();
 });
 
-When("I click in the post to delete", async function () {
-  let element = await this.driver.$("h3.gh-content-entry-title");
+When("I click in the post with name {string}", async function (value) {
+  let elements = await this.driver.$$("h3.gh-content-entry-title");
+  let element = elements.find(async el => await el.getText() === value);
   return await element.click();
 });
 
@@ -285,18 +281,14 @@ When("I click page button", async function () {
   return await element.click();
 });
 
-When("I click in the page for the test", async function () {
-  let element = await this.driver.$("h3.gh-content-entry-title");
-  return await element.click();
-});
-
 When("I enter in the page body {string}", async function (value) {
   let element = await this.driver.$("article.koenig-editor");
   return await element.setValue(value);
 });
 
-When("I click in the page to delete", async function () {
-  let element = await this.driver.$("h3.gh-content-entry-title");
+When("I click in the page with name {string}", async function (value) {
+  let elements = await this.driver.$$("h3.gh-content-entry-title");
+  let element = elements.find(async el => await el.getText() === value);
   return await element.click();
 });
 

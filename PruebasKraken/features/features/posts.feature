@@ -11,7 +11,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts y crear un po
   And I wait for 2 seconds 
   And I click posts button
   And I click New post button
-  And I enter in the post name "test name"
+  And I enter in the post name "test name 1"
   And I click on the editor
   And I click in the publish option 
   And I Select the set it live now option 
@@ -32,14 +32,15 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts, crear un pos
   And I click posts button
   And I wait for 5 seconds 
   And I click New post button
-  And I enter in the post name "test name"
+  And I enter in the post name "test name 2"
   And I click on the editor
   And I click in the publish option 
   And I Select the set it live now option 
   And I click in the publish button 
   And I click post button
-  And I click in the post for the test
-  And I enter in the post name "test name modificado"
+  And I wait for 2 seconds 
+  And I click in the post with name "test name 2"
+  And I enter in the post name "test name 2 modificado"
   And I click on the editor
   And I enter in the post body "My new post body"
   And I click in the update option
@@ -67,7 +68,8 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts, crear un pos
   And I Select the set it live now option 
   And I click in the publish button 
   And I click post button
-  And I click in the post to delete
+  And I wait for 2 seconds 
+  And I click in the post with name "borrar"
   And I click in the settings button
   And I click on Delete Post
   And I click on Delete Post confirmation

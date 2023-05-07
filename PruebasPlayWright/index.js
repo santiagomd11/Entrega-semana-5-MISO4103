@@ -69,6 +69,15 @@ const url = 'http://localhost:2368/ghost';
     
     await logout(page, screenshotPath);
 
+    await testEscenario11(page)
+    await testEscenario12(page)
+    await testEscenario13(page)
+    await testEscenario14(page)
+    await testEscenario15(page)
+    await testEscenario16(page)
+    await testEscenario17(page)
+    await testEscenario18(page)
+
     //Finalizar la prueba
     await browser.close();
   }
@@ -511,4 +520,561 @@ async function testScenario10(page){
   console.log('Deleted draft');
 
   await logout(page, screenshotPath);
+}
+
+
+// Pruebas Feature post
+
+async function testEscenario11(page){
+  // Escenario 11: Como usuario quiero loguearme en la pagina, listar posts y crear un post
+
+  console.log('---------------------------------')
+  console.log('Escenario 11 -> create new post')
+  console.log('---------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/post/escenario11");
+  await page.screenshot({path:'./imagenes-test/post/escenario11/1.login-successful.png'})
+
+  // Entra a los post
+  await page.click('a[href="#/posts/"]')
+  console.log('Clicked on section Posts')
+
+  // Cliquea en new post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario11/2.list-posts.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new post')
+
+  // Rellena los inputs de title an description
+  await page.screenshot({path:'./imagenes-test/post/escenario11/3.empty-new-post.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', 'This is a post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario11/4.new-write-post.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Publica el post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario11/5.action-publish-post.png'})
+  await page.getByRole('button', { name: 'Publish', exact: true }).click();
+  console.log('Clicked on button Publish')
+  await page.screenshot({path:'./imagenes-test/post/escenario11/6.publishing-post.png'})
+  console.log('Post publishing')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario11/7.created-post.png'})
+  console.log('Post created and published')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario11/8.verify-created-post.png'})
+  
+  // Hace el logout
+  await logout(page, "./imagenes-test/post/escenario11");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario12(page){
+  // Escenario 12: Como usuario quiero loguearme en la pagina, listar posts, crear un post, y editar el post
+
+  console.log('-----------------------------------------')
+  console.log('Escenario 12 -> create new post and edit')
+  console.log('-----------------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/post/escenario12");
+  await page.screenshot({path:'./imagenes-test/post/escenario12/1.login-successful.png'})
+
+  // Entra a los post
+  await page.click('a[href="#/posts/"]')
+  console.log('Clicked on section Posts')
+
+  // Cliquea en new post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario12/2.list-posts.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new post')
+
+  // Rellena los inputs de title an description
+  let titlePost = 'Post to edit ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:'./imagenes-test/post/escenario12/3.empty-new-post.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario12/4.new-write-post.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option Publish')
+
+  // Actualiza el post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario12/5.action-publish-post.png'})
+  await page.getByRole('button', { name: 'Publish', exact: true }).click();
+  console.log('Clicked on button Publish')
+  await page.screenshot({path:'./imagenes-test/post/escenario12/6.publishing-post.png'})
+  console.log('Post publishing')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario12/7.created-post.png'})
+  console.log('Post created and published')
+  await new Promise(r => setTimeout(r, 200));
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario12/8.Enter-post-created.png'})
+
+  await page.getByText(titlePost, { exact: true }).click();
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this post');
+  console.log('Editing inputs title and description')
+  await page.screenshot({path:'./imagenes-test/post/escenario12/9.Editing-post-inputs.png'})
+
+  // Despliega la opción de Update
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByText('Update', { exact: true }).click();
+  console.log('Clicked on option Update')
+  await new Promise(r => setTimeout(r, 200));
+  await page.screenshot({path:'./imagenes-test/post/escenario12/10.updating-post.png'})
+  await page.getByRole('button', { name: 'Update', exact: true }).click();
+  console.log('Clicked on button Update')
+  console.log('Post updating')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario12/11.updated-post.png'})
+  console.log('Post updated and published')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario12/12.List-after-updated.png'})
+
+  // Hace el logout
+  await logout(page, "./imagenes-test/post/escenario12");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario13(page){
+  // Escenario 13: Como usuario quiero loguearme en la pagina, listar posts, crear un post, y dejarlo programado para publicarse mas tarde
+
+  console.log('-----------------------------------------------')
+  console.log('Escenario 13 -> Create new post and schedule')
+  console.log('-----------------------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/post/escenario13");
+  await page.screenshot({path:'./imagenes-test/post/escenario13/1.login-successful.png'})
+
+  // Entra a los post
+  await page.click('a[href="#/posts/"]')
+  console.log('Clicked on section Posts')
+
+  // Cliquea en new post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario13/2.list-posts.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new post')
+
+  // Rellena los inputs de title an description
+  let titlePost = 'Post to schedule ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:'./imagenes-test/post/escenario13/3.empty-new-post.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule post');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario13/4.new-write-post.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Programa la publicación del post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario13/5.action-publish-post.png'})
+  await page.getByText('Schedule it for later', { exact: true }).click();
+  await page.screenshot({path:'./imagenes-test/post/escenario11/6.select-option-schedule.png'})
+  await page.getByRole('button', { name: 'Schedule', exact: true }).click();
+  console.log('Clicked on button Schedule')
+  await page.screenshot({path:'./imagenes-test/post/escenario13/7.scheduling-post.png'})
+  console.log('Post scheduling')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario13/8.scheduled-post.png'})
+  console.log('Post scheduled')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario13/9.Verify-post-schedule.png'})
+
+  // Hace el logout
+  await logout(page, "./imagenes-test/post/escenario13");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario14(page) {
+  // Escenario 14: Como usuario quiero loguearme en la pagina, listar posts y crear un post
+
+  console.log('--------------------------------------------')
+  console.log('Escenario 14 -> create new post and delete')
+  console.log('--------------------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/post/escenario14");
+  await page.screenshot({path:'./imagenes-test/post/escenario14/1.login-successful.png'})
+
+  // Entra a los post
+  await page.click('a[href="#/posts/"]')
+  console.log('Clicked on section Posts')
+
+  // Cliquea en new post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/2.list-posts.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new post')
+
+  // Rellena los inputs de title an description
+  let titlePost = 'Post to delete ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:'./imagenes-test/post/escenario14/3.empty-new-post.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description delete post');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/4.new-write-post.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Publica el post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/5.action-publish-post.png'})
+  await page.getByRole('button', { name: 'Publish', exact: true }).click();
+  console.log('Clicked on button Publish')
+  await page.screenshot({path:'./imagenes-test/post/escenario14/6.publishing-post.png'})
+  console.log('Post publishing')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/7.created-post.png'})
+  console.log('Post created and published')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/8.verify-created-post.png'})
+  console.log('Verify list post')
+
+  // Delete post
+  await page.getByText(titlePost, { exact: true }).click();
+  await new Promise(r => setTimeout(r, 200));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/9.Enter-post-created.png'})
+  console.log('Enter post')
+  await page.click('css=.post-settings')
+  await new Promise(r => setTimeout(r, 200));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/10.settings-post.png'})
+  console.log('Enter configuration of post')
+  await page.click('css=.gh-btn.gh-btn-hover-red.gh-btn-icon.settings-menu-delete-button');
+  await new Promise(r => setTimeout(r, 200));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/11.confirm-delete-post.png'})
+  console.log('Clicked on option Delete post')
+  await new Promise(r => setTimeout(r, 200));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await page.screenshot({path:'./imagenes-test/post/escenario14/12.deleting-post.png'})
+  console.log('Clicked on button Delete')
+  console.log('Deleted post')
+
+  // Muestra la lista de post
+  await new Promise(r => setTimeout(r, 200));
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario14/13.Verify-post-deleted.png'})
+
+  // Hace el logout
+  await logout(page, "./imagenes-test/post/escenario14");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+// Pruebas Feature page
+
+async function testEscenario15(page){
+  // Escenario 15: Como usuario quiero loguearme en la pagina, listar pages y crear una page
+
+  console.log('---------------------------------')
+  console.log('Escenario 15 -> create new page')
+  console.log('---------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/page/escenario15");
+  await page.screenshot({path:'./imagenes-test/page/escenario15/1.login-successful.png'})
+
+  // Entra a los page
+  await page.click('a[href="#/pages/"]')
+  console.log('Clicked on section Pages')
+
+  // Cliquea en new page
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario15/2.list-pages.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new page')
+
+  // Rellena los inputs de title an description
+  await page.screenshot({path:'./imagenes-test/page/escenario15/3.empty-new-page.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', 'This is a page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this page');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario15/4.new-write-page.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Publica el page
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario15/5.action-publish-page.png'})
+  await page.getByRole('button', { name: 'Publish', exact: true }).click();
+  console.log('Clicked on button Publish')
+  await page.screenshot({path:'./imagenes-test/page/escenario15/6.publishing-page.png'})
+  console.log('page publishing')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario15/7.created-page.png'})
+  console.log('page created and published')
+
+  // Muestra la lista de page
+  await page.click('a[href="#/pages/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario15/8.verify-created-page.png'})
+  
+  // Hace el logout
+  await logout(page, "./imagenes-test/page/escenario15");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario16(page){
+  // Escenario 16: Como usuario quiero loguearme en la pagina, listar pages, crear una page, y editar una page
+
+  console.log('-------------------------------------------')
+  console.log('Escenario 16 -> create new page and edit')
+  console.log('-------------------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/page/escenario16");
+  await page.screenshot({path:'./imagenes-test/page/escenario16/1.login-successful.png'})
+
+  // Entra a los page
+  await page.click('a[href="#/pages/"]')
+  console.log('Clicked on section Pages')
+
+  // Cliquea en new page
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario16/2.list-pages.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new page')
+
+  // Rellena los inputs de title y description
+  let titlePage = 'Page to edit ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:'./imagenes-test/page/escenario16/3.empty-new-page.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this page');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario16/4.new-write-page.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Publica el page
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario16/5.action-publish-page.png'})
+  await page.getByRole('button', { name: 'Publish', exact: true }).click();
+  console.log('Clicked on button Publish')
+  await page.screenshot({path:'./imagenes-test/page/escenario16/6.publishing-page.png'})
+  console.log('page publishing')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario16/7.created-page.png'})
+  console.log('page created and published')
+
+  // Muestra la lista de page
+  await page.click('a[href="#/pages/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario16/8.verify-created-page.png'})
+
+  // Enter to page
+  await page.getByText(titlePage, { exact: true }).click();
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this page');
+  console.log('Editing inputs title and description')
+  await page.screenshot({path:'./imagenes-test/page/escenario16/9.Editing-page-inputs.png'})
+
+  // Despliega la opción de Update
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByText('Update', { exact: true }).click();
+  console.log('Clicked on option Update')
+  await new Promise(r => setTimeout(r, 200));
+  await page.screenshot({path:'./imagenes-test/page/escenario16/10.updating-page.png'})
+  await page.getByRole('button', { name: 'Update', exact: true }).click();
+  console.log('Clicked on button Update')
+  console.log('Page updating')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario16/11.updated-page.png'})
+  console.log('Page updated and published')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/pages/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario16/12.List-after-updated.png'})
+
+
+  // Hace el logout
+  await logout(page, "./imagenes-test/page/escenario16");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario17(page){
+  // Escenario 17: Como usuario quiero loguearme en la pagina, listar pages, crear un page, y dejarla programada para publicarse mas tarde
+
+  console.log('-------------------------------------------')
+  console.log('Escenario 17 -> Create new page and schedule')
+  console.log('-------------------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/page/escenario17");
+  await page.screenshot({path:'./imagenes-test/page/escenario17/1.login-successful.png'})
+
+  // Entra a los page
+  await page.click('a[href="#/pages/"]')
+  console.log('Clicked on section Pages')
+
+  // Cliquea en new page
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario17/2.list-pages.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new page')
+
+  // Rellena los inputs de title y description
+  let titlePage = 'Page to schedule ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:'./imagenes-test/page/escenario17/3.empty-new-page.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule page');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario17/4.new-write-page.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Programa la publicación del post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario17/5.action-publish-page.png'})
+  await page.getByText('Schedule it for later', { exact: true }).click();
+  await page.screenshot({path:'./imagenes-test/page/escenario17/6.select-option-schedule.png'})
+  await page.getByRole('button', { name: 'Schedule', exact: true }).click();
+  console.log('Clicked on button Schedule')
+  await page.screenshot({path:'./imagenes-test/page/escenario17/7.scheduling-page.png'})
+  console.log('Page scheduling')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario17/8.scheduled-page.png'})
+  console.log('Page scheduled')
+
+  // Muestra la lista de page
+  await page.click('a[href="#/pages/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario17/9.verify-page-schedule.png'})
+
+  // Hace el logout
+  await logout(page, "./imagenes-test/page/escenario17");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario18(page){
+  // Escenario 18: Como usuario quiero loguearme en la pagina, listar pages, crear un page, y eliminarla
+
+  console.log('-------------------------------------------')
+  console.log('Escenario 18 -> Create new page and delete')
+  console.log('-------------------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/page/escenario18");
+  await page.screenshot({path:'./imagenes-test/page/escenario18/1.login-successful.png'})
+
+  // Entra a los page
+  await page.click('a[href="#/pages/"]')
+  console.log('Clicked on section Pages')
+
+  // Cliquea en new page
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/2.list-pages.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new page')
+
+  // Rellena los inputs de title y description
+  let titlePage = 'Page to delete ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:'./imagenes-test/page/escenario18/3.empty-new-page.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule page');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/4.new-write-page.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Publica el page
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/5.action-publish-page.png'})
+  await page.getByRole('button', { name: 'Publish', exact: true }).click();
+  console.log('Clicked on button Publish')
+  await page.screenshot({path:'./imagenes-test/page/escenario18/6.publishing-page.png'})
+  console.log('page publishing')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/7.created-page.png'})
+  console.log('page created and published')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/pages/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/8.verify-created-page.png'})
+  console.log('Verify list of page')
+
+  // Delete post
+  await page.getByText(titlePage, { exact: true }).click();
+  await new Promise(r => setTimeout(r, 200));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/9.Enter-page-created.png'})
+  console.log('Enter page')
+  await page.click('css=.post-settings')
+  await new Promise(r => setTimeout(r, 200));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/10.settings-page.png'})
+  console.log('Enter configuration of page')
+  await page.click('css=.gh-btn.gh-btn-hover-red.gh-btn-icon.settings-menu-delete-button');
+  await new Promise(r => setTimeout(r, 200));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/11.confirm-delete-page.png'})
+  console.log('Clicked on option Delete page')
+  await new Promise(r => setTimeout(r, 200));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await page.screenshot({path:'./imagenes-test/page/escenario18/12.deleting-page.png'})
+  console.log('Clicked on button Delete')
+  console.log('Deleted page')
+
+  // Muestra la lista de post
+  await new Promise(r => setTimeout(r, 200));
+  await page.click('a[href="#/pages/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/page/escenario18/13.Verify-page-deleted.png'})
+
+  // Hace el logout
+  await logout(page, "./imagenes-test/page/escenario18");
+  await new Promise(r => setTimeout(r, 2000));
 }

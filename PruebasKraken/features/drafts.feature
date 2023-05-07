@@ -33,5 +33,17 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft y ed
   And I wait for 2 seconds 
   And I click new draft post button
   And I enter in the post name "DRAFT PARA EDITAR"
-  And I wait for 3 seconds
+  And I wait for 1 seconds
+  And I click on the editor
+  And I wait for 2 seconds
   And I click the back button
+  And I wait for 3 seconds 
+  And I click in the post with name "DRAFT PARA EDITAR"
+  And I enter in the post name "DRAFT PARA EDITAR MODIFICADO"
+  And I wait for 2 seconds 
+  And I click on the editor
+  And I enter in the post body "My new post body"
+  And I wait for 2 seconds 
+  And I click the back button
+  And I wait for 3 seconds 
+

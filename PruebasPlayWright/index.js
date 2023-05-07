@@ -109,13 +109,13 @@ async function testScenario1(page){
   await page.screenshot({path:`${screenshotPath}/2-ghostuser.png`})
   console.log('Clicked on ghost user')
 
-  await logout(page);
+  await logout(page, screenshotPath);
 }
 
 async function testScenario2(page){
   //Scenario 2: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y crear un usuario nuevo
   var screenshotPath = './imagenes-test/users/scenario2';
-  await login(page, screenshotPath)
+  await login(page, screenshotPath);
 
   //Go to users (staff)
   await page.click('a[href="#/staff/"]')
@@ -144,13 +144,13 @@ async function testScenario2(page){
   await page.screenshot({path:`${screenshotPath}/6-userListAfterDelete.png`})
   console.log('Deleted user')
 
-  await logout(page);
+  await logout(page, screenshotPath);
 }
 
 async function testScenario3(page){
   //Scenario 3: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios, y editar un usuario
   var screenshotPath = './imagenes-test/users/scenario3';
-  await login(page, screenshotPath)
+  await login(page, screenshotPath);
 
   //Go to users (staff)
   await page.click('a[href="#/staff/"]')
@@ -192,13 +192,13 @@ async function testScenario3(page){
   await new Promise(r => setTimeout(r, 2000));
   await page.getByRole('button', { name: 'Save' }).click();
   
-  await logout(page);
+  await logout(page, screenshotPath);
 }
 
 async function testScenario4(page){
   //Scenario 4: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y eliminar un usuario
   var screenshotPath = './imagenes-test/users/scenario4';
-  await login(page, screenshotPath)
+  await login(page, screenshotPath);
 
   //Go to users (staff)
   await page.click('a[href="#/staff/"]')
@@ -229,7 +229,7 @@ async function testScenario4(page){
   await page.screenshot({path:`${screenshotPath}/6-userListAfterDelete.png`})
   console.log('Deleted user');
 
-  await logout(page);
+  await logout(page, screenshotPath);
 }
 
 async function testScenario5(page){
@@ -271,6 +271,8 @@ async function testScenario5(page){
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}/5-newTagDeleted.png`})
   console.log('Deleted new tag');
+
+  await logout(page, screenshotPath);
 }
 
 async function testScenario6(page){
@@ -328,7 +330,7 @@ async function testScenario6(page){
   await page.screenshot({path:`${screenshotPath}/7-newTagDeleted.png`})
   console.log('Deleted new tag');
   
-  await logout(page);
+  await logout(page, screenshotPath);
 }
 
 async function testScenario7(page){
@@ -370,6 +372,8 @@ async function testScenario7(page){
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}/5-newTagDeleted.png`})
   console.log('Deleted new tag');
+
+  await logout(page, screenshotPath);
 }
 
 async function testScenario8(page){
@@ -418,5 +422,93 @@ async function testScenario8(page){
   await page.screenshot({path:`${screenshotPath}/6-newInternalTagDeleted.png`})
   console.log('Deleted new internal tag');
   
-  await logout(page);
+  await logout(page, screenshotPath);
+}
+
+async function testScenario9(page){
+  //Scenario 9: Como usuario quiero iniciar sesion en la pagina y crear un post draft
+  var screenshotPath = './imagenes-test/drafts/scenario9';
+  await login(page, screenshotPath);
+
+  //Go to posts page
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:`${screenshotPath}/1-postsPage.png`})
+  console.log('Clicked on posts page')
+
+  //Go to new post page
+  await page.click('a[href="#/editor/post/"]')
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:`${screenshotPath}/2-newPostPage.png`})
+  console.log('Clicked on create new post')
+
+  //Fill new post fields
+  await page.getByPlaceholder("Post Title").fill("Test draft title");
+  await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'lorem ipsum...');
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:`${screenshotPath}/3-newPostFilled.png`})
+  console.log('Filled new post details')
+
+  // See draft in list
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:`${screenshotPath}/4-draftList.png`})
+
+  //Open draft and delete it (cleanup)
+  await page.getByText('Test draft title').click()
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('css=button.post-settings');
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByText('Delete post').click()
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  console.log('Deleted draft (cleanup)');
+
+  await logout(page, screenshotPath);
+}
+
+async function testScenario10(page){
+  //Scenario 10: Como usuario quiero iniciar sesion en la pagina, crear un post draft y eliminarlo
+  var screenshotPath = './imagenes-test/drafts/scenario10';
+  await login(page, screenshotPath);
+
+  //Go to posts page
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 2000));
+  await page.screenshot({path:`${screenshotPath}/1-postsPage.png`})
+  console.log('Clicked on posts page')
+
+  //Go to new post page
+  await page.click('a[href="#/editor/post/"]')
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:`${screenshotPath}/2-newPostPage.png`})
+  console.log('Clicked on create new post')
+
+  //Fill new post fields
+  await page.getByPlaceholder("Post Title").fill("Test draft title");
+  await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'lorem ipsum...');
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:`${screenshotPath}/3-newPostFilled.png`})
+  console.log('Filled new post details')
+
+  // See draft in list
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:`${screenshotPath}/4-draftList.png`})
+
+  //Open draft and delete it (cleanup)
+  await page.getByText('Test draft title').click()
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('css=button.post-settings');
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByText('Delete post').click()
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}/5-deleteDraftConfirm.png`})
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}/6-deletedDraft.png`})
+  console.log('Deleted draft');
+
+  await logout(page, screenshotPath);
 }

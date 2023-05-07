@@ -79,7 +79,7 @@ When("I click the internal tags new tag button", async function () {
 // *********************** POSTS FEATURE *********************************
 
 When("I click posts button", async function () {
-  let element = await this.driver.$("#ember28");
+  let element = await this.driver.$(`a.ember-view[href="#/posts/"]`);
   return await element.click();
 });
 

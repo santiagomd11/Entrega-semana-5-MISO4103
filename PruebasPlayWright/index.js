@@ -77,6 +77,8 @@ const url = 'http://localhost:2368/ghost';
     await testEscenario16(page)
     await testEscenario17(page)
     await testEscenario18(page)
+    await testEscenario19(page)
+    await testEscenario20(page)
 
     //Finalizar la prueba
     await browser.close();
@@ -1076,5 +1078,120 @@ async function testEscenario18(page){
 
   // Hace el logout
   await logout(page, "./imagenes-test/page/escenario18");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario19(page){
+  // Escenario 19: Como usuario quiero loguearme en la pagina, y crear un post draft y editarlo
+
+  console.log('------------------------------------------------')
+  console.log('Escenario 19 -> create new post draft and edit')
+  console.log('------------------------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/post/escenario19");
+  await page.screenshot({path:'./imagenes-test/post/escenario19/1.login-successful.png'})
+
+  // Entra a los post
+  await page.click('a[href="#/posts/"]')
+  console.log('Clicked on section Posts')
+
+  // Cliquea en new post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario19/2.list-posts.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new post')
+
+  // Rellena los inputs de title an description
+  let titlePost = 'Post drafts to edit ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:'./imagenes-test/post/escenario19/3.empty-new-post.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.screenshot({path:'./imagenes-test/post/escenario19/4.Editing-post-inputs.png'})
+  console.log('Writed about inputs title and description')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario19/5.Enter-post-created.png'})
+
+  await page.getByText(titlePost, { exact: true }).click();
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this post');
+  console.log('Editing inputs title and description')
+  await page.screenshot({path:'./imagenes-test/post/escenario19/6.Editing-post-inputs.png'})
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario19/6.List-after-updated.png'})
+
+  // Hace el logout
+  await logout(page, "./imagenes-test/post/escenario19");
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario20(page){
+  // Escenario 20: Como usuario quiero loguearme en la pagina, y crear un post draft, y publicarlo
+
+  console.log('------------------------------------------------')
+  console.log('Escenario 20 -> create new post draft and publish')
+  console.log('------------------------------------------------')
+
+  // Hace el login
+  await login(page, "./imagenes-test/post/escenario20");
+  await page.screenshot({path:'./imagenes-test/post/escenario20/1.login-successful.png'})
+
+  // Entra a los post
+  await page.click('a[href="#/posts/"]')
+  console.log('Clicked on section Posts')
+
+  // Cliquea en new post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario20/2.list-posts.png'})
+  await page.click('css=.ember-view.gh-btn.gh-btn-green')
+  console.log('Clicked on button new post')
+
+  // Rellena los inputs de title an description
+  let titlePost = 'Post drafts to publish ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:'./imagenes-test/post/escenario20/3.empty-new-post.png'})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.screenshot({path:'./imagenes-test/post/escenario20/4.Editing-post-inputs.png'})
+  console.log('Writed about inputs title and description')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario20/5.Enter-post-created.png'})
+
+  await page.getByText(titlePost, { exact: true }).click();
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario20/6.post-created.png'})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Publica el post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario20/7.action-publish-post.png'})
+  await page.getByRole('button', { name: 'Publish', exact: true }).click();
+  console.log('Clicked on button Publish')
+  await page.screenshot({path:'./imagenes-test/post/escenario20/8.publishing-post.png'})
+  console.log('Post publishing')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario20/9.published-post.png'})
+  console.log('Post created and published')
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:'./imagenes-test/post/escenario20/10.List-after-published.png'})
+
+  // Hace el logout
+  await logout(page, "./imagenes-test/post/escenario20");
   await new Promise(r => setTimeout(r, 2000));
 }

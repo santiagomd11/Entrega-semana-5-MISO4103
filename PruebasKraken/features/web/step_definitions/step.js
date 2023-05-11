@@ -25,6 +25,11 @@ Then("I click New Tags button", async function () {
   return await element.click();
 });
 
+Then("I see the tag I created {string}", async function (value) {
+  let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
+  return await element;
+});
+
 When("I enter the name input field {string}", async function (value) {
   let element = await this.driver.$("input#tag-name");
   return await element.setValue(value);

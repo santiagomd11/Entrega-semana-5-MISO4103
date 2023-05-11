@@ -20,8 +20,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas y crear u
   And I wait for 3 seconds 
   And I click tags button
   And I wait for 3 seconds 
-
-
+  Then I see the tag I created "test"
 
 @web @user2
 Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas, crear una etiqueta y editarla

@@ -16,7 +16,12 @@ When("I click login button", async function () {
 });
 
 Then("I click tags button", async function () {
-  let element = await this.driver.$("#ember38");
+  let element = await this.driver.$(`a.ember-view[href="#/tags/"]`);
+  return await element.click();
+});
+
+Then("I click tags button from internal", async function () {
+  let element = await this.driver.$(`a.ember-view[href="#/tags/?type=internal"]`);
   return await element.click();
 });
 
@@ -25,7 +30,7 @@ Then("I click New Tags button", async function () {
   return await element.click();
 });
 
-Then("I see the tag I created {string}", async function (value) {
+Then("I see the tag {string}", async function (value) {
   let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
   return await element;
 });
@@ -56,7 +61,7 @@ When("I click save button", async function () {
 });
 
 When("I click the tag {string} button", async function (value) {
-    let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
+    let element = await this.driver.$(`a[href="#/tags/${value}/"]`);
     return await element.click();
 });
 
@@ -73,6 +78,12 @@ When("I click the confirm delete tag button", async function () {
 When("I click the internal tags button", async function () {
     let element = await this.driver.$("div.gh-contentfilter button:not(.gh-btn-group-selected)");
     return await element.click();
+});
+
+
+Then("I see the tags title", async function () {
+  let element = await this.driver.$("h2.gh-canvas-title");
+  return await element;
 });
 
 When("I click the internal tags new tag button", async function () {

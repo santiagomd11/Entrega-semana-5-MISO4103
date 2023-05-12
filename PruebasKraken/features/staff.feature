@@ -11,7 +11,7 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I wait for 2 seconds 
   And I click staff button
   And I wait for 2 seconds 
-  And I click staff ghost button 
+  And I click staff "ghost" button 
   And I wait for 2 seconds 
   And I enter the user name input field "GhostEditado"
   And I enter the email input field "emaileditado@gmail.com"
@@ -20,6 +20,10 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I enter the user location input field "Bogota"
   And I click save edit staff button  
   And I wait for 4 seconds
+  And I click staff button
+  Then I click staff "ghost" button 
+    And I enter the user name input field "ghost"
+    And I click save edit staff button
 
 @web @user2
 Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff y editar la contraseña del usuario Ghost
@@ -32,11 +36,12 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I wait for 2 seconds 
   And I click staff button
   And I wait for 2 seconds 
-  And I click staff ghost button 
+  And I click staff "ghost" button
   And I wait for 2 seconds 
   And I enter the user new password input field "Mr.hellno19"
   And I enter the user password verification input field "Mr.hellno19"
   And I click save change password button
+  Then I see the password changed notification
 
 
 @web @user3
@@ -50,7 +55,7 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I wait for 2 seconds 
   And I click staff button
   And I wait for 2 seconds 
-  And I click staff ghost button 
+  And I click staff "ghost" button 
   And I wait for 2 seconds 
   And I click the engine button
   And I wait for 2 seconds
@@ -58,10 +63,11 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I wait for 2 seconds  
   And I click the confirm suspend button
   And I wait for 2 seconds  
-  And I click the engine button
-  And I click the unsuspend button
-  And I wait for 2 seconds  
-  And I click the confirm suspend button
+  Then I see the suspended badge
+    And I click the engine button
+    And I click the unsuspend button
+    And I wait for 2 seconds  
+    And I click the confirm suspend button
 
 
 @web @user4
@@ -78,4 +84,4 @@ And I wait for 2 seconds
 And I click the invite people button
 And I enter in the invite form email "test@mail.com"
 And I select the user role to Contributor
-And I click the send invitation button
+Then I click the send invitation button

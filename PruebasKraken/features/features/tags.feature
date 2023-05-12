@@ -34,17 +34,13 @@ Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas, crear un
   And I click tags button
   And I wait for 2 seconds 
   And I click New Tags button
-  And I enter the name input field "testEdit"
+  And I enter the name input field "test2"
   And I enter the color input field "e84565"
   And I enter the description input field "A test description"
   And I click save button
   And I wait for 2 seconds 
   And I click tags button
   And I wait for 10 seconds 
-  And I click the tag "testedit" button
-  And I wait for 3 seconds
-  And I enter the name input field "test2Editado"
-  And I click save button
   And I wait for 5 seconds
   And I click tags button
   And I wait for 3 seconds

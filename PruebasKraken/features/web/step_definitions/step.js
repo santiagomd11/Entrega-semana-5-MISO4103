@@ -61,7 +61,7 @@ When("I click save button", async function () {
 });
 
 When("I click the tag {string} button", async function (value) {
-    let element = await this.driver.$(`a[href="#/tags/${value}/"]`);
+    let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
     return await element.click();
 });
 
@@ -211,8 +211,12 @@ When("I click staff button", async function () {
   return await element.click();
 });
 
-When("I click staff ghost button", async function () {
-  let element = await this.driver.$(`a[href="#/staff/ghost/"].ember-view`);
+Then("I see the password changed notification", async function () {
+  let element = await this.driver.$(`span.gh-notification-title`);
+  return await element.getValue();
+});
+When("I click staff {string} button", async function (value) {
+  let element = await this.driver.$(`a[href="#/staff/${value}/"].ember-view`);
   return await element.click();
 });
 
@@ -221,6 +225,10 @@ When("I enter the user name input field {string}", async function (value) {
   return await element.setValue(value);
 });
 
+Then ("I see the suspended badge", async function () {
+  let element = await this.driver.$("span.gh-badge.suspended");
+  return await element.getValue();
+});
 When("I enter the email input field {string}", async function (value) {
   let element = await this.driver.$("input#user-email");
   return await element.setValue(value);

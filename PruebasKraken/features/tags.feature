@@ -40,8 +40,11 @@ Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas, crear un
   And I click save button
   And I wait for 2 seconds 
   And I click tags button
-  And I wait for 10 seconds 
+  And I wait for 4 seconds 
+  And I click the tag "test2" button
   And I wait for 5 seconds
+  And I enter the name input field "test2Editado"
+  And I click save button
   And I click tags button
   And I wait for 3 seconds
   Then I see the tag "test2Editado"

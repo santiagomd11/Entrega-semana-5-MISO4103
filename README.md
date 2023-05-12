@@ -51,7 +51,7 @@
 KRAKEN
 
   1. Pararse en la carpeta de PruebasKraken desde el directorio raíz sería cd PruebasKraken
-  2. Tener corriendo en la máquina local Ghost (para ello instale Ghost en su máquina local y una vez instalado corra el comando ghost start  ), para la correcta ejecución de las pruebas es importante que el usuario creado en Ghost tenga unas credenciales que correspondan con las especificadas en la pruebas:
+  2. Tener corriendo en la máquina local Ghost (para ello instale Ghost en su máquina local la versión con la que actualmente se corren estas pruebas es la v3.41.1 con NodeJS v 14.19.0 y una vez instalado corra el comando ghost start  ), para la correcta ejecución de las pruebas es importante que el usuario creado en Ghost tenga unas credenciales que correspondan con las especificadas en la pruebas:
       ```
         email: myjachis@gmail.com
         password: Mr.hellno19 

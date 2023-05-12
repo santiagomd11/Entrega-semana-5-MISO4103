@@ -77,3 +77,10 @@ PLAYWRIGHT
  3. Ejecutar el comando `npm install playwright`
  4. Ejecutar el comando `node index.js`
 
+**INSTRUCCIONES PARA EJECUCIÓN DE SCRIPT DE COMPARACIÓN**
+
+  1. Primero ejecute las pruebas de la carpeta de pruebas de PruebasKraken, dentro de la carpeta reports generada se genera una carpeta screenshots le recomendamos moverla la carpeta root de este proyecto.
+  2. Ahora ejecute las pruebas de la carpeta de pruebas de PrubasKraken_Semana6,, dentro de la carpeta reports generada se genera una carpeta screenshots le recomendamos moverla la carpeta root de este proyecto.
+  3. Una vez cuente con ambas carpetas de screenshots dirijase al archivo reports.js y en la línea 7 y 6 escriba la ruta en la que están las dos carpetas de screenshots a comparar (Tenga en cuenta que se hará una comparación uno a uno) le aconsejamos mover las carpetas de screenshots a la raíz del proyecto para facilitar este proceso.
+  4. Una vez hecho esto guarde cambios y desde la carpeta raíz ejecute el comando node reports.js (IMPORTANTE: Usar una versión de node superior a 15, aquí se ha usado la 18.16.0. dado que Kraken funciona con la versión 14.9.0 se aconseja el uso de nvm para poder cambiar entre versiones)
+  5. Una vez corra el script podrá ver varios archivos html e imagenes (con el resultado de las diferencias) y al final un documento html llamado reports.html abralo y verá una lista con el reporte por cada imagene incluyendo la imagen de la carpeta 1 vs la carpeta 2, las diferencias y el porcentaje de diferencias. 

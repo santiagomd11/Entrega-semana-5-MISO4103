@@ -21,7 +21,7 @@ When("I click New Tags button", async function () {
 });
 
 When("I click tags button", async function () {
-  let element = await this.driver.$(`a[data-test-nav="tags"]`);
+  let element = await this.driver.$(`a[href="#/tags/"]`);
   return await element.click();
 });
 

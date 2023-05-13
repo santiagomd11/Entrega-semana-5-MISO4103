@@ -96,12 +96,7 @@ async function testScenario1(page){
   //#endregion 
 
   //#region THEN
-  // const titleResult = await (await page.getByText(titlePost, { exact: true }).textContent()).trim();
-  // expect.expect(titleResult).toBe(titlePost);
-  // console.log("----------Expect test---------")
-  // console.log("Result: " + titleResult)
-  // console.log("Expect: " + titlePost)
-  // console.log("----------Expect test---------")
+  await expect.expect(page.locator('input#user-name')).toHaveValue('Ghost')
   //#endregion
 
   await logout(page, screenshotPath);
@@ -127,17 +122,19 @@ async function testScenario2(page){
   console.log('Clicked on create new user')
 
   //Fill new user email new-user-email
-  await page.type('css=#new-user-email', 'kmilo2106@gmail.com');
+  var newEmail = 'kmilo2106@gmail.com'
+  await page.type('css=#new-user-email', newEmail);
   await page.screenshot({path:`${screenshotPath}-3-fillnewUserEmail.png`})
-  await page.getByRole('button', { name: 'Send invitation now' }).click();
+  await page.getByRole('button', { name: 'Send invitation now', exact: true}).click();
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-4-clickSendInvite.png`})
-  await page.getByRole('button', { title: 'Close' }).click();
+  await page.getByRole('button', { name: 'Close', exact: true }).click();
   await page.screenshot({path:`${screenshotPath}-5-newUserList.png`})
   console.log('Added new user')
   //#endregion
 
   //#region THEN
+  await expect.expect(page.locator('.gh-invited-users > div.apps-grid > div.apps-grid-cell > article.apps-card-app > div.apps-card-left > div.apps-card-meta > h3.apps-card-app-title')).toHaveText(newEmail);
   //#endregion
 
   //Borrar usuario para no generar conflictos
@@ -169,7 +166,7 @@ async function testScenario3(page){
   console.log('Clicked on ghost user')
 
   //Edit fields
-  await page.fill('css=#user-slug', 'ghost_edited');
+  var editedUserName = 'Ghost_edited_user'
   await page.fill('css=#user-email', 'ghost-author_edited@example.com');
   await page.locator('select#new-user-role').selectOption({ label: 'Contributor' })
   await page.fill('css=#user-location', 'The Internet_edited');
@@ -187,10 +184,13 @@ async function testScenario3(page){
   //#endregion
 
   //#region THEN
+  await expect.expect(page.locator('input#user-website')).toHaveValue('https://ghost-edited.org')
+  await expect.expect(page.locator('input#user-email')).toHaveValue('ghost-author_edited@example.com')
+  console.log("Expect ok")
   //#endregion
 
   //Deshacer cambios para quedar con los valores iniciales
-  await page.fill('css=#user-slug', 'ghost');
+  //await page.fill('css=#user-slug', 'ghost');
   await page.fill('css=#user-email', 'ghost-author@example.com');
   await page.locator('select#new-user-role').selectOption({ label: 'Author' })
   await page.fill('css=#user-location', 'The Internet');
@@ -224,25 +224,31 @@ async function testScenario4(page){
   console.log('Clicked on create new user')
 
   //Fill new user email new-user-email
-  await page.type('css=#new-user-email', 'kmilo2106@gmail.com');
+  await page.type('css=#new-user-email', 'correo@gmail.com');
   await page.screenshot({path:`${screenshotPath}-3-fillnewUserEmail.png`})
   await page.getByRole('button', { name: 'Send invitation now' }).click();
   console.log('Clicked on send invitation')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-4-clickSendInvite.png`})
   await page.getByTitle('Close').click();
-  await new Promise(r => setTimeout(r, 1000));
+  await new Promise(r => setTimeout(r, 4000));
   await page.screenshot({path:`${screenshotPath}-5-userListAfterAdd.png`})
   console.log('Added new user')
 
   //Delete user
+  await page.reload()
+  await new Promise(r => setTimeout(r, 3000));
   await page.click('a[href="#revoke"]');
-  await new Promise(r => setTimeout(r, 2000));
+  await new Promise(r => setTimeout(r, 7000));
   await page.screenshot({path:`${screenshotPath}-6-userListAfterDelete.png`})
   console.log('Deleted user');
+  await page.reload()
+  await new Promise(r => setTimeout(r, 3000));
   //#endregion
 
   //#region THEN
+  await expect.expect(page.getByText('correo@gmail.com')).toBeHidden();
+  console.log('Expect ok')
   //#endregion
 
   await logout(page, screenshotPath);
@@ -285,6 +291,8 @@ async function testScenario5(page){
   //#endregion
 
   //#region THEN
+  await expect.expect(page.getByRole('heading', { name: 'Tags NewTag' })).toBeVisible();
+  console.log('Expect ok')
   //#endregion
 
   //Delete tag (cleanup)
@@ -350,6 +358,8 @@ async function testScenario6(page){
   //#endregion
 
   //#region THEN
+  await expect.expect(page.locator('input#tag-name')).toHaveValue('NewTag_edited')
+  console.log('Expect ok')
   //#endregion
 
   //Delete tag (cleanup)
@@ -384,7 +394,7 @@ async function testScenario7(page){
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
-  await page.fill('input#tag-name', 'NewTag');
+  await page.fill('input#tag-name', 'NewTag-Scen7');
   await page.fill('input#tag-slug', 'NewTag-Slug');
   await page.getByPlaceholder("abcdef").fill("00ff00");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
@@ -397,18 +407,21 @@ async function testScenario7(page){
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-4-newTagSaved.png`})
   console.log('Saved new tag');
-  //#endregion
 
-  //#region THEN
-  //#endregion
-
-  //Delete tag (cleanup)
+  //Delete tag 
   await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
   await new Promise(r => setTimeout(r, 1000));
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-5-newTagDeleted.png`})
   console.log('Deleted new tag');
+  //#endregion
+
+  //#region THEN
+  await expect.expect(page.getByText('NewTag-Scen7')).toBeHidden();
+  console.log('Expect ok')
+  //#endregion
+  
 
   await logout(page, screenshotPath);
 }
@@ -456,6 +469,8 @@ async function testScenario8(page){
   //#endregion
 
   //#region THEN
+  await expect.expect(page.getByRole('heading', { name: 'Tags #NewInternalTag' })).toBeVisible();
+  console.log('Expect ok')
   //#endregion
 
   //Delete tag (cleanup)
@@ -503,6 +518,8 @@ async function testScenario9(page){
   //#endregion
 
   //#region THEN
+  await expect.expect(page.getByText('Test draft title')).toBeVisible();
+  console.log('Expect ok')
   //#endregion
 
   //Open draft and delete it (cleanup)
@@ -540,7 +557,8 @@ async function testScenario10(page){
   console.log('Clicked on create new post')
 
   //Fill new post fields
-  await page.getByPlaceholder("Post Title").fill("Test draft title");
+  var newPostTitle = 'Test draft title scen10'
+  await page.getByPlaceholder("Post Title").fill(newPostTitle);
   await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newPostFilled.png`})
@@ -550,13 +568,9 @@ async function testScenario10(page){
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-4-draftList.png`})
-  //#endregion
-
-  //#region THEN
-  //#endregion
 
   //Open draft and delete it (cleanup)
-  await page.getByText('Test draft title').click()
+  await page.getByText(newPostTitle).click()
   await new Promise(r => setTimeout(r, 500));
   await page.click('css=button.post-settings');
   await new Promise(r => setTimeout(r, 500));
@@ -567,6 +581,12 @@ async function testScenario10(page){
   await new Promise(r => setTimeout(r, 500));
   await page.screenshot({path:`${screenshotPath}-6-deletedDraft.png`})
   console.log('Deleted draft');
+  //#endregion
+
+  //#region THEN
+  await expect.expect(page.getByText(newPostTitle)).toBeHidden();
+  console.log('Expect ok')
+  //#endregion
 
   await logout(page, screenshotPath);
 }

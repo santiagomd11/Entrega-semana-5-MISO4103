@@ -590,7 +590,7 @@ async function testEscenario11(page){
   expect.expect(titleResult).toBe(titlePost);
   console.log("----------Expect test---------")
   console.log("Result: " + titleResult)
-  console.log("Expected: " + titleResult)
+  console.log("Expected: " + titlePost)
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 

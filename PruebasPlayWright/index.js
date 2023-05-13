@@ -25,51 +25,16 @@ const url = 'http://localhost:2368/ghost';
     console.log('Project loaded')
 
     //Interactuar con la aplicación web
-    //Login
-    await login(page, screenshotPath);
-
-    //Go to tags page
-    await page.click('a[href="#/tags/"]')
-    await new Promise(r => setTimeout(r, 2000));
-    await page.screenshot({path:`${screenshotPath}/tagsPage.png`})
-    console.log('Clicked on tags page')
-
-    //Go to internal tags page
-    await page.getByRole('button', { name: 'Internal tags' }).click();
-    await new Promise(r => setTimeout(r, 1000));
-    await page.screenshot({path:`${screenshotPath}/internalTagsPage.png`})
-    console.log('Clicked on internal tags page')
-
-    //Go to new tag page
-    await page.click('a[href="#/tags/new/"]')
-    await new Promise(r => setTimeout(r, 1000));
-    await page.screenshot({path:`${screenshotPath}/newTagPage.png`})
-    console.log('Clicked on create new internal tag')
-
-    //Fill new tag fields
-    await page.fill('input#tag-name', '#NewInternalTag');
-    await page.fill('input#tag-slug', 'NewInternalTag-Slug');
-    await page.getByPlaceholder("abcdef").fill("ff00ff");
-    await page.fill('textarea#tag-description', 'lorem ipsum...');
-    await new Promise(r => setTimeout(r, 1000));
-    await page.screenshot({path:`${screenshotPath}/newInternalTagFilled.png`})
-    console.log('Filled new internal tag details')
-
-    //Save new Tag
-    await page.getByRole('button', { name: 'Save' }).click();
-    await new Promise(r => setTimeout(r, 1000));
-    await page.screenshot({path:`${screenshotPath}/newInternalTagSaved.png`})
-    console.log('Saved new internal tag');
-
-    //Delete tag (cleanup)
-    await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
-    await new Promise(r => setTimeout(r, 1000));
-    await page.getByRole('button', { name: 'Delete', exact: true }).click();
-    await new Promise(r => setTimeout(r, 2000));
-    await page.screenshot({path:`${screenshotPath}/newInternalTagDeleted.png`})
-    console.log('Deleted new internal tag');
-    
-    await logout(page, screenshotPath);
+    await testScenario1(page);
+    await testScenario2(page);
+    await testScenario3(page);
+    await testScenario4(page);
+    await testScenario5(page);
+    await testScenario6(page);
+    await testScenario7(page);
+    await testScenario8(page);
+    await testScenario9(page);
+    await testScenario10(page);
 
     await testEscenario11(page)
     await testEscenario12(page)
@@ -90,6 +55,8 @@ const url = 'http://localhost:2368/ghost';
 
 
 async function login(page, screenshotPath){
+  if(!screenshotPath)
+    screenshotPath = './imagenes-test/0-login'
   await page.type('css=.email.ember-text-field.gh-input.ember-view', 'myjachis@gmail.com');
   await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Mr.hellno.19');
   await page.click('css=.login.gh-btn.gh-btn-blue')
@@ -99,6 +66,8 @@ async function login(page, screenshotPath){
 }
 
 async function logout(page, screenshotPath){
+  if(!screenshotPath)
+    screenshotPath = './imagenes-test/99-logout'
   await page.click('span.gh-user-name.mb1');
   await page.click('a[href="#/signout/"]')
   console.log('Logged out');
@@ -108,53 +77,73 @@ async function logout(page, screenshotPath){
 
 async function testScenario1(page){
   //Scenario 1: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y ver los detalles de un usuario
-  var screenshotPath = './imagenes-test/users/scenario1';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/users-scenario1';
   await login(page, screenshotPath);
+  //#endregion
 
-//Go to users (staff)
+  //#region WHEN
+  //Go to users (staff)
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-staffpage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
 
   //Go to user ghost
   await page.locator('css=h3.apps-card-app-title').filter({ hasText: 'Ghost' }).click()
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/2-ghostuser.png`})
+  await page.screenshot({path:`${screenshotPath}-2-ghostuser.png`})
   console.log('Clicked on ghost user')
+  //#endregion 
+
+  //#region THEN
+  // const titleResult = await (await page.getByText(titlePost, { exact: true }).textContent()).trim();
+  // expect.expect(titleResult).toBe(titlePost);
+  // console.log("----------Expect test---------")
+  // console.log("Result: " + titleResult)
+  // console.log("Expect: " + titlePost)
+  // console.log("----------Expect test---------")
+  //#endregion
 
   await logout(page, screenshotPath);
 }
 
 async function testScenario2(page){
   //Scenario 2: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y crear un usuario nuevo
-  var screenshotPath = './imagenes-test/users/scenario2';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/users-scenario2';
   await login(page, screenshotPath);
+  //#endregion
 
+  //#region WHEN
   //Go to users (staff)
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-staffpage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
 
   //Click on create user
   await page.click('css=.gh-btn.gh-btn-green')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/2-createUser.png`})
+  await page.screenshot({path:`${screenshotPath}-2-createUser.png`})
   console.log('Clicked on create new user')
 
   //Fill new user email new-user-email
   await page.type('css=#new-user-email', 'kmilo2106@gmail.com');
-  await page.screenshot({path:`${screenshotPath}/3-fillnewUserEmail.png`})
+  await page.screenshot({path:`${screenshotPath}-3-fillnewUserEmail.png`})
   await page.getByRole('button', { name: 'Send invitation now' }).click();
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/4-clickSendInvite.png`})
+  await page.screenshot({path:`${screenshotPath}-4-clickSendInvite.png`})
   await page.getByRole('button', { title: 'Close' }).click();
-  await page.screenshot({path:`${screenshotPath}/5-newUserList.png`})
+  await page.screenshot({path:`${screenshotPath}-5-newUserList.png`})
   console.log('Added new user')
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Borrar usuario para no generar conflictos
   await page.click('a[href="#revoke"]');
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/6-userListAfterDelete.png`})
+  await page.screenshot({path:`${screenshotPath}-6-userListAfterDelete.png`})
   console.log('Deleted user')
 
   await logout(page, screenshotPath);
@@ -162,18 +151,21 @@ async function testScenario2(page){
 
 async function testScenario3(page){
   //Scenario 3: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios, y editar un usuario
-  var screenshotPath = './imagenes-test/users/scenario3';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/users-scenario3';
   await login(page, screenshotPath);
+  //#endregion
 
+  //#region WHEN
   //Go to users (staff)
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-staffpage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
 
   //Go to user ghost
   await page.locator('css=h3.apps-card-app-title').filter({ hasText: 'Ghost' }).click()
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/2-ghostuser.png`})
+  await page.screenshot({path:`${screenshotPath}-2-ghostuser.png`})
   console.log('Clicked on ghost user')
 
   //Edit fields
@@ -183,15 +175,19 @@ async function testScenario3(page){
   await page.fill('css=#user-location', 'The Internet_edited');
   await page.fill('css=#user-website', 'https://ghost-edited.org');
   await page.fill('css=#user-bio', 'You can delete this user to remove all the welcome posts _edited');
-  await page.screenshot({path:`${screenshotPath}/3-editedUserFields.png`})
+  await page.screenshot({path:`${screenshotPath}-3-editedUserFields.png`})
   console.log('Edited user fields')
   await new Promise(r => setTimeout(r, 2000));
   await page.getByRole('button', { name: 'Save' }).click();
   
   await page.reload()
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/4-editedUserSave.png`});
+  await page.screenshot({path:`${screenshotPath}-4-editedUserSave.png`});
   console.log('Saved edited user');
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Deshacer cambios para quedar con los valores iniciales
   await page.fill('css=#user-slug', 'ghost');
@@ -200,7 +196,7 @@ async function testScenario3(page){
   await page.fill('css=#user-location', 'The Internet');
   await page.fill('css=#user-website', 'https://ghost.org');
   await page.fill('css=#user-bio', 'You can delete this user to remove all the welcome posts');
-  await page.screenshot({path:`${screenshotPath}/5-editedUserFields_rollback.png`})
+  await page.screenshot({path:`${screenshotPath}-5-editedUserFields_rollback.png`})
   console.log('Rolled back edited user fields')
   await new Promise(r => setTimeout(r, 2000));
   await page.getByRole('button', { name: 'Save' }).click();
@@ -210,56 +206,66 @@ async function testScenario3(page){
 
 async function testScenario4(page){
   //Scenario 4: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y eliminar un usuario
-  var screenshotPath = './imagenes-test/users/scenario4';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/users-scenario4';
   await login(page, screenshotPath);
+  //#endregion
 
+  //#region WHEN
   //Go to users (staff)
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-staffpage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
 
   //Click on create user
   await page.click('css=.gh-btn.gh-btn-green')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/2-createUser.png`})
+  await page.screenshot({path:`${screenshotPath}-2-createUser.png`})
   console.log('Clicked on create new user')
 
   //Fill new user email new-user-email
   await page.type('css=#new-user-email', 'kmilo2106@gmail.com');
-  await page.screenshot({path:`${screenshotPath}/3-fillnewUserEmail.png`})
+  await page.screenshot({path:`${screenshotPath}-3-fillnewUserEmail.png`})
   await page.getByRole('button', { name: 'Send invitation now' }).click();
   console.log('Clicked on send invitation')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/4-clickSendInvite.png`})
+  await page.screenshot({path:`${screenshotPath}-4-clickSendInvite.png`})
   await page.getByTitle('Close').click();
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/5-userListAfterAdd.png`})
+  await page.screenshot({path:`${screenshotPath}-5-userListAfterAdd.png`})
   console.log('Added new user')
 
   //Delete user
   await page.click('a[href="#revoke"]');
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/6-userListAfterDelete.png`})
+  await page.screenshot({path:`${screenshotPath}-6-userListAfterDelete.png`})
   console.log('Deleted user');
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   await logout(page, screenshotPath);
 }
 
 async function testScenario5(page){
   //Scenario 5: Como usuario quiero loguearme en la pagina, listar etiquetas y crear una etiqueta
-  var screenshotPath = './imagenes-test/tags/scenario5';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/tags-scenario5';
   await login(page, screenshotPath);
+  //#endregion 
 
+  //#region WHEN
   //Go to tags page
   await page.click('a[href="#/tags/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-tagsPage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-tagsPage.png`})
   console.log('Clicked on tags page')
 
   //Go to new tag page
   await page.click('a[href="#/tags/new/"]')
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/2-newTagPage.png`})
+  await page.screenshot({path:`${screenshotPath}-2-newTagPage.png`})
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
@@ -268,21 +274,25 @@ async function testScenario5(page){
   await page.getByPlaceholder("abcdef").fill("00ff00");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/3-newTagFilled.png`})
+  await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
 
   //Save new Tag
   await page.getByRole('button', { name: 'Save' }).click();
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/4-newTagSaved.png`})
+  await page.screenshot({path:`${screenshotPath}-4-newTagSaved.png`})
   console.log('Saved new tag');
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Delete tag (cleanup)
   await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
   await new Promise(r => setTimeout(r, 1000));
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/5-newTagDeleted.png`})
+  await page.screenshot({path:`${screenshotPath}-5-newTagDeleted.png`})
   console.log('Deleted new tag');
 
   await logout(page, screenshotPath);
@@ -290,19 +300,22 @@ async function testScenario5(page){
 
 async function testScenario6(page){
   //Scenario 6: Como usuario quiero loguearme en la pagina, listar etiquetas, crear una etiqueta y editarla
-  var screenshotPath = './imagenes-test/tags/scenario6';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/tags-scenario6';
   await login(page, screenshotPath);
+  //#endregion
 
+  //#region WHEN
   //Go to tags page
   await page.click('a[href="#/tags/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-tagsPage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-tagsPage.png`})
   console.log('Clicked on tags page')
 
   //Go to new tag page
   await page.click('a[href="#/tags/new/"]')
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/2-newTagPage.png`})
+  await page.screenshot({path:`${screenshotPath}-2-newTagPage.png`})
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
@@ -311,13 +324,13 @@ async function testScenario6(page){
   await page.getByPlaceholder("abcdef").fill("00ff00");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/3-newTagFilled.png`})
+  await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
 
   //Save new Tag
   await page.getByRole('button', { name: 'Save' }).click();
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/4-newTagSaved.png`})
+  await page.screenshot({path:`${screenshotPath}-4-newTagSaved.png`})
   console.log('Saved new tag');
 
   //Edit new tag
@@ -326,21 +339,25 @@ async function testScenario6(page){
   await page.getByPlaceholder("abcdef").fill("0000ff");
   await page.fill('textarea#tag-description', 'lorem ipsum... edited');
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/5-newTagEdited.png`})
+  await page.screenshot({path:`${screenshotPath}-5-newTagEdited.png`})
   console.log('Edited new tag details')
 
   //Save edited Tag
   await page.getByRole('button', { name: 'Save' }).click();
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/6-newTagEditedSaved.png`})
+  await page.screenshot({path:`${screenshotPath}-6-newTagEditedSaved.png`})
   console.log('Saved new tag');
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Delete tag (cleanup)
   await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
   await new Promise(r => setTimeout(r, 1000));
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/7-newTagDeleted.png`})
+  await page.screenshot({path:`${screenshotPath}-7-newTagDeleted.png`})
   console.log('Deleted new tag');
   
   await logout(page, screenshotPath);
@@ -348,19 +365,22 @@ async function testScenario6(page){
 
 async function testScenario7(page){
   //Como usuario quiero loguearme en la pagina, listar etiquetas, crear una etiqueta y borrar una etiqueta
-  var screenshotPath = './imagenes-test/tags/scenario7';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/tags-scenario7';
   await login(page, screenshotPath);
+  //#endregion
 
+  //#region WHEN
   //Go to tags page
   await page.click('a[href="#/tags/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-tagsPage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-tagsPage.png`})
   console.log('Clicked on tags page')
 
   //Go to new tag page
   await page.click('a[href="#/tags/new/"]')
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/2-newTagPage.png`})
+  await page.screenshot({path:`${screenshotPath}-2-newTagPage.png`})
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
@@ -369,21 +389,25 @@ async function testScenario7(page){
   await page.getByPlaceholder("abcdef").fill("00ff00");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/3-newTagFilled.png`})
+  await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
 
   //Save new Tag
   await page.getByRole('button', { name: 'Save' }).click();
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/4-newTagSaved.png`})
+  await page.screenshot({path:`${screenshotPath}-4-newTagSaved.png`})
   console.log('Saved new tag');
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Delete tag (cleanup)
   await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
   await new Promise(r => setTimeout(r, 1000));
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/5-newTagDeleted.png`})
+  await page.screenshot({path:`${screenshotPath}-5-newTagDeleted.png`})
   console.log('Deleted new tag');
 
   await logout(page, screenshotPath);
@@ -391,25 +415,28 @@ async function testScenario7(page){
 
 async function testScenario8(page){
   //Scenario 8: Como usuario quiero loguearme en la pagina, listar etiquetas y crear una etiqueta interna
-  var screenshotPath = './imagenes-test/tags/scenario8';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/tags-scenario8';
   await login(page, screenshotPath);
+  //#endregion
 
+  //#region WHEN
   //Go to tags page
   await page.click('a[href="#/tags/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-tagsPage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-tagsPage.png`})
   console.log('Clicked on tags page')
 
   //Go to internal tags page
   await page.getByRole('button', { name: 'Internal tags' }).click();
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/2-internalTagsPage.png`})
+  await page.screenshot({path:`${screenshotPath}-2-internalTagsPage.png`})
   console.log('Clicked on internal tags page')
 
   //Go to new tag page
   await page.click('a[href="#/tags/new/"]')
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/3-newTagPage.png`})
+  await page.screenshot({path:`${screenshotPath}-3-newTagPage.png`})
   console.log('Clicked on create new internal tag')
 
   //Fill new tag fields
@@ -418,21 +445,25 @@ async function testScenario8(page){
   await page.getByPlaceholder("abcdef").fill("ff00ff");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/4-newInternalTagFilled.png`})
+  await page.screenshot({path:`${screenshotPath}-4-newInternalTagFilled.png`})
   console.log('Filled new internal tag details')
 
   //Save new Tag
   await page.getByRole('button', { name: 'Save' }).click();
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/5-newInternalTagSaved.png`})
+  await page.screenshot({path:`${screenshotPath}-5-newInternalTagSaved.png`})
   console.log('Saved new internal tag');
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Delete tag (cleanup)
   await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
   await new Promise(r => setTimeout(r, 1000));
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/6-newInternalTagDeleted.png`})
+  await page.screenshot({path:`${screenshotPath}-6-newInternalTagDeleted.png`})
   console.log('Deleted new internal tag');
   
   await logout(page, screenshotPath);
@@ -440,32 +471,39 @@ async function testScenario8(page){
 
 async function testScenario9(page){
   //Scenario 9: Como usuario quiero iniciar sesion en la pagina y crear un post draft
-  var screenshotPath = './imagenes-test/drafts/scenario9';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/drafts-scenario9';
   await login(page, screenshotPath);
+  //#endregion
 
+  //#region WHEN
   //Go to posts page
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-postsPage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-postsPage.png`})
   console.log('Clicked on posts page')
 
   //Go to new post page
   await page.click('a[href="#/editor/post/"]')
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/2-newPostPage.png`})
+  await page.screenshot({path:`${screenshotPath}-2-newPostPage.png`})
   console.log('Clicked on create new post')
 
   //Fill new post fields
   await page.getByPlaceholder("Post Title").fill("Test draft title");
   await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/3-newPostFilled.png`})
+  await page.screenshot({path:`${screenshotPath}-3-newPostFilled.png`})
   console.log('Filled new post details')
 
   // See draft in list
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/4-draftList.png`})
+  await page.screenshot({path:`${screenshotPath}-4-draftList.png`})
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Open draft and delete it (cleanup)
   await page.getByText('Test draft title').click()
@@ -483,32 +521,39 @@ async function testScenario9(page){
 
 async function testScenario10(page){
   //Scenario 10: Como usuario quiero iniciar sesion en la pagina, crear un post draft y eliminarlo
-  var screenshotPath = './imagenes-test/drafts/scenario10';
+  //#region GIVEN
+  var screenshotPath = './imagenes-test/drafts-scenario10';
   await login(page, screenshotPath);
+  //#endregion
 
+  //#region WHEN
   //Go to posts page
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}/1-postsPage.png`})
+  await page.screenshot({path:`${screenshotPath}-1-postsPage.png`})
   console.log('Clicked on posts page')
 
   //Go to new post page
   await page.click('a[href="#/editor/post/"]')
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/2-newPostPage.png`})
+  await page.screenshot({path:`${screenshotPath}-2-newPostPage.png`})
   console.log('Clicked on create new post')
 
   //Fill new post fields
   await page.getByPlaceholder("Post Title").fill("Test draft title");
   await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/3-newPostFilled.png`})
+  await page.screenshot({path:`${screenshotPath}-3-newPostFilled.png`})
   console.log('Filled new post details')
 
   // See draft in list
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 1000));
-  await page.screenshot({path:`${screenshotPath}/4-draftList.png`})
+  await page.screenshot({path:`${screenshotPath}-4-draftList.png`})
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Open draft and delete it (cleanup)
   await page.getByText('Test draft title').click()
@@ -517,10 +562,10 @@ async function testScenario10(page){
   await new Promise(r => setTimeout(r, 500));
   await page.getByText('Delete post').click()
   await new Promise(r => setTimeout(r, 500));
-  await page.screenshot({path:`${screenshotPath}/5-deleteDraftConfirm.png`})
+  await page.screenshot({path:`${screenshotPath}-5-deleteDraftConfirm.png`})
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
   await new Promise(r => setTimeout(r, 500));
-  await page.screenshot({path:`${screenshotPath}/6-deletedDraft.png`})
+  await page.screenshot({path:`${screenshotPath}-6-deletedDraft.png`})
   console.log('Deleted draft');
 
   await logout(page, screenshotPath);

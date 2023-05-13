@@ -1,5 +1,7 @@
 const playwright = require('playwright');
 
+const expect = require('@playwright/test');
+
 const url = 'http://localhost:2368/ghost';
 
 (async () => {
@@ -534,10 +536,13 @@ async function testEscenario11(page){
   console.log('Escenario 11 -> create new post')
   console.log('---------------------------------')
 
+  //----------------GIVEN---------------------
   // Hace el login
   await login(page, "./imagenes-test/post/escenario11");
   await page.screenshot({path:'./imagenes-test/post/escenario11/1.login-successful.png'})
+  //----------------GIVEN---------------------
 
+  //----------------WHEN---------------------
   // Entra a los post
   await page.click('a[href="#/posts/"]')
   console.log('Clicked on section Posts')
@@ -548,9 +553,11 @@ async function testEscenario11(page){
   await page.click('css=.ember-view.gh-btn.gh-btn-green')
   console.log('Clicked on button new post')
 
+  const titlePost = "This is a post " + Math.floor(Math.random()*10000001);
+
   // Rellena los inputs de title an description
   await page.screenshot({path:'./imagenes-test/post/escenario11/3.empty-new-post.png'})
-  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', 'This is a post');
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
   await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
   console.log('Writed about inputs title and description')
 
@@ -575,8 +582,19 @@ async function testEscenario11(page){
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 500));
   await page.screenshot({path:'./imagenes-test/post/escenario11/8.verify-created-post.png'})
-  
-  // Hace el logout
+  //----------------WHEN---------------------
+
+
+  //----------------THEN---------------------
+  const titleResult = await (await page.getByText(titlePost, { exact: true }).textContent()).trim();
+  expect.expect(titleResult).toBe(titlePost);
+  console.log("----------Expect test---------")
+  console.log("Result: " + titleResult)
+  console.log("Expected: " + titleResult)
+  console.log("----------Expect test---------")
+  //----------------THEN---------------------
+
+
   await logout(page, "./imagenes-test/post/escenario11");
   await new Promise(r => setTimeout(r, 2000));
 }

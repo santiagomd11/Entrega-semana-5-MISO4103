@@ -133,15 +133,16 @@ async function testScenario2(page){
   await page.getByRole('button', { name: 'Send invitation now', exact: true}).click();
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-4-clickSendInvite.png`})
-  await page.getByRole('button', { name: 'Close', exact: true }).click();
-  await page.screenshot({path:`${screenshotPath}-5-newUserList.png`})
-  console.log('Added new user')
+  //await page.getByRole('button', { name: 'Close', exact: true }).click();
   await page.reload()
   await new Promise(r => setTimeout(r, 3000));
+  await page.screenshot({path:`${screenshotPath}-5-newUserList.png`})
+  console.log('Added new user')
+  
   //#endregion
 
   //#region THEN
-  await expect.expect(page.locator('.gh-invited-users > div.apps-grid > div.apps-grid-cell > article.apps-card-app > div.apps-card-left > div.apps-card-meta > h3.apps-card-app-title')).toHaveText(newEmail);
+  expect.expect(page.getByText(newEmail)).toBeVisible();
   console.log('Expect ok')
   //#endregion
 

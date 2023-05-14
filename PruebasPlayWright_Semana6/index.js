@@ -23,6 +23,7 @@ const url = 'http://localhost:2368/ghost';
     console.log('Project loaded')
 
     //Interactuar con la aplicación web
+    // await testScenario1(page);
     // await testScenario5(page);
     // await testScenario6(page);
     // await testScenario7(page);
@@ -81,6 +82,7 @@ async function testScenario1(page){
   await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
 
   //Go to user 
+  //await page.getByTestId('members-list-item').click()
   var userName = (await page.locator('css=h3.ma0.pa0.gh-members-list-name').innerText()).valueOf()
   console.log('username: ' + userName);
   await page.locator('css=h3.ma0.pa0.gh-members-list-name').click()
@@ -91,6 +93,7 @@ async function testScenario1(page){
 
   //#region THEN
   await expect.expect(page.locator('h2.gh-canvas-title')).toHaveText(userName)
+  console.log('Expect ok')
   //#endregion
 
   await logout(page, screenshotPath);
@@ -119,7 +122,7 @@ async function testScenario5(page){
   //Fill new tag fields
   await page.fill('input#tag-name', 'NewTag');
   await page.fill('input#tag-slug', 'NewTag-Slug');
-  await page.getByPlaceholder("abcdef").fill("00ff00");
+  await page.getByPlaceholder("15171A").fill("00ff00");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
@@ -133,7 +136,7 @@ async function testScenario5(page){
   //#endregion
 
   //#region THEN
-  await expect.expect(page.getByRole('heading', { name: 'Tags NewTag' })).toBeVisible();
+  await expect.expect(page.getByRole('heading', { name: 'NewTag' })).toBeVisible();
   console.log('Expect ok')
   //#endregion
 
@@ -171,7 +174,7 @@ async function testScenario6(page){
   //Fill new tag fields
   await page.fill('input#tag-name', 'NewTag');
   await page.fill('input#tag-slug', 'NewTag-Slug');
-  await page.getByPlaceholder("abcdef").fill("00ff00");
+  await page.getByPlaceholder("15171A").fill("00ff00");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
@@ -186,7 +189,7 @@ async function testScenario6(page){
   //Edit new tag
   await page.fill('input#tag-name', 'NewTag_edited');
   await page.fill('input#tag-slug', 'NewTag-Slug_edited');
-  await page.getByPlaceholder("abcdef").fill("0000ff");
+  await page.getByPlaceholder("15171A").fill("0000ff");
   await page.fill('textarea#tag-description', 'lorem ipsum... edited');
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-5-newTagEdited.png`})
@@ -238,7 +241,7 @@ async function testScenario7(page){
   //Fill new tag fields
   await page.fill('input#tag-name', 'NewTag-Scen7');
   await page.fill('input#tag-slug', 'NewTag-Slug');
-  await page.getByPlaceholder("abcdef").fill("00ff00");
+  await page.getByPlaceholder("15171A").fill("00ff00");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
@@ -297,7 +300,7 @@ async function testScenario8(page){
   //Fill new tag fields
   await page.fill('input#tag-name', '#NewInternalTag');
   await page.fill('input#tag-slug', 'NewInternalTag-Slug');
-  await page.getByPlaceholder("abcdef").fill("ff00ff");
+  await page.getByPlaceholder("15171A").fill("ff00ff");
   await page.fill('textarea#tag-description', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-4-newInternalTagFilled.png`})
@@ -311,7 +314,7 @@ async function testScenario8(page){
   //#endregion
 
   //#region THEN
-  await expect.expect(page.getByRole('heading', { name: 'Tags #NewInternalTag' })).toBeVisible();
+  await expect.expect(page.getByRole('heading', { name: '#NewInternalTag' })).toBeVisible();
   console.log('Expect ok')
   //#endregion
 
@@ -367,7 +370,7 @@ async function testScenario9(page){
   //Open draft and delete it (cleanup)
   await page.getByText('Test draft title').click()
   await new Promise(r => setTimeout(r, 500));
-  await page.click('css=button.post-settings');
+  await page.getByTitle('Settings').click()
   await new Promise(r => setTimeout(r, 500));
   await page.getByText('Delete post').click()
   await new Promise(r => setTimeout(r, 500));

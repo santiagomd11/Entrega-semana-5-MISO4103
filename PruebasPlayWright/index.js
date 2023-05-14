@@ -412,6 +412,10 @@ async function testScenario7(page){
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-4-newTagSaved.png`})
   console.log('Saved new tag');
+  //#endregion
+
+  //#region THEN
+  //#endregion
 
   //Delete tag 
   await page.getByRole('button', { name: 'Delete tag', exact: true }).click();

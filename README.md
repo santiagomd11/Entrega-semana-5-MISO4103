@@ -83,7 +83,7 @@ Ejecucion sobre la version 5.46.1 de ghost, con node 18.16.0
   * Login en la pagina, crear un post draft, y editarlo.
   
   
-# INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS
+## INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS
 
 KRAKEN
 
@@ -114,7 +114,7 @@ PLAYWRIGHT
  3. Ejecutar el comando `npm install playwright`
  4. Ejecutar el comando `node index.js`
 
-**INSTRUCCIONES PARA EJECUCIÓN DE SCRIPT DE COMPARACIÓN**
+## INSTRUCCIONES PARA EJECUCIÓN DE SCRIPT DE COMPARACIÓN
 
   1. Primero ejecute las pruebas de la carpeta de pruebas de PruebasKraken, dentro de la carpeta reports generada se genera una carpeta screenshots le recomendamos moverla la carpeta root de este proyecto.
   2. Ahora ejecute las pruebas de la carpeta de pruebas de PrubasKraken_Semana6,, dentro de la carpeta reports generada se genera una carpeta screenshots le recomendamos moverla la carpeta root de este proyecto.

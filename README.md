@@ -49,7 +49,7 @@ Ejecucion sobre la version 3.41.1 de ghost, con node 14.19.0
   * Login en la pagina, crear un post draft, y publicarlo.
   * Login en la pagina, crear un post draft, y eliminarlo.
  
-## Semana  5 
+## Semana  6
 
 Ejecucion sobre la version 5.46.1 de ghost, con node 18.16.0
 
@@ -83,7 +83,7 @@ Ejecucion sobre la version 5.46.1 de ghost, con node 18.16.0
   * Login en la pagina, crear un post draft, y editarlo.
   
   
-**INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS**
+# INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS
 
 KRAKEN
 

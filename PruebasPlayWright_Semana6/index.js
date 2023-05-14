@@ -34,7 +34,7 @@ const url = 'http://localhost:2368/ghost';
 
     await testEscenario11(page)
     await testEscenario12(page)
-    // await testEscenario13(page)
+    await testEscenario13(page)
     // await testEscenario14(page)
     // await testEscenario19(page)
 
@@ -567,6 +567,90 @@ async function testEscenario12(page){
 
   // Hace el logout
   await logout(page, `${screenshotPath}-13-`);
+  await new Promise(r => setTimeout(r, 2000));
+}
+
+
+async function testEscenario13(page){
+  // Escenario 13: Como usuario quiero loguearme en la pagina, listar posts, crear un post, y dejarlo programado para publicarse mas tarde
+
+  console.log('-----------------------------------------------')
+  console.log('Escenario 13 -> Create new post and schedule')
+  console.log('-----------------------------------------------')
+
+  //----------------GIVEN---------------------
+  var screenshotPath = './imagenes-test/posts-escenario13';
+  // Hace el login
+  await login(page, `${screenshotPath}-`);
+  await page.screenshot({path:`${screenshotPath}-1-login-successful.png`})
+  //----------------GIVEN---------------------
+
+
+  //----------------WHEN---------------------
+  // Entra a los post
+  await page.click('a[href="#/posts/"]')
+  console.log('Clicked on section Posts')
+
+  // Cliquea en new post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}-2-list-posts.png`})
+  await page.click('css=.ember-view.gh-btn.gh-btn-primary')
+  console.log('Clicked on button new post')
+
+  // Rellena los inputs de title an description
+  let titlePost = 'Post to schedule ' + Math.floor(Math.random()*10000001)
+  await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule post');
+  console.log('Writed about inputs title and description')
+
+  // Despliega la opción de publish
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}-4-new-write-post.png`})
+  await page.getByText('Publish', { exact: true }).click();
+  console.log('Clicked on option new Publish')
+
+  // Programa la publicación del post
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}-5-action-publish-post.png`})
+  await page.getByText('Right now', { exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}-6-select-option-schedule.png`})
+  await page.getByText('Schedule for later', { exact: true }).click();
+  console.log('Clicked on button Schedule for later')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}-7-scheduling-post.png`})
+  console.log('Post scheduling')
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByText('Continue, final review →', { exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+
+  await page.getByText('Publish post,', { exact: false }).click({force: true});
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}-8-scheduled-post.png`})
+  console.log('Post scheduled')
+
+  await page.getByText('Editor', { exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+
+  // Muestra la lista de post
+  await page.click('a[href="#/posts/"]')
+  await new Promise(r => setTimeout(r, 500));
+  await page.screenshot({path:`${screenshotPath}-9-Verify-post-schedule.png`})
+  //----------------WHEN---------------------
+
+
+  //----------------THEN---------------------
+  const titleResult = await (await page.getByText(titlePost, { exact: true }).textContent()).trim();
+  expect.expect(titlePost).toBe(titleResult);
+  console.log("----------Expect test---------")
+  console.log("Result: " + titleResult)
+  console.log("Expect: " + titlePost)
+  console.log("----------Expect test---------")
+  //----------------THEN---------------------
+
+  // Hace el logout
+  await logout(page, `${screenshotPath}-10-`);
   await new Promise(r => setTimeout(r, 2000));
 }
 

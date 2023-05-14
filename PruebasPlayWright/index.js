@@ -136,17 +136,22 @@ async function testScenario2(page){
   await page.getByRole('button', { name: 'Close', exact: true }).click();
   await page.screenshot({path:`${screenshotPath}-5-newUserList.png`})
   console.log('Added new user')
+  await page.reload()
+  await new Promise(r => setTimeout(r, 3000));
   //#endregion
 
   //#region THEN
   await expect.expect(page.locator('.gh-invited-users > div.apps-grid > div.apps-grid-cell > article.apps-card-app > div.apps-card-left > div.apps-card-meta > h3.apps-card-app-title')).toHaveText(newEmail);
+  console.log('Expect ok')
   //#endregion
 
   //Borrar usuario para no generar conflictos
   await page.click('a[href="#revoke"]');
-  await new Promise(r => setTimeout(r, 2000));
+  await new Promise(r => setTimeout(r, 7000));
   await page.screenshot({path:`${screenshotPath}-6-userListAfterDelete.png`})
-  console.log('Deleted user')
+  console.log('Deleted user');
+  await page.reload()
+  await new Promise(r => setTimeout(r, 3000));
 
   await logout(page, screenshotPath);
 }

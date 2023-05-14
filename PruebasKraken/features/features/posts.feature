@@ -8,16 +8,24 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts y crear un po
   And I enter password "Mr.hellno19"
   And I wait for 1 seconds
   And I click login button
-  And I wait for 2 seconds 
+  And I wait for 3 seconds 
   And I click posts button
+  And I wait for 2 seconds 
   And I click New post button
-  And I enter in the post name "test name 1"
+  And I wait for 2 seconds 
+  And I enter in the post name "Post test 1"
+  And I wait for 2 seconds 
   And I click on the editor
+  And I wait for 2 seconds 
   And I click in the publish option 
+  And I wait for 2 seconds 
   And I Select the set it live now option 
+  And I wait for 2 seconds 
   And I click in the publish button 
+  And I wait for 2 seconds 
   And I click post button
   And I wait for 3 seconds 
+  Then I see the post with name "Post test 1"
 
 
 @web @user2
@@ -28,26 +36,40 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts, crear un pos
   And I enter password "Mr.hellno19"
   And I wait for 1 seconds
   And I click login button
-  And I wait for 2 seconds 
+  And I wait for 3 seconds 
   And I click posts button
-  And I wait for 5 seconds 
+  And I wait for 2 seconds 
   And I click New post button
-  And I enter in the post name "test name 2"
+  And I wait for 2 seconds 
+  And I enter in the post name "Post test 2"
+  And I wait for 2 seconds 
   And I click on the editor
+  And I wait for 2 seconds 
   And I click in the publish option 
+  And I wait for 2 seconds 
   And I Select the set it live now option 
+  And I wait for 2 seconds 
   And I click in the publish button 
+  And I wait for 2 seconds 
   And I click post button
   And I wait for 2 seconds 
-  And I click in the post with name "test name 2"
-  And I enter in the post name "test name 2 modificado"
+  And I click in the post with name "Post test 2"
+  And I wait for 2 seconds 
+  And I enter in the post name "Post test 2 modificado"
+  And I wait for 2 seconds 
   And I click on the editor
+  And I wait for 2 seconds 
   And I enter in the post body "My new post body"
+  And I wait for 2 seconds 
   And I click in the update option
+  And I wait for 2 seconds 
   And I click in the Published option 
+  And I wait for 2 seconds 
   And I click in the update button
+  And I wait for 2 seconds 
   And I click post button
   And I wait for 3 seconds
+  Then I see the post with name "Post test 2 modificado"
 
 
 @web @user3
@@ -58,22 +80,32 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts, crear un pos
   And I enter password "Mr.hellno19"
   And I wait for 1 seconds
   And I click login button
-  And I wait for 2 seconds 
+  And I wait for 3 seconds 
   And I click posts button
-  And I wait for 12 seconds 
+  And I wait for 2 seconds 
   And I click New post button
-  And I enter in the post name "borrar"
+  And I wait for 2 seconds 
+  And I enter in the post name "Post test 3 borrar"
+  And I wait for 2 seconds 
   And I click on the editor
+  And I wait for 2 seconds 
   And I click in the publish option 
+  And I wait for 2 seconds 
   And I Select the set it live now option 
+  And I wait for 2 seconds 
   And I click in the publish button 
+  And I wait for 2 seconds 
   And I click post button
   And I wait for 2 seconds 
-  And I click in the post with name "borrar"
+  And I click in the post with name "Post test 3 borrar"
+  And I wait for 2 seconds 
   And I click in the settings button
+  And I wait for 3 seconds 
   And I click on Delete Post
+  And I wait for 3 seconds 
   And I click on Delete Post confirmation
   And I wait for 3 seconds
+  Then I don't see the post with name "Post test 3 borrar"
 
 
 @web @user4
@@ -84,14 +116,21 @@ Scenario: Como usuario quiero loguearme en la pagina, listar posts, crear un pos
   And I enter password "Mr.hellno19"
   And I wait for 1 seconds
   And I click login button
-  And I wait for 2 seconds 
+  And I wait for 3 seconds 
   And I click posts button
-  And I wait for 18 seconds 
+  And I wait for 2 seconds 
   And I click New post button
-  And I enter in the post name "test name scheduled"
+  And I wait for 2 seconds 
+  And I enter in the post name "Post test scheduled"
+  And I wait for 2 seconds 
   And I click on the editor
+  And I wait for 2 seconds 
   And I click in the publish option 
+  And I wait for 2 seconds 
   And I Select the Schedule it for later option 
+  And I wait for 2 seconds 
   And I click in the Schedule button 
+  And I wait for 2 seconds 
   And I click post button
   And I wait for 3 seconds 
+  Then I see the post with name "Post test scheduled"

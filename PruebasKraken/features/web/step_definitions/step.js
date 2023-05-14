@@ -185,9 +185,18 @@ When("I click in the Schedule button", async function () {
 });
 
 When("I click in the post with name {string}", async function (value) {
-  let elements = await this.driver.$$("h3.gh-content-entry-title");
-  let element = elements.find(async el => await el.getText() === value);
-  return await element.click();
+  const postSelector = `li.gh-list-row.gh-posts-list-item`;
+  const elements = await this.driver.$$(postSelector);
+
+  for (const element of elements) {
+    const titleElement = await element.$("h3.gh-content-entry-title");
+    const text = await titleElement.getText();
+
+    if (text.includes(value)) {
+      await element.click();
+      return;
+    }
+  }
 });
 
 When("I click in the settings button", async function () {
@@ -196,13 +205,43 @@ When("I click in the settings button", async function () {
 });
 
 When("I click on Delete Post", async function () {
-  let element = await this.driver.$("button.settings-menu-delete-button");
-  return await element.click();
+  const deleteButtonSelector = ".settings-menu-delete-button";
+  const deleteButton = await this.driver.$(deleteButtonSelector);
+  await deleteButton.scrollIntoView();
+  await deleteButton.click();
 });
 
 When("I click on Delete Post confirmation", async function () {
   let element = await this.driver.$("button.gh-btn.gh-btn-red.gh-btn-icon.ember-view");
   return await element.click();
+});
+
+Then("I see the post with name {string}", async function (value) {
+  const postSelector = `li.gh-list-row.gh-posts-list-item`;
+  const elements = await this.driver.$$(postSelector);
+
+  for (const element of elements) {
+    const titleElement = await element.$("h3.gh-content-entry-title");
+    const text = await titleElement.getText();
+
+    if (text.includes(value)) {
+      return await element;
+    }
+  }
+});
+
+Then("I don't see the post with name {string}", async function (value) {
+  const postSelector = `li.gh-list-row.gh-posts-list-item`;
+  const elements = await this.driver.$$(postSelector);
+
+  for (const element of elements) {
+    const titleElement = await element.$("h3.gh-content-entry-title");
+    const text = await titleElement.getText();
+
+    if (text.includes(value)) {
+      throw new Error(`Post with name "${value}" is present, but it should not be.`);
+    }
+  }
 });
 
 // *********************** STAFF FEATURE *********************************

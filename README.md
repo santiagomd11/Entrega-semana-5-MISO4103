@@ -1,4 +1,8 @@
-# Entrega-semana-5-MISO4103
+# Entrega-semana-5-6-MISO4103
+
+## Semana  5 
+
+Ejecucion sobre la version 3.41.1 de ghost, con node 14.19.0
 
 **Funcionalidades bajo prueba**
 
@@ -44,9 +48,42 @@
   * Login en la pagina, crear un post draft, y editarlo.
   * Login en la pagina, crear un post draft, y publicarlo.
   * Login en la pagina, crear un post draft, y eliminarlo.
+ 
+## Semana  6
+
+Ejecucion sobre la version 5.46.1 de ghost, con node 18.16.0
+
+**Funcionalidades bajo prueba**
+
+ * Creación, edición Tags
+ * Gestión de Staff
+ * Posts
+ * Pages
+ * Drafts
+
+**ESCENARIOS DE PRUEBA**
+
+**Creación, edición Tags**
+
+  * Login en la pagina, listar etiquetas y crear una etiqueta nueva
+  * Login en la pagina, listar etiquetas, crear una etiqueta nueva y luego editarla
+  * Login en la pagina, listar etiquetas, crear una etiqueta nueva y luego borrarla
+  * Login en la pagina, listar etiquetas y crear una etiqueta INTERNA nueva
+
+**Posts** 
+
+  * Login en la pagina, listar posts y crear un post.
+  * Login en la pagina, listar posts, crear un post, y editar el post.
+  * Login en la pagina, listar posts, crear un post, y dejarlo programado para publicarse mas tarde.
+  * Login en la pagina, listar posts, crear un post, y eliminarlo.
+  
+**Drafts** 
+
+  * Login en la pagina, y crear un post draft.
+  * Login en la pagina, crear un post draft, y editarlo.
   
   
-**INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS**
+## INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS
 
 KRAKEN
 
@@ -77,7 +114,7 @@ PLAYWRIGHT
  3. Ejecutar el comando `npm install playwright`
  4. Ejecutar el comando `node index.js`
 
-**INSTRUCCIONES PARA EJECUCIÓN DE SCRIPT DE COMPARACIÓN**
+## INSTRUCCIONES PARA EJECUCIÓN DE SCRIPT DE COMPARACIÓN
 
   1. Primero ejecute las pruebas de la carpeta de pruebas de PruebasKraken, dentro de la carpeta reports generada se genera una carpeta screenshots le recomendamos moverla la carpeta root de este proyecto.
   2. Ahora ejecute las pruebas de la carpeta de pruebas de PrubasKraken_Semana6,, dentro de la carpeta reports generada se genera una carpeta screenshots le recomendamos moverla la carpeta root de este proyecto.

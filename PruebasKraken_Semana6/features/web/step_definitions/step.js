@@ -194,6 +194,16 @@ When("I click on Delete Post confirmation", async function () {
   return await element.click();
 });
 
+When("I click draft button", async function () {
+  let element = await this.driver.$(`a.ember-view[href="#/posts/?type=draft"]`);
+  return await element.click();
+});
+
+When("I click new draft post button", async function () {
+  let element = await this.driver.$(`a.ember-view[href="#/editor/post/"]`);
+  return await element.click();
+});
+
 Then("I see the post with name {string}", async function (value) {
   const postSelector = `li[data-test-post-id]`;
   const elements = await this.driver.$$(postSelector);

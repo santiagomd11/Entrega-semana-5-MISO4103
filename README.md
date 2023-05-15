@@ -53,6 +53,8 @@ Ejecucion sobre la version 3.41.1 de ghost, con node 14.19.0
 
 Ejecucion sobre la version 5.46.1 de ghost, con node 18.16.0
 
+**VIDEO SEMANA 6:** [LINK](https://uniandes-my.sharepoint.com/:v:/g/personal/vs_montano_uniandes_edu_co/Eb28Oz6dYxtFtBH7LrZ_0k4BQ9Ea_yfKRf1i__w0o76HBg?e=uxL2Uu)
+
 **Funcionalidades bajo prueba**
 
  * Creación, edición Tags

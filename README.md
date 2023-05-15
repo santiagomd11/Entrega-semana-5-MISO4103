@@ -109,10 +109,11 @@ KRAKEN
   4. Correr el comando npx kraken-node run
 
 PLAYWRIGHT
- 1. Clonar repositorio
- 2. Ir a la carpeta "PruebasPlayWright" (e.g. `cd Entrega-semana-5-MISO4103/PruebasPlayWright`)
- 3. Ejecutar el comando `npm install playwright`
- 4. Ejecutar el comando `node index.js`
+ 1. Clonar el repositorio del proyect
+ 2. Abrir la terminal y navegar hasta la carpeta "PruebasPlayWright". Puedes hacerlo ejecutando el siguiente comando:  (e.g. `cd Entrega-semana-5-MISO4103/PruebasPlayWright`)
+ 3. Instalar las dependencias de Playwright ejecutando el siguiente comando: `npm install playwright`
+ 4. EUna vez que las dependencias se hayan instalado correctamente, puedes ejecutar el archivo principal utilizando el siguiente comando `node index.js`. Esto iniciará la ejecución de las pruebas automatizadas con Playwright.
+Asegúrate de tener Node.js y npm instalados en tu sistema antes de seguir estas instrucciones.
 
 ## INSTRUCCIONES PARA EJECUCIÓN DE SCRIPT DE COMPARACIÓN
 

@@ -111,10 +111,16 @@ KRAKEN
   4. Correr el comando npx kraken-node run
 
 PLAYWRIGHT
- 1. Clonar el repositorio del proyect
+ 1. Clonar el repositorio del proyecto
  2. Abrir la terminal y navegar hasta la carpeta "PruebasPlayWright". Puedes hacerlo ejecutando el siguiente comando:  (e.g. `cd Entrega-semana-5-MISO4103/PruebasPlayWright`)
  3. Instalar las dependencias de Playwright ejecutando el siguiente comando: `npm install playwright`
- 4. EUna vez que las dependencias se hayan instalado correctamente, puedes ejecutar el archivo principal utilizando el siguiente comando `node index.js`. Esto iniciará la ejecución de las pruebas automatizadas con Playwright.
+ 4. Tener corriendo en la máquina local Ghost (para ello instale Ghost en su máquina local la versión con la que actualmente se corren estas pruebas es la v3.41.1 con NodeJS v 14.19.0 y una vez instalado corra el comando `ghost start`, para la correcta ejecución de las pruebas es importante que el usuario creado en Ghost tenga unas credenciales que correspondan con las especificadas en la pruebas:
+      ```
+        email: myjachis@gmail.com
+        password: Mr.hellno19 
+      ```
+ 5. Asegurarse de que en el archivo `index.js`, la función principal incluya los escenarios que se quieran probar (e.g. `testScenario1`)
+ 6. Una vez que las dependencias se hayan instalado correctamente, puedes ejecutar el archivo principal utilizando el siguiente comando `node index.js`. Esto iniciará la ejecución de las pruebas automatizadas con Playwright.
 Asegúrate de tener Node.js y npm instalados en tu sistema antes de seguir estas instrucciones.
 
 ## INSTRUCCIONES PARA EJECUCIÓN DE SCRIPT DE COMPARACIÓN

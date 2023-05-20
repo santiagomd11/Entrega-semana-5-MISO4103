@@ -1,7 +1,6 @@
 const playwright = require('playwright');
-
+const faker = require('@faker-js/faker').faker;
 const expect = require('@playwright/test');
-
 const url = 'http://localhost:2368/ghost';
 
 (async () => {
@@ -81,30 +80,26 @@ async function logout(page, screenshotPath){
 }
 
 async function testScenario1(page){
-  //Scenario 1: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y ver los detalles de un usuario
+  //Scenario 1: Intentar iniciar sesion en la pagina, correo y pw aleatorios, assert falla
   //#region GIVEN
+  //await page.goto(url); hecho en la linea 24
   var screenshotPath = './imagenes-test/users-scenario1';
-  await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
-  //Go to users (staff)
-  await page.click('a[href="#/staff/"]')
-  await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
-
-  //Go to user ghost
-  await page.locator('css=h3.apps-card-app-title').filter({ hasText: 'Ghost' }).click()
-  await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}-2-ghostuser.png`})
-  console.log('Clicked on ghost user')
+  await page.type('css=.email.ember-text-field.gh-input.ember-view', faker.internet.email());
+  await page.type('css=.password.ember-text-field.gh-input.ember-view', faker.internet.password());
+  await page.click('css=.login.gh-btn.gh-btn-blue')
+  await new Promise(r => setTimeout(r, 7000));
+  console.log(`Clicked on login button, URL is now ${page.url()}`)
+  await page.screenshot({path:`${screenshotPath}0-loginbutton.png`});
   //#endregion 
 
   //#region THEN
-  await expect.expect(page.locator('input#user-name')).toHaveValue('Ghost')
+  await expect.expect(page.getByText('There is no user with that email address.')).toBeVisible();
+  console.log('Expect ok');
   //#endregion
 
-  await logout(page, screenshotPath);
 }
 
 async function testScenario2(page){
@@ -127,7 +122,7 @@ async function testScenario2(page){
   console.log('Clicked on create new user')
 
   //Fill new user email new-user-email
-  var newEmail = 'kmilo2106@gmail.com'
+  var newEmail = faker.internet.email();
   await page.type('css=#new-user-email', newEmail);
   await page.screenshot({path:`${screenshotPath}-3-fillnewUserEmail.png`})
   await page.getByRole('button', { name: 'Send invitation now', exact: true}).click();
@@ -177,40 +172,22 @@ async function testScenario3(page){
   console.log('Clicked on ghost user')
 
   //Edit fields
-  var editedUserName = 'Ghost_edited_user'
-  await page.fill('css=#user-email', 'ghost-author_edited@example.com');
+  await page.fill('css=#user-email', faker.internet.email().replace('@', ''));
   await page.locator('select#new-user-role').selectOption({ label: 'Contributor' })
-  await page.fill('css=#user-location', 'The Internet_edited');
-  await page.fill('css=#user-website', 'https://ghost-edited.org');
-  await page.fill('css=#user-bio', 'You can delete this user to remove all the welcome posts _edited');
+  await page.fill('css=#user-location', faker.location.country());
+  await page.fill('css=#user-website', faker.internet.url());
+  await page.fill('css=#user-bio', faker.word.words(20));
   await page.screenshot({path:`${screenshotPath}-3-editedUserFields.png`})
   console.log('Edited user fields')
   await new Promise(r => setTimeout(r, 2000));
   await page.getByRole('button', { name: 'Save' }).click();
-  
-  await page.reload()
-  await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}-4-editedUserSave.png`});
-  console.log('Saved edited user');
   //#endregion
 
   //#region THEN
-  await expect.expect(page.locator('input#user-website')).toHaveValue('https://ghost-edited.org')
-  await expect.expect(page.locator('input#user-email')).toHaveValue('ghost-author_edited@example.com')
+  await expect.expect(page.getByRole('button', { name: 'Retry' })).toBeVisible()
+  await expect.expect(page.getByText('Please supply a valid email address')).toBeVisible()
   console.log("Expect ok")
   //#endregion
-
-  //Deshacer cambios para quedar con los valores iniciales
-  //await page.fill('css=#user-slug', 'ghost');
-  await page.fill('css=#user-email', 'ghost-author@example.com');
-  await page.locator('select#new-user-role').selectOption({ label: 'Author' })
-  await page.fill('css=#user-location', 'The Internet');
-  await page.fill('css=#user-website', 'https://ghost.org');
-  await page.fill('css=#user-bio', 'You can delete this user to remove all the welcome posts');
-  await page.screenshot({path:`${screenshotPath}-5-editedUserFields_rollback.png`})
-  console.log('Rolled back edited user fields')
-  await new Promise(r => setTimeout(r, 2000));
-  await page.getByRole('button', { name: 'Save' }).click();
   
   await logout(page, screenshotPath);
 }
@@ -224,6 +201,7 @@ async function testScenario4(page){
 
   //#region WHEN
   //Go to users (staff)
+  var userEmail = faker.internet.email()
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
@@ -235,7 +213,7 @@ async function testScenario4(page){
   console.log('Clicked on create new user')
 
   //Fill new user email new-user-email
-  await page.type('css=#new-user-email', 'correo@gmail.com');
+  await page.type('css=#new-user-email', userEmail);
   await page.screenshot({path:`${screenshotPath}-3-fillnewUserEmail.png`})
   await page.getByRole('button', { name: 'Send invitation now' }).click();
   console.log('Clicked on send invitation')
@@ -258,7 +236,7 @@ async function testScenario4(page){
   //#endregion
 
   //#region THEN
-  await expect.expect(page.getByText('correo@gmail.com')).toBeHidden();
+  await expect.expect(page.getByText(userEmail)).toBeHidden();
   console.log('Expect ok')
   //#endregion
 
@@ -286,10 +264,10 @@ async function testScenario5(page){
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
-  await page.fill('input#tag-name', 'NewTag');
-  await page.fill('input#tag-slug', 'NewTag-Slug');
-  await page.getByPlaceholder("abcdef").fill("00ff00");
-  await page.fill('textarea#tag-description', 'lorem ipsum...');
+  await page.fill('input#tag-name', faker.person.firstName());
+  await page.fill('input#tag-slug', `${faker.person.firstName()}-slug`);
+  await page.getByPlaceholder("abcdef").fill(faker.word.sample(length = 6)); //does not match format
+  await page.fill('textarea#tag-description', faker.lorem.words(250)); //exceeds max length
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
@@ -298,21 +276,14 @@ async function testScenario5(page){
   await page.getByRole('button', { name: 'Save' }).click();
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-4-newTagSaved.png`})
-  console.log('Saved new tag');
+  console.log('Clicked on save tag');
   //#endregion
 
   //#region THEN
-  await expect.expect(page.getByRole('heading', { name: 'Tags NewTag' })).toBeVisible();
-  console.log('Expect ok')
+  await expect.expect(page.getByRole('button', { name: 'Retry' })).toBeVisible()
+  await expect.expect(page.getByText('The color should be in valid hex format')).toBeVisible()
+  console.log("Expect ok")
   //#endregion
-
-  //Delete tag (cleanup)
-  await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
-  await new Promise(r => setTimeout(r, 1000));
-  await page.getByRole('button', { name: 'Delete', exact: true }).click();
-  await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}-5-newTagDeleted.png`})
-  console.log('Deleted new tag');
 
   await logout(page, screenshotPath);
 }
@@ -338,10 +309,11 @@ async function testScenario6(page){
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
-  await page.fill('input#tag-name', 'NewTag');
-  await page.fill('input#tag-slug', 'NewTag-Slug');
-  await page.getByPlaceholder("abcdef").fill("00ff00");
-  await page.fill('textarea#tag-description', 'lorem ipsum...');
+  var name = faker.commerce.productName();
+  await page.fill('input#tag-name', name);
+  await page.fill('input#tag-slug', `${name}-slug`);
+  await page.getByPlaceholder("abcdef").fill(faker.color.rgb().replace('#',''));
+  await page.fill('textarea#tag-description', faker.lorem.words(10));
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
@@ -353,10 +325,11 @@ async function testScenario6(page){
   console.log('Saved new tag');
 
   //Edit new tag
-  await page.fill('input#tag-name', 'NewTag_edited');
-  await page.fill('input#tag-slug', 'NewTag-Slug_edited');
-  await page.getByPlaceholder("abcdef").fill("0000ff");
-  await page.fill('textarea#tag-description', 'lorem ipsum... edited');
+  var editedName = faker.commerce.productName();
+  await page.fill('input#tag-name', editedName);
+  await page.fill('input#tag-slug', `${editedName}-slug`);
+  await page.getByPlaceholder("abcdef").fill(faker.color.rgb().replace('#',''));
+  await page.fill('textarea#tag-description', faker.lorem.words(15));
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-5-newTagEdited.png`})
   console.log('Edited new tag details')
@@ -369,7 +342,7 @@ async function testScenario6(page){
   //#endregion
 
   //#region THEN
-  await expect.expect(page.locator('input#tag-name')).toHaveValue('NewTag_edited')
+  await expect.expect(page.locator('input#tag-name')).toHaveValue(editedName)
   console.log('Expect ok')
   //#endregion
 
@@ -405,10 +378,10 @@ async function testScenario7(page){
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
-  await page.fill('input#tag-name', 'NewTag-Scen7');
-  await page.fill('input#tag-slug', 'NewTag-Slug');
-  await page.getByPlaceholder("abcdef").fill("00ff00");
-  await page.fill('textarea#tag-description', 'lorem ipsum...');
+  //await page.fill('input#tag-name', ); //name is required
+  await page.fill('input#tag-slug', `${faker.person.firstName()}-slug`);
+  await page.getByPlaceholder("abcdef").fill(faker.color.rgb().replace('#', ''));
+  await page.fill('textarea#tag-description', faker.lorem.words(10));
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
@@ -417,26 +390,14 @@ async function testScenario7(page){
   await page.getByRole('button', { name: 'Save' }).click();
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-4-newTagSaved.png`})
-  console.log('Saved new tag');
+  console.log('Clicked on save tag');
   //#endregion
 
   //#region THEN
+  await expect.expect(page.getByRole('button', { name: 'Retry' })).toBeVisible()
+  await expect.expect(page.getByText('You must specify a name for the tag.')).toBeVisible()
+  console.log("Expect ok")
   //#endregion
-
-  //Delete tag 
-  await page.getByRole('button', { name: 'Delete tag', exact: true }).click();
-  await new Promise(r => setTimeout(r, 1000));
-  await page.getByRole('button', { name: 'Delete', exact: true }).click();
-  await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}-5-newTagDeleted.png`})
-  console.log('Deleted new tag');
-  //#endregion
-
-  //#region THEN
-  await expect.expect(page.getByText('NewTag-Scen7')).toBeHidden();
-  console.log('Expect ok')
-  //#endregion
-  
 
   await logout(page, screenshotPath);
 }
@@ -468,10 +429,11 @@ async function testScenario8(page){
   console.log('Clicked on create new internal tag')
 
   //Fill new tag fields
-  await page.fill('input#tag-name', '#NewInternalTag');
-  await page.fill('input#tag-slug', 'NewInternalTag-Slug');
-  await page.getByPlaceholder("abcdef").fill("ff00ff");
-  await page.fill('textarea#tag-description', 'lorem ipsum...');
+  var name = faker.commerce.productName();
+  await page.fill('input#tag-name', `#${name}`);
+  await page.fill('input#tag-slug', `${name}-slug`);
+  await page.getByPlaceholder("abcdef").fill(faker.color.rgb().replace('#',''));
+  await page.fill('textarea#tag-description', faker.lorem.words(15));
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-4-newInternalTagFilled.png`})
   console.log('Filled new internal tag details')
@@ -484,7 +446,7 @@ async function testScenario8(page){
   //#endregion
 
   //#region THEN
-  await expect.expect(page.getByRole('heading', { name: 'Tags #NewInternalTag' })).toBeVisible();
+  await expect.expect(page.getByRole('heading', { name: `Tags #${name}` })).toBeVisible();
   console.log('Expect ok')
   //#endregion
 
@@ -520,8 +482,9 @@ async function testScenario9(page){
   console.log('Clicked on create new post')
 
   //Fill new post fields
-  await page.getByPlaceholder("Post Title").fill("Test draft title");
-  await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'lorem ipsum...');
+  var postTitle = faker.person.firstName();
+  await page.getByPlaceholder("Post Title").fill(postTitle);
+  await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.words(30));
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newPostFilled.png`})
   console.log('Filled new post details')
@@ -533,12 +496,12 @@ async function testScenario9(page){
   //#endregion
 
   //#region THEN
-  await expect.expect(page.getByText('Test draft title')).toBeVisible();
+  await expect.expect(page.getByText(postTitle)).toBeVisible();
   console.log('Expect ok')
   //#endregion
 
   //Open draft and delete it (cleanup)
-  await page.getByText('Test draft title').click()
+  await page.getByText(postTitle).click()
   await new Promise(r => setTimeout(r, 500));
   await page.click('css=button.post-settings');
   await new Promise(r => setTimeout(r, 500));
@@ -572,7 +535,7 @@ async function testScenario10(page){
   console.log('Clicked on create new post')
 
   //Fill new post fields
-  var newPostTitle = 'Test draft title scen10'
+  var newPostTitle = `${faker.person.firstName()} draft`
   await page.getByPlaceholder("Post Title").fill(newPostTitle);
   await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'lorem ipsum...');
   await new Promise(r => setTimeout(r, 1000));

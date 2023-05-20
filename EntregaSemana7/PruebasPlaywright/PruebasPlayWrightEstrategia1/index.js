@@ -32,51 +32,38 @@ const mockData = require('./MockData.json');
     console.log('Project loaded')
 
     //Interactuar con la aplicación web
-    //await testScenario1(page);
-    //await testScenario2(page);
-    //await testScenario3(page);
-    //await testScenario4(page);
-    //await testScenario5(page);
-    //await testScenario6(page);
-    //await testScenario7(page);
-    //await testScenario8(page);
-    //await testScenario9(page);
-    //await testScenario10(page);
+    await testScenario1(page);
+    await testScenario2(page);
+    await testScenario3(page);
+    await testScenario4(page);
+    await testScenario5(page);
+    await testScenario6(page);
+    await testScenario7(page);
+    await testScenario8(page);
+    await testScenario9(page);
+    await testScenario10(page);
 
     // Feature Post
     await testEscenario11(page)
-    //await testEscenario12(page)
-    //await testEscenario13(page)
-    //await testEscenario14(page)
+    await testEscenario12(page)
+    await testEscenario13(page)
+    await testEscenario14(page)
 
     // Feature Page
-    //await testEscenario15(page)
-    //await testEscenario16(page)
-    //await testEscenario17(page)
-    //await testEscenario18(page)
+    await testEscenario15(page)
+    await testEscenario16(page)
+    await testEscenario17(page)
+    await testEscenario18(page)
 
     // Feature Post draft
-    //await testEscenario19(page)
-    //await testEscenario20(page)
+    await testEscenario19(page)
+    await testEscenario20(page)
 
     //Finalizar la prueba
     await browser.close();
   }
   return;
 })();//Llamado propio de la función
-
-// Funciones del pool
-function postName(value) {
-  elementIndex = parseInt(value.slice(-1)) - 1
-  postName = pool['data_posts'][elementIndex][value]
-  return postName;
-}
-
-function postBody(value) {
-  elementIndex = parseInt(value.slice(-1)) - 1
-  postBody = pool['data_posts'][elementIndex][value]
-  return postBody;
-}
 
 async function login(page, screenshotPath){
   if(!screenshotPath)
@@ -665,12 +652,12 @@ async function testEscenario11(page){
   await page.click('css=.ember-view.gh-btn.gh-btn-green')
   console.log('Clicked on button new post')
 
-  const titlePost = postName("name1");
-  console.log(titlePost);
+  var item = getRandomItem(pool["data_posts"]);
+  const titlePost = item.title;
   // Rellena los inputs de title an description
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', postBody("body1"));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -739,10 +726,11 @@ async function testEscenario12(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post to edit ' + Math.floor(Math.random()*10000001)
+  var item = getRandomItem(pool["data_posts"]);
+  var titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -761,16 +749,19 @@ async function testEscenario12(page){
   await new Promise(r => setTimeout(r, 500));
   await page.screenshot({path:`${screenshotPath}-7-created-post.png`})
   console.log('Post created and published')
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 500));
 
   // Muestra la lista de post
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 500));
   await page.screenshot({path:`${screenshotPath}-8-Enter-post-created.png`})
-
   await page.getByText(titlePost, { exact: true }).click();
-  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this post');
+
+  let titleBefore = titlePost;
+  item = getRandomItem(pool["data_posts"]);
+  titlePost = item.title;
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', item.body);
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-9-Editing-post-inputs.png`})
 
@@ -795,7 +786,7 @@ async function testEscenario12(page){
 
 
   //----------------THEN---------------------
-  titlePost += '-edited';
+  titlePost = titleBefore + titlePost;
   const titleResult = await (await page.getByText(titlePost, { exact: true }).textContent()).trim();
   expect.expect(titlePost).toBe(titleResult);
   console.log("----------Expect test---------")
@@ -804,7 +795,8 @@ async function testEscenario12(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-13-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -837,10 +829,11 @@ async function testEscenario13(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post to schedule ' + Math.floor(Math.random()*10000001)
+  var item = getRandomItem(pool["data_posts"]);
+  var titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -878,14 +871,14 @@ async function testEscenario13(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-10-`);
   await new Promise(r => setTimeout(r, 2000));
 }
 
 
 async function testEscenario14(page) {
-  // Escenario 14: Como usuario quiero loguearme en la pagina, listar posts y crear un post
+  // Escenario 14: Como usuario quiero loguearme en la pagina, listar posts, crear un post y eliminarlo
 
   console.log('--------------------------------------------')
   console.log('Escenario 14 -> create new post and delete')
@@ -911,10 +904,11 @@ async function testEscenario14(page) {
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post to delete ' + Math.floor(Math.random()*10000001)
+  var item = getRandomItem(pool["data_posts"]);
+  var titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description delete post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1005,11 +999,12 @@ async function testEscenario15(page){
   await page.click('css=.ember-view.gh-btn.gh-btn-green')
   console.log('Clicked on button new page')
 
-  let titlePage = 'This is a page ' + Math.floor(Math.random()*10000001);
+  var item = getRandomItem(pool["data_pages"]);
+  const titlePage = item.title;
   // Rellena los inputs de title an description
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1045,7 +1040,7 @@ async function testEscenario15(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+  await deletePage(page, titlePage)
   await logout(page, `${screenshotPath}-9-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1078,10 +1073,11 @@ async function testEscenario16(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  let titlePage = 'Page to edit ' + Math.floor(Math.random()*10000001)
+  var item = getRandomItem(pool["data_pages"]);
+  var titlePage = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1108,8 +1104,11 @@ async function testEscenario16(page){
 
   // Enter to page
   await page.getByText(titlePage, { exact: true }).click();
-  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this page');
+  let titleBefore = titlePage;
+  item = getRandomItem(pool["data_pages"]);
+  titlePage = item.title;
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', item.body);
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-9-Editing-page-inputs.png`})
 
@@ -1134,7 +1133,7 @@ async function testEscenario16(page){
 
 
   //----------------THEN---------------------
-  titlePage += "-edited";
+  titlePage = titleBefore + titlePage;
   const titleResult = await (await page.getByText(titlePage, { exact: true }).textContent()).trim();
   expect.expect(titlePage).toBe(titleResult);
   console.log("----------Expect test---------")
@@ -1143,7 +1142,8 @@ async function testEscenario16(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePage(page, titlePage)
   await logout(page, `${screenshotPath}-13-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1176,10 +1176,11 @@ async function testEscenario17(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  let titlePage = 'Page to schedule ' + Math.floor(Math.random()*10000001)
+  var item = getRandomItem(pool["data_pages"]);
+  const titlePage = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1217,7 +1218,8 @@ async function testEscenario17(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePage(page, titlePage)
   await logout(page, `${screenshotPath}-10-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1250,10 +1252,11 @@ async function testEscenario18(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  let titlePage = 'Page to delete ' + Math.floor(Math.random()*10000001)
+  var item = getRandomItem(pool["data_pages"]);
+  const titlePage = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1279,7 +1282,7 @@ async function testEscenario18(page){
   await page.screenshot({path:`${screenshotPath}-8-verify-created-page.png`})
   console.log('Verify list of page')
 
-  // Delete post
+  // Delete page
   await page.getByText(titlePage, { exact: true }).click();
   await new Promise(r => setTimeout(r, 200));
   await page.screenshot({path:`${screenshotPath}-9-Enter-page-created.png`})
@@ -1343,10 +1346,11 @@ async function testEscenario19(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post drafts to edit ' + Math.floor(Math.random()*10000001)
+  var item = getRandomItem(pool["data_posts"]);
+  var titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   await page.screenshot({path:`${screenshotPath}-4-Editing-post-inputs.png`})
   console.log('Writed about inputs title and description')
 
@@ -1356,8 +1360,11 @@ async function testEscenario19(page){
   await page.screenshot({path:`${screenshotPath}-5-Enter-post-created.png`})
 
   await page.getByText(titlePost, { exact: true }).click();
-  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this post');
+  let titleBefore = titlePost;
+  item = getRandomItem(pool["data_posts"]);
+  titlePost = item.title;
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', item.body);
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-6-Editing-post-inputs.png`})
 
@@ -1369,7 +1376,7 @@ async function testEscenario19(page){
 
 
   //----------------THEN---------------------
-  titlePost += "-edited";
+  titlePost = titleBefore + titlePost;
   const titleResult = await (await page.getByText(titlePost, { exact: true }).textContent()).trim();
   expect.expect(titlePost).toBe(titleResult);
   console.log("----------Expect test---------")
@@ -1378,7 +1385,8 @@ async function testEscenario19(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-8-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1411,10 +1419,11 @@ async function testEscenario20(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post drafts to publish ' + Math.floor(Math.random()*10000001)
+  var item = getRandomItem(pool["data_posts"]);
+  const titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   await page.screenshot({path:`${screenshotPath}-4-Editing-post-inputs.png`})
   console.log('Writed about inputs title and description')
 
@@ -1459,7 +1468,7 @@ async function testEscenario20(page){
   //----------------THEN---------------------
 
 
-  // Hace el logout
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-11-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1472,14 +1481,31 @@ async function deletePost(page, titlePost) {
 
   // Delete post
   await page.getByText(titlePost, { exact: true }).click();
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 500));
   await page.click('css=.post-settings')
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 500));
   await page.click('css=.gh-btn.gh-btn-hover-red.gh-btn-icon.settings-menu-delete-button');
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 500));
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 500));
   await page.click('a[href="#/posts/"]');
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 500));
+
+}
+
+async function deletePage(page, titlePage) {
+
+  // Delete page
+  await page.getByText(titlePage, { exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('css=.post-settings')
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('css=.gh-btn.gh-btn-hover-red.gh-btn-icon.settings-menu-delete-button');
+  await new Promise(r => setTimeout(r, 500));
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('a[href="#/pages/"]')
+  await new Promise(r => setTimeout(r, 500));
 
 }

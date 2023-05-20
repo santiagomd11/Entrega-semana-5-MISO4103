@@ -15,13 +15,13 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft
   And I wait for 2 seconds 
   And I click new draft post button
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT"
+  And I enter in the post name a random name for "scenario1"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds
   And I click the back button
   And I wait for 3 seconds
-  Then I see the post with name "DRAFT" 
+  Then I see the post with the random name for "scenario1"
 
 @web @user2
 Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft y editarlo
@@ -38,22 +38,22 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft y ed
   And I wait for 2 seconds 
   And I click new draft post button
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT PARA EDITAR"
+  And I enter in the post name a random name for "scenario2"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds
   And I click the back button
   And I wait for 3 seconds 
-  And I click in the post with name "DRAFT PARA EDITAR"
+  And I click in the post with random name for "scenario2"
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT PARA EDITAR MODIFICADO"
+  And I enter in the post name a random name for "scenario2"
   And I wait for 2 seconds 
   And I click on the editor
-  And I enter in the post body "My new post body"
+  And I enter in the post body a random body
   And I wait for 2 seconds 
   And I click the back button
   And I wait for 3 seconds 
-  Then I see the post with name "DRAFT PARA EDITAR MODIFICADO" 
+  Then I see the post with the random name for "scenario1"
 
 @web @user3
 Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y publicarlo
@@ -70,13 +70,13 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y p
   And I wait for 2 seconds 
   And I click new draft post button
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT PARA PUBLICAR"
+  And I enter in the post name a random name for "scenario3"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds
   And I click the back button
   And I wait for 3 seconds 
-  And I click in the post with name "DRAFT PARA PUBLICAR"
+  And I click in the post with random name for "scenario3"
   And I wait for 2 seconds
   And I click in the publish option 
   And I wait for 2 seconds 
@@ -88,7 +88,7 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y p
   And I wait for 2 seconds 
   And I click posts button
   And I wait for 3 seconds 
-  Then I see the post with name "DRAFT PARA PUBLICAR" 
+  Then I see the post with the random name for "scenario3"
 
 @web @user4
 Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y eliminarlo
@@ -105,13 +105,13 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y e
   And I wait for 2 seconds 
   And I click new draft post button
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT PARA ELIMINAR"
+  And I enter in the post name a random name for "scenario4"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds
   And I click the back button
   And I wait for 3 seconds 
-  And I click in the post with name "DRAFT PARA ELIMINAR"
+  And I click in the post with random name for "scenario4"
   And I wait for 2 seconds
   And I click in the settings button
   And I wait for 2 seconds 
@@ -119,4 +119,4 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y e
   And I wait for 2 seconds
   And I click on Delete Post confirmation
   And I wait for 3 seconds 
-  Then I don't see the post with name "DRAFT PARA ELIMINAR"
+  Then I see the post with the random name for "scenario4"

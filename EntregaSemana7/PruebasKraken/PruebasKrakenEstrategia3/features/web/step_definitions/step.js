@@ -1,5 +1,18 @@
-const { Given, When, Then } = require("@cucumber/cucumber");
-const assert = require('assert')
+const { BeforeAll, When, Then } = require("@cucumber/cucumber");
+const assert = require('assert');
+const faker = require('faker');
+
+let posts_data = {
+  "scenario1": {},
+  "scenario2": {},
+  "scenario3": {},
+  "scenario4": {},
+};
+
+BeforeAll(function () {
+  console.log(posts_data);
+});
+
 When("I enter email {string}", async function (email) {
   let element = await this.driver.$("#ember8");
   return await element.setValue(email);
@@ -124,9 +137,11 @@ When("I click the post", async function (value) {
   return await element.click();
 });
 
-When("I enter in the post name {string}", async function (value) {
+When("I enter in the post name a random name for {string}", async function (value) {
   let element = await this.driver.$("textarea.gh-editor-title");
-  return await element.setValue(value);
+  let name = faker.lorem.word();
+  posts_data[value]["name"] = name;
+  return await element.setValue(name);
 });
 
 When("I click on the editor", async function () {
@@ -154,9 +169,10 @@ When("I click post button", async function () {
   return await element.click();
 });
 
-When("I enter in the post body {string}", async function (value) {
+When("I enter in the post body a random body", async function () {
   let element = await this.driver.$("article.koenig-editor");
-  return await element.setValue(value);
+  let body = faker.lorem.paragraph();
+  return await element.setValue(body);
 });
 
 When("I click in the update option", async function () {
@@ -184,15 +200,16 @@ When("I click in the Schedule button", async function () {
   return await element.click();
 });
 
-When("I click in the post with name {string}", async function (value) {
+When("I click in the post with random name for {string}", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
+  const postName = posts_data[value]["name"];
 
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
 
-    if (text.includes(value)) {
+    if (text.includes(postName)) {
       await element.click();
       return;
     }
@@ -216,15 +233,16 @@ When("I click on Delete Post confirmation", async function () {
   return await element.click();
 });
 
-Then("I see the post with name {string}", async function (value) {
+Then("I see the post with the random name for {string}", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
+  const postName = posts_data[value]["name"];
 
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
 
-    if (text.includes(value)) {
+    if (text.includes(postName)) {
       return await element;
     }
   }

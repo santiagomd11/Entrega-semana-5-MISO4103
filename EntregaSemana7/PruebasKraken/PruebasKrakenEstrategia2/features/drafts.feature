@@ -15,13 +15,15 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft
   And I wait for 2 seconds 
   And I click new draft post button
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT"
+  And I enter in the post name the "name1" from the pool
   And I wait for 2 seconds 
   And I click on the editor
-  And I wait for 2 seconds
+  And I wait for 2 seconds 
+  And I enter in the post body the "body1" from the pool
+  And I wait for 4 seconds
   And I click the back button
   And I wait for 3 seconds
-  Then I see the post with name "DRAFT" 
+  Then I see the post with "name1" from the pool
 
 @web @user2
 Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft y editarlo
@@ -38,22 +40,23 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft y ed
   And I wait for 2 seconds 
   And I click new draft post button
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT PARA EDITAR"
+  And I enter in the post name the "name2" from the pool
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds
   And I click the back button
   And I wait for 3 seconds 
-  And I click in the post with name "DRAFT PARA EDITAR"
+  And I click in the post with name "name2" from the pool
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT PARA EDITAR MODIFICADO"
+  And I enter in the post name the "name5" from the pool
   And I wait for 2 seconds 
   And I click on the editor
-  And I enter in the post body "My new post body"
   And I wait for 2 seconds 
+  And I enter in the post body the "body5" from the pool
+  And I wait for 4 seconds
   And I click the back button
   And I wait for 3 seconds 
-  Then I see the post with name "DRAFT PARA EDITAR MODIFICADO" 
+  Then I see the post with "name5" from the pool
 
 @web @user3
 Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y publicarlo
@@ -70,13 +73,13 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y p
   And I wait for 2 seconds 
   And I click new draft post button
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT PARA PUBLICAR"
+  And I enter in the post name the "name3" from the pool
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds
   And I click the back button
   And I wait for 3 seconds 
-  And I click in the post with name "DRAFT PARA PUBLICAR"
+  And I click in the post with name "name3" from the pool
   And I wait for 2 seconds
   And I click in the publish option 
   And I wait for 2 seconds 
@@ -88,7 +91,7 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y p
   And I wait for 2 seconds 
   And I click posts button
   And I wait for 3 seconds 
-  Then I see the post with name "DRAFT PARA PUBLICAR" 
+  Then I see the post with "name3" from the pool
 
 @web @user4
 Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y eliminarlo
@@ -105,13 +108,13 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y e
   And I wait for 2 seconds 
   And I click new draft post button
   And I wait for 2 seconds 
-  And I enter in the post name "DRAFT PARA ELIMINAR"
+  And I enter in the post name the "name4" from the pool
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds
   And I click the back button
   And I wait for 3 seconds 
-  And I click in the post with name "DRAFT PARA ELIMINAR"
+  And I click in the post with name "name4" from the pool
   And I wait for 2 seconds
   And I click in the settings button
   And I wait for 2 seconds 
@@ -119,4 +122,4 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y e
   And I wait for 2 seconds
   And I click on Delete Post confirmation
   And I wait for 3 seconds 
-  Then I don't see the post with name "DRAFT PARA ELIMINAR"
+  Then I don't see the post with "name4" from the pool

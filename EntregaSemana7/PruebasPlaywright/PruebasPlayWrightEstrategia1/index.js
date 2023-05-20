@@ -4,6 +4,12 @@ const expect = require('@playwright/test');
 
 const url = 'http://localhost:2368/ghost';
 
+const fs = require('fs');
+const path = require('path');
+
+const poolJson = fs.readFileSync(path.join(__dirname, 'pool.json'))
+const pool = JSON.parse(poolJson);
+
 (async () => {
   
   //Definir los navegadores en los que se quiere hacer la prueba
@@ -25,32 +31,32 @@ const url = 'http://localhost:2368/ghost';
     console.log('Project loaded')
 
     //Interactuar con la aplicación web
-    await testScenario1(page);
-    await testScenario2(page);
-    await testScenario3(page);
-    await testScenario4(page);
-    await testScenario5(page);
-    await testScenario6(page);
-    await testScenario7(page);
-    await testScenario8(page);
-    await testScenario9(page);
-    await testScenario10(page);
+    //await testScenario1(page);
+    //await testScenario2(page);
+    //await testScenario3(page);
+    //await testScenario4(page);
+    //await testScenario5(page);
+    //await testScenario6(page);
+    //await testScenario7(page);
+    //await testScenario8(page);
+    //await testScenario9(page);
+    //await testScenario10(page);
 
     // Feature Post
     await testEscenario11(page)
-    await testEscenario12(page)
-    await testEscenario13(page)
-    await testEscenario14(page)
+    //await testEscenario12(page)
+    //await testEscenario13(page)
+    //await testEscenario14(page)
 
     // Feature Page
-    await testEscenario15(page)
-    await testEscenario16(page)
-    await testEscenario17(page)
-    await testEscenario18(page)
+    //await testEscenario15(page)
+    //await testEscenario16(page)
+    //await testEscenario17(page)
+    //await testEscenario18(page)
 
     // Feature Post draft
-    await testEscenario19(page)
-    await testEscenario20(page)
+    //await testEscenario19(page)
+    //await testEscenario20(page)
 
     //Finalizar la prueba
     await browser.close();
@@ -58,12 +64,24 @@ const url = 'http://localhost:2368/ghost';
   return;
 })();//Llamado propio de la función
 
+// Funciones del pool
+function postName(value) {
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postName = pool['data_posts'][elementIndex][value]
+  return postName;
+}
+
+function postBody(value) {
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_posts'][elementIndex][value]
+  return postBody;
+}
 
 async function login(page, screenshotPath){
   if(!screenshotPath)
     screenshotPath = './imagenes-test/0-login'
-  await page.type('css=.email.ember-text-field.gh-input.ember-view', 'myjachis@gmail.com');
-  await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Mr.hellno.19');
+  await page.type('css=.email.ember-text-field.gh-input.ember-view', 't.rodriguezh@uniandes.edu.co');
+  await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Miso1234567890');
   await page.click('css=.login.gh-btn.gh-btn-blue')
   await new Promise(r => setTimeout(r, 7000));
   console.log(`Clicked on login button, URL is now ${page.url()}`)
@@ -635,12 +653,12 @@ async function testEscenario11(page){
   await page.click('css=.ember-view.gh-btn.gh-btn-green')
   console.log('Clicked on button new post')
 
-  const titlePost = "This is a post " + Math.floor(Math.random()*10000001);
-
+  const titlePost = postName("name1");
+  console.log(titlePost);
   // Rellena los inputs de title an description
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', postBody("body1"));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -676,7 +694,7 @@ async function testEscenario11(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-9-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1432,4 +1450,24 @@ async function testEscenario20(page){
   // Hace el logout
   await logout(page, `${screenshotPath}-11-`);
   await new Promise(r => setTimeout(r, 2000));
+}
+
+
+//-------------------------------------------------------
+// Funciones que eliminan despues de finalizar cada test
+
+async function deletePost(page, titlePost) {
+
+  // Delete post
+  await page.getByText(titlePost, { exact: true }).click();
+  await new Promise(r => setTimeout(r, 200));
+  await page.click('css=.post-settings')
+  await new Promise(r => setTimeout(r, 200));
+  await page.click('css=.gh-btn.gh-btn-hover-red.gh-btn-icon.settings-menu-delete-button');
+  await new Promise(r => setTimeout(r, 200));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 200));
+  await page.click('a[href="#/posts/"]');
+  await new Promise(r => setTimeout(r, 200));
+
 }

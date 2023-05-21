@@ -41,24 +41,33 @@ Then("I see the tag {string}", async function (value) {
   return await element;
 });
 
-When("I enter the name input field {string}", async function (value) {
+When("I enter the name input field {string} from the pool", async function (value) {
   let element = await this.driver.$("input#tag-name");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_tags'][elementIndex][value]
+  return await element.setValue(postBody);
 });
 
-When("I enter the slug input field {string}", async function (value) {
+
+When("I enter the slug input field {string} from the pool", async function (value) {
   let element = await this.driver.$("input#tag-slug");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_tags'][elementIndex][value]
+  return await element.setValue(postBody);
 });
 
-When("I enter the color input field {string}", async function (value) {
+When("I enter the color input field {string} from the pool", async function (value) {
     let element = await this.driver.$(`input[name="accent-color"]`);
-    return await element.setValue(value);
+    elementIndex = parseInt(value.slice(-1)) - 1
+    postBody = pool['data_tags'][elementIndex][value]
+    return await element.setValue(postBody);
 });
 
-When("I enter the description input field {string}", async function (value) {
+When("I enter the description input field {string} from the pool", async function (value) {
     let element = await this.driver.$("textarea#tag-description");
-    return await element.setValue(value);
+    elementIndex = parseInt(value.slice(-1)) - 1
+    postBody = pool['data_tags'][elementIndex][value]
+    return await element.setValue(postBody);
 });
 
 When("I click save button", async function () {

@@ -43,6 +43,32 @@
       "body5": "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam sit amet quam ut elit convallis facilisis. In hac habitasse platea dictumst. Integer vulputate leo id augue pretium vulputate."
     }
   ],
-  "data_staff": [{"name1": "ghost", "email1": "random@mail.com", "location1": "Bogota", "password1": "Amelie.Lens12"}],
-  "data_tags": []
+  "data_staff": [
+    {
+      "name1": "ghost",
+      "email1": "random@mail.com",
+      "location1": "Bogota",
+      "password1": "Amelie.Lens12"
+    }
+  ],
+  "data_tags": [
+    {
+      "name1": "test",
+      "slug1": "test",
+      "color1": "e84565",
+      "description1": "This is a description"
+    },
+    {
+      "name2": "test2",
+      "slug2": "test",
+      "color2": "e84561",
+      "description2": "This is a description again"
+    },
+    {
+      "name3": "#internalTest",
+      "slug3": "test",
+      "color3": "e84561",
+      "description3": "A internalTest description"
+    }
+  ]
 }

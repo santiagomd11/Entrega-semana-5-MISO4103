@@ -114,6 +114,7 @@ Scenario: Como usuario quiero loguearme en la pagina, y crear un post draft, y e
   And I wait for 2 seconds
   And I click the back button
   And I wait for 3 seconds 
+  
   And I click in the post with name "name4" from the pool
   And I wait for 2 seconds
   And I click in the settings button

@@ -396,7 +396,7 @@ When("I click New page button", async function () {
 });
 
 
-When("I enter in the page name {string} from the pool", async function (value) {
+When("I enter in the page name the {string} from the pool", async function (value) {
   let element = await this.driver.$("textarea.gh-editor-title");
   elementIndex = parseInt(value.slice(-1)) - 1
   postName = pool['data_pages'][elementIndex][value]
@@ -409,7 +409,7 @@ When("I click page button", async function () {
   return await element.click();
 });
 
-When("I enter in the page body {string} from the pool", async function (value) {
+When("I enter in the page body the {string} from the pool", async function (value) {
   let element = await this.driver.$("article.koenig-editor");
   elementIndex = parseInt(value.slice(-1)) - 1
   postBody = pool['data_pages'][elementIndex][value]
@@ -433,21 +433,6 @@ When("I click in the page with name {string} from the pool", async function (val
     }
   }
 });
-When("I click in the page with name {string}", async function (value) {
-  const postSelector = `li.gh-list-row.gh-posts-list-item`;
-  const elements = await this.driver.$$(postSelector);
-
-  for (const element of elements) {
-    const titleElement = await element.$("h3.gh-content-entry-title");
-    const text = await titleElement.getText();
-
-    if (text.includes(value)) {
-      await element.click();
-      return;
-    }
-  }
-});
-
 
 When("I click on Delete Page", async function () {
   const deleteButtonSelector = ".settings-menu-delete-button";
@@ -475,19 +460,6 @@ Then("I see the page with name {string} from the pool", async function (value) {
     }
   }
 });
-Then("I see the page with name {string}", async function (value) {
-  const postSelector = `li.gh-list-row.gh-posts-list-item`;
-  const elements = await this.driver.$$(postSelector);
-
-  for (const element of elements) {
-    const titleElement = await element.$("h3.gh-content-entry-title");
-    const text = await titleElement.getText();
-
-    if (text.includes(value)) {
-      return await element;
-    }
-  }
-});
 
 Then("I don't see the page with name {string} from the pool", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
@@ -499,7 +471,7 @@ Then("I don't see the page with name {string} from the pool", async function (va
     const text = await titleElement.getText();
 
     if (text.includes(pageName)) {
-      throw new Error(`Page with name "${value}" is present, but it should not be.`);
+      throw new Error(`Page with name "${pageName}" is present, but it should not be.`);
     }
   }
 });

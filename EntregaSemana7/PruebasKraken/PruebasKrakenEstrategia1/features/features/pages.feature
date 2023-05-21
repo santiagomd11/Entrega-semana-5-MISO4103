@@ -27,7 +27,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages y crear una p
   And I wait for 2 seconds 
   And I click page button
   And I wait for 3 seconds 
-  Then I see the page with "name1" from the pool
+  Then I see the page with name "name1" from the pool
 
 @web @user2
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un page y editarla
@@ -72,7 +72,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un pag
   And I wait for 2 seconds 
   And I click page button
   And I wait for 3 seconds
-  Then I see the page with "name5" from the pool
+  Then I see the page with name "name5" from the pool
 
 @web @user3
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una page, y eliminarla
@@ -109,7 +109,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click on Delete Page confirmation
   And I wait for 3 seconds
-  Then I don't see the page with "name3" from the pool
+  Then I don't see the page with name "name3" from the pool
 
 @web @user4
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una page, y dejarla programada para publicarse mas tarde
@@ -138,4 +138,4 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click page button
   And I wait for 3 seconds 
-  Then I see the page with "name4" from the pool
+  Then I see the page with name "name4" from the pool

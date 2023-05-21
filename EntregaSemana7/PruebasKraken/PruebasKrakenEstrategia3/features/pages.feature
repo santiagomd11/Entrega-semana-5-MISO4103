@@ -40,7 +40,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un pag
   And I wait for 2 seconds 
   And I click New page button
   And I wait for 2 seconds 
-  And I enter in the page name "Page test name 2"
+  And I enter in the page a random name for "scenario2"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
@@ -52,13 +52,13 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un pag
   And I wait for 2 seconds 
   And I click page button
   And I wait for 2 seconds 
-  And I click in the page with name "Page test name 2"
+  And I click in the page with random name for "scenario2"
   And I wait for 2 seconds 
-  And I enter in the page name "Page test name 2 modificado"
+  And I enter in the page a random name for "scenario2"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
-  And I enter in the page body "My new page body"
+  And I enter in the page body a random body
   And I wait for 2 seconds 
   And I click in the update option
   And I wait for 2 seconds 
@@ -68,7 +68,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un pag
   And I wait for 2 seconds 
   And I click page button
   And I wait for 3 seconds
-  Then I see the page with name "Page test name 2 modificado"
+  Then I see the page with the random name for "scenario2"
 
 @web @user3
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una page, y eliminarla
@@ -83,7 +83,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click New page button
   And I wait for 2 seconds 
-  And I enter in the page name "Page test name 3 borrar"
+  And I enter in the page a random name for "scenario3"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
@@ -95,7 +95,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click page button
   And I wait for 2 seconds 
-  And I click in the page with name "Page test name 3 borrar"
+  And I click in the page with random name for "scenario3"
   And I wait for 2 seconds 
   And I click in the settings button
   And I wait for 2 seconds 
@@ -103,7 +103,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click on Delete Page confirmation
   And I wait for 3 seconds
-  Then I don't see the page with name "Page test name 3 borrar"
+  Then I don't see the page with the random name for "scenario3"
 
 @web @user4
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una page, y dejarla programada para publicarse mas tarde
@@ -118,16 +118,16 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click New page button
   And I wait for 2 seconds 
-  And I enter in the page name "Page test name 4 scheduled"
+  And I enter in the page a random name for "scenario4"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
   And I click in the publish option 
   And I wait for 2 seconds 
-  And I Select the Schedule it for later option 
+  And I Select the Schedule it for later option
   And I wait for 2 seconds 
   And I click in the Schedule button 
   And I wait for 2 seconds 
   And I click page button
   And I wait for 3 seconds 
-  Then I see the page with name "Page test name 4 scheduled"
+  Then I see the page with the random name for "scenario4"

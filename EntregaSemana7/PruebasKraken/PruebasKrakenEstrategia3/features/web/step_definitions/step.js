@@ -386,7 +386,7 @@ When("I enter in the page a random name for {string}", async function (value) {
   let element = await this.driver.$("textarea.gh-editor-title");
   let name = faker.lorem.word();
   pages_data[value]["name"] = name;
-  return await element.setValue(value);
+  return await element.setValue(name);
 });
 
 When("I click page button", async function () {
@@ -394,20 +394,22 @@ When("I click page button", async function () {
   return await element.click();
 });
 
-When("I enter in the page body {string}", async function (value) {
+When("I enter in the page body a random body", async function () {
   let element = await this.driver.$("article.koenig-editor");
-  return await element.setValue(value);
+  let body = faker.lorem.paragraph();
+  return await element.setValue(body);
 });
 
-When("I click in the page with name {string}", async function (value) {
+When("I click in the page with random name for {string}", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
+  const pageName = pages_data[value]["name"];
 
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
 
-    if (text.includes(value)) {
+    if (text.includes(pageName)) {
       await element.click();
       return;
     }
@@ -430,7 +432,7 @@ When("I click on Delete Page confirmation", async function () {
 Then("I see the page with the random name for {string}", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
-  const pageName = posts_data[value]["name"];
+  const pageName = pages_data[value]["name"];
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
@@ -441,16 +443,17 @@ Then("I see the page with the random name for {string}", async function (value) 
   }
 });
 
-Then("I don't see the page with name {string}", async function (value) {
+Then("I don't see the page with the random name for {string}", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
 
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
+    const pageName = pages_data[value]["name"];
 
-    if (text.includes(value)) {
-      throw new Error(`Page with name "${value}" is present, but it should not be.`);
+    if (text.includes(pageName)) {
+      throw new Error(`Page with name "${pageName}" is present, but it should not be.`);
     }
   }
 });

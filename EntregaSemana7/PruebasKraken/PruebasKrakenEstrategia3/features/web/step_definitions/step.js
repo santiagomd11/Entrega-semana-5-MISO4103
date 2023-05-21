@@ -9,6 +9,14 @@ let posts_data = {
   "scenario4": {},
 };
 
+
+let pages_data = {
+  "scenario1": {},
+  "scenario2": {},
+  "scenario3": {},
+  "scenario4": {},
+};
+
 BeforeAll(function () {
   console.log(posts_data);
 });
@@ -143,6 +151,7 @@ When("I enter in the post name a random name for {string}", async function (valu
   posts_data[value]["name"] = name;
   return await element.setValue(name);
 });
+
 
 When("I click on the editor", async function () {
   let element = await this.driver.$("article.koenig-editor");
@@ -371,9 +380,19 @@ When("I click New page button", async function () {
   let element = await this.driver.$("a.gh-btn.gh-btn-green");
   return await element.click();
 });
-
-When("I enter in the page name {string}", async function (value) {
+When("I enter in the post name a random name for {string}", async function (value) {
   let element = await this.driver.$("textarea.gh-editor-title");
+  let name = faker.lorem.word();
+  posts_data[value]["name"] = name;
+  return await element.setValue(name);
+});
+
+
+
+When("I enter in the page a random name for {string}", async function (value) {
+  let element = await this.driver.$("textarea.gh-editor-title");
+  let name = faker.lorem.word();
+  pages_data[value]["name"] = name;
   return await element.setValue(value);
 });
 
@@ -415,15 +434,30 @@ When("I click on Delete Page confirmation", async function () {
   return await element.click();
 });
 
-Then("I see the page with name {string}", async function (value) {
+Then("I see the post with the random name for {string}", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
+  const postName = posts_data[value]["name"];
 
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
 
-    if (text.includes(value)) {
+    if (text.includes(postName)) {
+      return await element;
+    }
+  }
+});
+
+Then("I see the page with the random name for {string}", async function (value) {
+  const postSelector = `li.gh-list-row.gh-posts-list-item`;
+  const elements = await this.driver.$$(postSelector);
+  const pageName = posts_data[value]["name"];
+  for (const element of elements) {
+    const titleElement = await element.$("h3.gh-content-entry-title");
+    const text = await titleElement.getText();
+
+    if (text.includes(pageName)) {
       return await element;
     }
   }

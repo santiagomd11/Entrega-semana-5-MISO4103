@@ -13,7 +13,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages y crear una p
   And I wait for 2 seconds 
   And I click New page button
   And I wait for 2 seconds 
-  And I enter in the page name "Page test name 1"
+  And I enter in the page a random name for "scenario1"
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
@@ -25,7 +25,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages y crear una p
   And I wait for 2 seconds 
   And I click page button
   And I wait for 3 seconds 
-  Then I see the page with name "Page test name 1"
+  Then I see the page with the random name for "scenario1"
 
 @web @user2
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un page y editarla

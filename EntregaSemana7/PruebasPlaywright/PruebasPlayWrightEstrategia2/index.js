@@ -98,6 +98,8 @@ async function testScenario1(page){
   //#region THEN
   await expect.expect(page.getByText('There is no user with that email address.')).toBeVisible();
   console.log('Expect ok');
+  await page.reload();
+  await new Promise(r => setTimeout(r, 2000));
   //#endregion
 
 }
@@ -189,6 +191,8 @@ async function testScenario3(page){
   console.log("Expect ok")
   //#endregion
   
+  await page.reload()
+  await new Promise(r => setTimeout(r, 1000));
   await logout(page, screenshotPath);
 }
 
@@ -285,6 +289,8 @@ async function testScenario5(page){
   console.log("Expect ok")
   //#endregion
 
+  await page.reload()
+  await new Promise(r => setTimeout(r, 1000));
   await logout(page, screenshotPath);
 }
 
@@ -399,6 +405,8 @@ async function testScenario7(page){
   console.log("Expect ok")
   //#endregion
 
+  await page.reload()
+  await new Promise(r => setTimeout(r, 1000));
   await logout(page, screenshotPath);
 }
 

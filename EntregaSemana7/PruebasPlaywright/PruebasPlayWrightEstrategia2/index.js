@@ -28,30 +28,30 @@ const path = require('path');
 
 
     //Interactuar con la aplicación web
-    //await testScenario1(page);
-    //await testScenario2(page);
-    //await testScenario3(page);
-    //await testScenario4(page);
-    //await testScenario5(page);
-    //await testScenario6(page);
-    //await testScenario7(page);
-    //await testScenario8(page);
-    //await testScenario9(page);
-    //await testScenario10(page);
+    await testScenario1(page);
+    await testScenario2(page);
+    await testScenario3(page);
+    await testScenario4(page);
+    await testScenario5(page);
+    await testScenario6(page);
+    await testScenario7(page);
+    await testScenario8(page);
+    await testScenario9(page);
+    await testScenario10(page);
 
-    // Feature Post
+    // // Feature Post
     await testEscenario11(page)
     await testEscenario12(page)
     await testEscenario13(page)
     await testEscenario14(page)
 
-    // Feature Page
+    // // Feature Page
     await testEscenario15(page)
     await testEscenario16(page)
     await testEscenario17(page)
     await testEscenario18(page)
 
-    // Feature Post draft
+    // // Feature Post draft
     await testEscenario19(page)
     await testEscenario20(page)
 
@@ -73,7 +73,7 @@ function writeDataPostJson() {
     data.push(postData);
   }
 
-  let objectToSave = {data_posts:data, data_pages:[]}; 
+  let objectToSave = {data_posts:data, data_pages:[], data_users:[], data_tags:[]}; 
  
   fs.writeFile('pool.json', JSON.stringify(objectToSave),'utf8', (err) => { 
     if (err) throw err; 
@@ -93,7 +93,7 @@ function writeDataPageJson() {
     data.push(pageData);
   }
 
-  let objectToSave = {data_posts:[], data_pages:data}; 
+  let objectToSave = {data_posts:[], data_pages:data, data_users:[], data_tags:[]}; 
  
   fs.writeFile('pool.json', JSON.stringify(objectToSave),'utf8', (err) => { 
     if (err) throw err; 
@@ -102,6 +102,53 @@ function writeDataPageJson() {
   
 }
 
+function writeDataUserJson() {
+
+  let data = []
+  for(let i = 1; i <= 20; i++) {
+    let userData = {
+      ['email'] : faker.internet.email(),
+      ['password'] : faker.lorem.paragraph({ min: 8, max: 12 }),
+      ['country'] : faker.location.country(),
+      ['url'] : faker.internet.url(),
+      ['bio'] : faker.word.words(20)
+    };
+    data.push(userData);
+  }
+
+  let objectToSave = {data_posts:[], data_pages:[], data_users: data, data_tags:[]}; 
+ 
+  fs.writeFile('pool.json', JSON.stringify(objectToSave),'utf8', (err) => { 
+    if (err) throw err; 
+    console.log('The users pool was created!');
+  });
+  
+}
+
+function writeDataTagJson() {
+
+  let data = []
+  for(let i = 1; i <= 20; i++) {
+    let userData = {
+      ['name'] : faker.person.firstName(),
+      ['invalidColor'] : faker.word.sample(length = 6),
+      ['description'] : faker.word.words(20),
+      ['color'] : faker.color.rgb().replace('#',''),
+      ['editedName'] : faker.person.firstName()
+    };
+    data.push(userData);
+  }
+
+  let objectToSave = {data_posts:[], data_pages:[], data_users:[], data_tags:data}; 
+ 
+  fs.writeFile('pool.json', JSON.stringify(objectToSave),'utf8', (err) => { 
+    if (err) throw err; 
+    console.log('The tags pool was created!');
+  });
+  
+}
+
+
 function readDataJson() {
   var poolJson = fs.readFileSync(path.join(__dirname, 'pool.json'));
   var pool = JSON.parse(poolJson);
@@ -109,7 +156,7 @@ function readDataJson() {
 }
 
 function deleteDataJson() {
-  let objectToSave = {data_posts:[], data_pages:[]} 
+  let objectToSave = {data_posts:[], data_pages:[], data_users:[], data_tags:[]} 
  
   fs.writeFile('pool.json', JSON.stringify(objectToSave),'utf8', (err) => { 
     if (err) throw err; 
@@ -126,7 +173,7 @@ async function login(page, screenshotPath){
   if(!screenshotPath)
     screenshotPath = './imagenes-test/0-login'
   await page.type('css=.email.ember-text-field.gh-input.ember-view', 'myjachis@gmail.com');
-  await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Mr.hellno19');
+  await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Mr.hellno.19');
   await page.click('css=.login.gh-btn.gh-btn-blue')
   await new Promise(r => setTimeout(r, 7000));
   console.log(`Clicked on login button, URL is now ${page.url()}`)
@@ -148,11 +195,15 @@ async function testScenario1(page){
   //#region GIVEN
   //await page.goto(url); hecho en la linea 24
   var screenshotPath = './imagenes-test/users-scenario1';
+  writeDataUserJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   //#endregion
 
   //#region WHEN
-  await page.type('css=.email.ember-text-field.gh-input.ember-view', faker.internet.email());
-  await page.type('css=.password.ember-text-field.gh-input.ember-view', faker.internet.password());
+  var item = getRandomItem(pool["data_users"]);
+  await page.type('css=.email.ember-text-field.gh-input.ember-view', item.email);
+  await page.type('css=.password.ember-text-field.gh-input.ember-view', item.password);
   await page.click('css=.login.gh-btn.gh-btn-blue')
   await new Promise(r => setTimeout(r, 7000));
   console.log(`Clicked on login button, URL is now ${page.url()}`)
@@ -172,11 +223,15 @@ async function testScenario2(page){
   //Scenario 2: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y crear un usuario nuevo
   //#region GIVEN
   var screenshotPath = './imagenes-test/users-scenario2';
+  writeDataUserJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
   //Go to users (staff)
+  var item = getRandomItem(pool["data_users"]);
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
@@ -188,7 +243,7 @@ async function testScenario2(page){
   console.log('Clicked on create new user')
 
   //Fill new user email new-user-email
-  var newEmail = faker.internet.email();
+  var newEmail = item.email;
   await page.type('css=#new-user-email', newEmail);
   await page.screenshot({path:`${screenshotPath}-3-fillnewUserEmail.png`})
   await page.getByRole('button', { name: 'Send invitation now', exact: true}).click();
@@ -222,11 +277,15 @@ async function testScenario3(page){
   //Scenario 3: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios, y editar un usuario
   //#region GIVEN
   var screenshotPath = './imagenes-test/users-scenario3';
+  writeDataUserJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
   //Go to users (staff)
+  var item = getRandomItem(pool["data_users"]);
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
@@ -238,11 +297,11 @@ async function testScenario3(page){
   console.log('Clicked on ghost user')
 
   //Edit fields
-  await page.fill('css=#user-email', faker.internet.email().replace('@', ''));
+  await page.fill('css=#user-email', item.email.replace('@', ''));
   await page.locator('select#new-user-role').selectOption({ label: 'Contributor' })
-  await page.fill('css=#user-location', faker.location.country());
-  await page.fill('css=#user-website', faker.internet.url());
-  await page.fill('css=#user-bio', faker.word.words(20));
+  await page.fill('css=#user-location', item.country);
+  await page.fill('css=#user-website', item.url);
+  await page.fill('css=#user-bio', item.bio);
   await page.screenshot({path:`${screenshotPath}-3-editedUserFields.png`})
   console.log('Edited user fields')
   await new Promise(r => setTimeout(r, 2000));
@@ -264,12 +323,16 @@ async function testScenario4(page){
   //Scenario 4: Como usuario quiero iniciar sesion en la pagina, ver el listado de usuarios y eliminar un usuario
   //#region GIVEN
   var screenshotPath = './imagenes-test/users-scenario4';
+  writeDataUserJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
   //Go to users (staff)
-  var userEmail = faker.internet.email()
+  var item = getRandomItem(pool["data_users"]);
+  var userEmail = item.email;
   await page.click('a[href="#/staff/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-staffpage.png`})
@@ -315,11 +378,15 @@ async function testScenario5(page){
   //Scenario 5: Como usuario quiero loguearme en la pagina, listar etiquetas y crear una etiqueta
   //#region GIVEN
   var screenshotPath = './imagenes-test/tags-scenario5';
+  writeDataTagJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion 
 
   //#region WHEN
   //Go to tags page
+  var item = getRandomItem(pool["data_tags"]);
   await page.click('a[href="#/tags/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-tagsPage.png`})
@@ -332,10 +399,10 @@ async function testScenario5(page){
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
-  await page.fill('input#tag-name', faker.person.firstName());
-  await page.fill('input#tag-slug', `${faker.person.firstName()}-slug`);
-  await page.getByPlaceholder("abcdef").fill(faker.word.sample(length = 6)); //does not match format
-  await page.fill('textarea#tag-description', faker.lorem.words(250)); //exceeds max length
+  await page.fill('input#tag-name', item.name);
+  await page.fill('input#tag-slug', `${item.name}-slug`);
+  await page.getByPlaceholder("abcdef").fill(item.invalidColor); //does not match format
+  await page.fill('textarea#tag-description', item.description); //exceeds max length
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
@@ -362,11 +429,15 @@ async function testScenario6(page){
   //Scenario 6: Como usuario quiero loguearme en la pagina, listar etiquetas, crear una etiqueta y editarla
   //#region GIVEN
   var screenshotPath = './imagenes-test/tags-scenario6';
+  writeDataTagJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
   //Go to tags page
+  var item = getRandomItem(pool["data_tags"]);
   await page.click('a[href="#/tags/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-tagsPage.png`})
@@ -379,11 +450,11 @@ async function testScenario6(page){
   console.log('Clicked on create new tag')
 
   //Fill new tag fields
-  var name = faker.commerce.productName();
+  var name = item.name;
   await page.fill('input#tag-name', name);
   await page.fill('input#tag-slug', `${name}-slug`);
-  await page.getByPlaceholder("abcdef").fill(faker.color.rgb().replace('#',''));
-  await page.fill('textarea#tag-description', faker.lorem.words(10));
+  await page.getByPlaceholder("abcdef").fill(item.color);
+  await page.fill('textarea#tag-description', item.description);
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
@@ -395,11 +466,11 @@ async function testScenario6(page){
   console.log('Saved new tag');
 
   //Edit new tag
-  var editedName = faker.commerce.productName();
+  var editedName = item.editedName;
   await page.fill('input#tag-name', editedName);
   await page.fill('input#tag-slug', `${editedName}-slug`);
-  await page.getByPlaceholder("abcdef").fill(faker.color.rgb().replace('#',''));
-  await page.fill('textarea#tag-description', faker.lorem.words(15));
+  await page.getByPlaceholder("abcdef").fill(item.color);
+  await page.fill('textarea#tag-description', item.description);
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-5-newTagEdited.png`})
   console.log('Edited new tag details')
@@ -431,11 +502,15 @@ async function testScenario7(page){
   //Como usuario quiero loguearme en la pagina, listar etiquetas, crear una etiqueta y borrar una etiqueta
   //#region GIVEN
   var screenshotPath = './imagenes-test/tags-scenario7';
+  writeDataTagJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
   //Go to tags page
+  var item = getRandomItem(pool["data_tags"]);
   await page.click('a[href="#/tags/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-tagsPage.png`})
@@ -449,9 +524,9 @@ async function testScenario7(page){
 
   //Fill new tag fields
   //await page.fill('input#tag-name', ); //name is required
-  await page.fill('input#tag-slug', `${faker.person.firstName()}-slug`);
-  await page.getByPlaceholder("abcdef").fill(faker.color.rgb().replace('#', ''));
-  await page.fill('textarea#tag-description', faker.lorem.words(10));
+  await page.fill('input#tag-slug', `${item.name}-slug`);
+  await page.getByPlaceholder("abcdef").fill(item.color);
+  await page.fill('textarea#tag-description', item.description);
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newTagFilled.png`})
   console.log('Filled new tag details')
@@ -478,11 +553,15 @@ async function testScenario8(page){
   //Scenario 8: Como usuario quiero loguearme en la pagina, listar etiquetas y crear una etiqueta interna
   //#region GIVEN
   var screenshotPath = './imagenes-test/tags-scenario8';
+  writeDataTagJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
   //Go to tags page
+  var item = getRandomItem(pool["data_tags"]);
   await page.click('a[href="#/tags/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-tagsPage.png`})
@@ -501,11 +580,11 @@ async function testScenario8(page){
   console.log('Clicked on create new internal tag')
 
   //Fill new tag fields
-  var name = faker.commerce.productName();
+  var name = item.name;
   await page.fill('input#tag-name', `#${name}`);
   await page.fill('input#tag-slug', `${name}-slug`);
-  await page.getByPlaceholder("abcdef").fill(faker.color.rgb().replace('#',''));
-  await page.fill('textarea#tag-description', faker.lorem.words(15));
+  await page.getByPlaceholder("abcdef").fill(item.color);
+  await page.fill('textarea#tag-description', item.description);
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-4-newInternalTagFilled.png`})
   console.log('Filled new internal tag details')
@@ -537,11 +616,15 @@ async function testScenario9(page){
   //Scenario 9: Como usuario quiero iniciar sesion en la pagina y crear un post draft
   //#region GIVEN
   var screenshotPath = './imagenes-test/drafts-scenario9';
+  writeDataPostJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
   //Go to posts page
+  var item = getRandomItem(pool["data_posts"]);
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-postsPage.png`})
@@ -554,9 +637,9 @@ async function testScenario9(page){
   console.log('Clicked on create new post')
 
   //Fill new post fields
-  var postTitle = faker.person.firstName();
+  var postTitle = item.title;
   await page.getByPlaceholder("Post Title").fill(postTitle);
-  await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.words(30));
+  await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newPostFilled.png`})
   console.log('Filled new post details')
@@ -590,11 +673,15 @@ async function testScenario10(page){
   //Scenario 10: Como usuario quiero iniciar sesion en la pagina, crear un post draft y eliminarlo
   //#region GIVEN
   var screenshotPath = './imagenes-test/drafts-scenario10';
+  writeDataPostJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   await login(page, screenshotPath);
   //#endregion
 
   //#region WHEN
   //Go to posts page
+  var item = getRandomItem(pool["data_posts"]);
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-1-postsPage.png`})
@@ -607,9 +694,9 @@ async function testScenario10(page){
   console.log('Clicked on create new post')
 
   //Fill new post fields
-  var newPostTitle = `${faker.person.firstName()} draft`
+  var newPostTitle = `${item.title} draft`
   await page.getByPlaceholder("Post Title").fill(newPostTitle);
-  await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'lorem ipsum...');
+  await page.fill('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   await new Promise(r => setTimeout(r, 1000));
   await page.screenshot({path:`${screenshotPath}-3-newPostFilled.png`})
   console.log('Filled new post details')

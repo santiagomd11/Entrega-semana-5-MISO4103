@@ -13,10 +13,12 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages y crear una p
   And I wait for 2 seconds 
   And I click New page button
   And I wait for 2 seconds 
-  And I enter in the page name "name1" from the pool
+  And I enter in the page name the "name1" from the pool
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
+  And I enter in the page body the "body1" from the pool
+  And I wait for 4 seconds 
   And I click in the publish option 
   And I wait for 2 seconds 
   And I Select the set it live now option 
@@ -26,7 +28,6 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages y crear una p
   And I click page button
   And I wait for 3 seconds 
   Then I see the page with name "name1" from the pool
-
 
 @web @user2
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un page y editarla
@@ -41,10 +42,12 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un pag
   And I wait for 2 seconds 
   And I click New page button
   And I wait for 2 seconds 
-  And I enter in the page name "name2" from the pool
+  And I enter in the page name the "name2" from the pool
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
+  And I enter in the page body the "body2" from the pool
+  And I wait for 4 seconds 
   And I click in the publish option 
   And I wait for 2 seconds 
   And I Select the set it live now option 
@@ -55,12 +58,12 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un pag
   And I wait for 2 seconds 
   And I click in the page with name "name2" from the pool
   And I wait for 2 seconds 
-  And I enter in the page name "name3" from the pool
+  And I enter in the page name the "name5" from the pool
   And I wait for 2 seconds 
   And I click on the editor
-  And I wait for 2 seconds 
-  And I enter in the page body "body1" from the pool
-  And I wait for 2 seconds 
+  And I wait for 2 seconds
+  And I enter in the page body the "body5" from the pool
+  And I wait for 5 seconds 
   And I click in the update option
   And I wait for 2 seconds 
   And I click in the Published option 
@@ -69,7 +72,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear un pag
   And I wait for 2 seconds 
   And I click page button
   And I wait for 3 seconds
-  Then I see the page with name "name3" from the pool
+  Then I see the page with name "name5" from the pool
 
 @web @user3
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una page, y eliminarla
@@ -84,10 +87,12 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click New page button
   And I wait for 2 seconds 
-  And I enter in the page name "name4" from the pool
+  And I enter in the page name the "name3" from the pool
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
+  And I enter in the page body the "body3" from the pool
+  And I wait for 4 seconds 
   And I click in the publish option 
   And I wait for 2 seconds 
   And I Select the set it live now option 
@@ -96,7 +101,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click page button
   And I wait for 2 seconds 
-  And I click in the page with name "name4" from the pool
+  And I click in the page with name "name3" from the pool
   And I wait for 2 seconds 
   And I click in the settings button
   And I wait for 2 seconds 
@@ -104,7 +109,7 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click on Delete Page confirmation
   And I wait for 3 seconds
-  Then I don't see the page with name "name4" from the pool
+  Then I don't see the page with name "name3" from the pool
 
 @web @user4
 Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una page, y dejarla programada para publicarse mas tarde
@@ -119,10 +124,12 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click New page button
   And I wait for 2 seconds 
-  And I enter in the page name "Page test name 4 scheduled"
+  And I enter in the page name the "name4" from the pool
   And I wait for 2 seconds 
   And I click on the editor
   And I wait for 2 seconds 
+  And I enter in the page body the "body4" from the pool
+  And I wait for 4 seconds 
   And I click in the publish option 
   And I wait for 2 seconds 
   And I Select the Schedule it for later option 
@@ -131,4 +138,4 @@ Scenario: Como usuario quiero loguearme en la pagina, listar pages, crear una pa
   And I wait for 2 seconds 
   And I click page button
   And I wait for 3 seconds 
-  Then I see the page with name "Page test name 4 scheduled"
+  Then I see the page with name "name4" from the pool

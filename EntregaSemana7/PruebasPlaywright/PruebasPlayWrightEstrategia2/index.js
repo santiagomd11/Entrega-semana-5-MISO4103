@@ -598,12 +598,12 @@ async function testEscenario11(page){
   await page.click('css=.ember-view.gh-btn.gh-btn-green')
   console.log('Clicked on button new post')
 
-  const titlePost = "This is a post " + Math.floor(Math.random()*10000001);
+  const titlePost = faker.lorem.sentence();
 
   // Rellena los inputs de title an description
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -640,6 +640,7 @@ async function testEscenario11(page){
   //----------------THEN---------------------
 
 
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-9-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -672,10 +673,10 @@ async function testEscenario12(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post to edit ' + Math.floor(Math.random()*10000001)
+  var titlePost = faker.lorem.sentence();
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -702,8 +703,10 @@ async function testEscenario12(page){
   await page.screenshot({path:`${screenshotPath}-8-Enter-post-created.png`})
 
   await page.getByText(titlePost, { exact: true }).click();
-  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this post');
+  let titleBefore = titlePost;
+  titlePost = faker.lorem.sentence();;
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', faker.lorem.paragraph({ min: 1, max: 2 }));
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-9-Editing-post-inputs.png`})
 
@@ -728,7 +731,7 @@ async function testEscenario12(page){
 
 
   //----------------THEN---------------------
-  titlePost += '-edited';
+  titlePost = titleBefore + titlePost;
   const titleResult = await (await page.getByText(titlePost, { exact: true }).textContent()).trim();
   expect.expect(titlePost).toBe(titleResult);
   console.log("----------Expect test---------")
@@ -737,7 +740,8 @@ async function testEscenario12(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-13-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -770,10 +774,10 @@ async function testEscenario13(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post to schedule ' + Math.floor(Math.random()*10000001)
+  var titlePost = faker.lorem.sentence();
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -811,14 +815,15 @@ async function testEscenario13(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePost(page, titlePost);
   await logout(page, `${screenshotPath}-10-`);
   await new Promise(r => setTimeout(r, 2000));
 }
 
 
 async function testEscenario14(page) {
-  // Escenario 14: Como usuario quiero loguearme en la pagina, listar posts y crear un post
+  // Escenario 14: Como usuario quiero loguearme en la pagina, listar posts, crear un post y luego eliminarlo
 
   console.log('--------------------------------------------')
   console.log('Escenario 14 -> create new post and delete')
@@ -844,10 +849,10 @@ async function testEscenario14(page) {
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post to delete ' + Math.floor(Math.random()*10000001)
+  var titlePost = faker.lorem.sentence();
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description delete post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -938,11 +943,11 @@ async function testEscenario15(page){
   await page.click('css=.ember-view.gh-btn.gh-btn-green')
   console.log('Clicked on button new page')
 
-  let titlePage = 'This is a page ' + Math.floor(Math.random()*10000001);
+  var titlePage = faker.lorem.sentence();
   // Rellena los inputs de title an description
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -978,7 +983,8 @@ async function testEscenario15(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePage(page, titlePage);
   await logout(page, `${screenshotPath}-9-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1011,10 +1017,10 @@ async function testEscenario16(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  let titlePage = 'Page to edit ' + Math.floor(Math.random()*10000001)
+  var titlePage = faker.lorem.sentence();
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1041,8 +1047,10 @@ async function testEscenario16(page){
 
   // Enter to page
   await page.getByText(titlePage, { exact: true }).click();
-  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this page');
+  var titleBefore = titlePage;
+  titlePage = faker.lorem.sentence();
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', faker.lorem.paragraph({ min: 1, max: 2 }));
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-9-Editing-page-inputs.png`})
 
@@ -1067,7 +1075,7 @@ async function testEscenario16(page){
 
 
   //----------------THEN---------------------
-  titlePage += "-edited";
+  titlePage = titleBefore + titlePage;
   const titleResult = await (await page.getByText(titlePage, { exact: true }).textContent()).trim();
   expect.expect(titlePage).toBe(titleResult);
   console.log("----------Expect test---------")
@@ -1076,7 +1084,8 @@ async function testEscenario16(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePage(page, titlePage);
   await logout(page, `${screenshotPath}-13-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1109,10 +1118,10 @@ async function testEscenario17(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  let titlePage = 'Page to schedule ' + Math.floor(Math.random()*10000001)
+  var titlePage = faker.lorem.sentence();
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1150,7 +1159,8 @@ async function testEscenario17(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePage(page, titlePage);
   await logout(page, `${screenshotPath}-10-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1183,10 +1193,10 @@ async function testEscenario18(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  let titlePage = 'Page to delete ' + Math.floor(Math.random()*10000001)
+  var titlePage = faker.lorem.sentence();
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description schedule page');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1276,10 +1286,10 @@ async function testEscenario19(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post drafts to edit ' + Math.floor(Math.random()*10000001)
+  var titlePost = faker.lorem.sentence();
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   await page.screenshot({path:`${screenshotPath}-4-Editing-post-inputs.png`})
   console.log('Writed about inputs title and description')
 
@@ -1289,8 +1299,10 @@ async function testEscenario19(page){
   await page.screenshot({path:`${screenshotPath}-5-Enter-post-created.png`})
 
   await page.getByText(titlePost, { exact: true }).click();
-  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', '-edited');
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', 'I edited this post');
+  let titleBefore = titlePost;
+  titlePost = faker.lorem.sentence();
+  await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', faker.lorem.paragraph({ min: 1, max: 2 }));
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-6-Editing-post-inputs.png`})
 
@@ -1302,7 +1314,7 @@ async function testEscenario19(page){
 
 
   //----------------THEN---------------------
-  titlePost += "-edited";
+  titlePost = titleBefore + titlePost;
   const titleResult = await (await page.getByText(titlePost, { exact: true }).textContent()).trim();
   expect.expect(titlePost).toBe(titleResult);
   console.log("----------Expect test---------")
@@ -1311,7 +1323,8 @@ async function testEscenario19(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-  // Hace el logout
+
+  await deletePost(page, titlePost);
   await logout(page, `${screenshotPath}-8-`);
   await new Promise(r => setTimeout(r, 2000));
 }
@@ -1344,10 +1357,10 @@ async function testEscenario20(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  let titlePost = 'Post drafts to publish ' + Math.floor(Math.random()*10000001)
+  var titlePost = faker.lorem.sentence();
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', 'I write description of this post');
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
   await page.screenshot({path:`${screenshotPath}-4-Editing-post-inputs.png`})
   console.log('Writed about inputs title and description')
 
@@ -1392,7 +1405,45 @@ async function testEscenario20(page){
   //----------------THEN---------------------
 
 
-  // Hace el logout
+  await deletePost(page, titlePost);
   await logout(page, `${screenshotPath}-11-`);
   await new Promise(r => setTimeout(r, 2000));
+}
+
+
+
+//-------------------------------------------------------
+// Funciones que eliminan despues de finalizar cada test
+
+async function deletePost(page, titlePost) {
+
+  // Delete post
+  await page.getByText(titlePost, { exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('css=.post-settings')
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('css=.gh-btn.gh-btn-hover-red.gh-btn-icon.settings-menu-delete-button');
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('a[href="#/posts/"]');
+  await new Promise(r => setTimeout(r, 500));
+
+}
+
+async function deletePage(page, titlePage) {
+
+  // Delete page
+  await page.getByText(titlePage, { exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('css=.post-settings')
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('css=.gh-btn.gh-btn-hover-red.gh-btn-icon.settings-menu-delete-button');
+  await new Promise(r => setTimeout(r, 500));
+  await new Promise(r => setTimeout(r, 500));
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await new Promise(r => setTimeout(r, 500));
+  await page.click('a[href="#/pages/"]')
+  await new Promise(r => setTimeout(r, 500));
+
 }

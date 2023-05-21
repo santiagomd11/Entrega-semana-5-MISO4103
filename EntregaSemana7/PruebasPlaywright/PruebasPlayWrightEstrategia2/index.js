@@ -3,8 +3,11 @@ const faker = require('@faker-js/faker').faker;
 const expect = require('@playwright/test');
 const url = 'http://localhost:2368/ghost';
 
+const fs = require('fs');
+const path = require('path');
+
 (async () => {
-  
+
   //Definir los navegadores en los que se quiere hacer la prueba
   for (const browserType of ['chromium']) { //webkit
     //Contenido de la prueba
@@ -23,17 +26,18 @@ const url = 'http://localhost:2368/ghost';
     await page.screenshot({path:`${screenshotPath}/pagina.png`})
     console.log('Project loaded')
 
+
     //Interactuar con la aplicación web
-    await testScenario1(page);
-    await testScenario2(page);
-    await testScenario3(page);
-    await testScenario4(page);
-    await testScenario5(page);
-    await testScenario6(page);
-    await testScenario7(page);
-    await testScenario8(page);
-    await testScenario9(page);
-    await testScenario10(page);
+    //await testScenario1(page);
+    //await testScenario2(page);
+    //await testScenario3(page);
+    //await testScenario4(page);
+    //await testScenario5(page);
+    //await testScenario6(page);
+    //await testScenario7(page);
+    //await testScenario8(page);
+    //await testScenario9(page);
+    //await testScenario10(page);
 
     // Feature Post
     await testEscenario11(page)
@@ -58,11 +62,71 @@ const url = 'http://localhost:2368/ghost';
 })();//Llamado propio de la función
 
 
+function writeDataPostJson() {
+
+  let data = []
+  for(let i = 1; i <= 20; i++) {
+    let postData = {
+      ['title'] : faker.lorem.sentence(),
+      ['body'] : faker.lorem.paragraph({ min: 8, max: 12 })
+    };
+    data.push(postData);
+  }
+
+  let objectToSave = {data_posts:data, data_pages:[]}; 
+ 
+  fs.writeFile('pool.json', JSON.stringify(objectToSave),'utf8', (err) => { 
+    if (err) throw err; 
+    console.log('The pool to post was created!'); 
+  }); 
+  
+}
+
+function writeDataPageJson() {
+
+  let data = []
+  for(let i = 1; i <= 20; i++) {
+    let pageData = {
+      ['title'] : faker.lorem.sentence(),
+      ['body'] : faker.lorem.paragraph({ min: 8, max: 12 })
+    };
+    data.push(pageData);
+  }
+
+  let objectToSave = {data_posts:[], data_pages:data}; 
+ 
+  fs.writeFile('pool.json', JSON.stringify(objectToSave),'utf8', (err) => { 
+    if (err) throw err; 
+    console.log('The pool to page was created!');
+  });
+  
+}
+
+function readDataJson() {
+  var poolJson = fs.readFileSync(path.join(__dirname, 'pool.json'));
+  var pool = JSON.parse(poolJson);
+  return pool;
+}
+
+function deleteDataJson() {
+  let objectToSave = {data_posts:[], data_pages:[]} 
+ 
+  fs.writeFile('pool.json', JSON.stringify(objectToSave),'utf8', (err) => { 
+    if (err) throw err; 
+    console.log('The pool was deleted!'); 
+  }); 
+}
+
+function getRandomItem(array){
+  return array[Math.floor(Math.random()*array.length)];
+}
+
+
 async function login(page, screenshotPath){
   if(!screenshotPath)
     screenshotPath = './imagenes-test/0-login'
   await page.type('css=.email.ember-text-field.gh-input.ember-view', 'myjachis@gmail.com');
-  await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Mr.hellno.19');
+  await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Mr.hellno19');
   await page.click('css=.login.gh-btn.gh-btn-blue')
   await new Promise(r => setTimeout(r, 7000));
   console.log(`Clicked on login button, URL is now ${page.url()}`)
@@ -588,6 +652,9 @@ async function testEscenario11(page){
   console.log('---------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPostJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/posts-escenario11';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -606,12 +673,12 @@ async function testEscenario11(page){
   await page.click('css=.ember-view.gh-btn.gh-btn-green')
   console.log('Clicked on button new post')
 
-  const titlePost = faker.lorem.sentence();
-
+  var item = getRandomItem(pool["data_posts"]);
+  const titlePost = item.title;
   // Rellena los inputs de title an description
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -647,9 +714,9 @@ async function testEscenario11(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-
   await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-9-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
@@ -662,6 +729,9 @@ async function testEscenario12(page){
   console.log('-----------------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPostJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/posts-escenario12';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -681,10 +751,11 @@ async function testEscenario12(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  var titlePost = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_posts"]);
+  var titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -703,18 +774,19 @@ async function testEscenario12(page){
   await new Promise(r => setTimeout(r, 500));
   await page.screenshot({path:`${screenshotPath}-7-created-post.png`})
   console.log('Post created and published')
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 500));
 
   // Muestra la lista de post
   await page.click('a[href="#/posts/"]')
   await new Promise(r => setTimeout(r, 500));
   await page.screenshot({path:`${screenshotPath}-8-Enter-post-created.png`})
-
   await page.getByText(titlePost, { exact: true }).click();
+
   let titleBefore = titlePost;
-  titlePost = faker.lorem.sentence();;
+  item = getRandomItem(pool["data_posts"]);
+  titlePost = item.title;
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', faker.lorem.paragraph({ min: 1, max: 2 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', item.body);
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-9-Editing-post-inputs.png`})
 
@@ -749,8 +821,9 @@ async function testEscenario12(page){
   //----------------THEN---------------------
 
 
-  await deletePost(page, titlePost)
+  await deletePost(page, titlePost);
   await logout(page, `${screenshotPath}-13-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
@@ -763,6 +836,9 @@ async function testEscenario13(page){
   console.log('-----------------------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPostJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/posts-escenario13';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -782,10 +858,11 @@ async function testEscenario13(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  var titlePost = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_posts"]);
+  var titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -823,21 +900,24 @@ async function testEscenario13(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-
-  await deletePost(page, titlePost);
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-10-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
 
 async function testEscenario14(page) {
-  // Escenario 14: Como usuario quiero loguearme en la pagina, listar posts, crear un post y luego eliminarlo
+  // Escenario 14: Como usuario quiero loguearme en la pagina, listar posts, crear un post y eliminarlo
 
   console.log('--------------------------------------------')
   console.log('Escenario 14 -> create new post and delete')
   console.log('--------------------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPostJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/posts-escenario14';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -857,10 +937,11 @@ async function testEscenario14(page) {
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  var titlePost = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_posts"]);
+  var titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -919,6 +1000,7 @@ async function testEscenario14(page) {
 
   // Hace el logout
   await logout(page, `${screenshotPath}-13-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
@@ -933,6 +1015,9 @@ async function testEscenario15(page){
   console.log('---------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPageJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/pages-escenario15';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -951,11 +1036,12 @@ async function testEscenario15(page){
   await page.click('css=.ember-view.gh-btn.gh-btn-green')
   console.log('Clicked on button new page')
 
-  var titlePage = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_pages"]);
+  const titlePage = item.title;
   // Rellena los inputs de title an description
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -991,9 +1077,9 @@ async function testEscenario15(page){
   console.log("----------Expect test---------")
   //----------------THEN---------------------
 
-
-  await deletePage(page, titlePage);
+  await deletePage(page, titlePage)
   await logout(page, `${screenshotPath}-9-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
@@ -1006,6 +1092,9 @@ async function testEscenario16(page){
   console.log('-------------------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPageJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/pages-escenario16';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -1025,10 +1114,11 @@ async function testEscenario16(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  var titlePage = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_pages"]);
+  var titlePage = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1055,10 +1145,11 @@ async function testEscenario16(page){
 
   // Enter to page
   await page.getByText(titlePage, { exact: true }).click();
-  var titleBefore = titlePage;
-  titlePage = faker.lorem.sentence();
+  let titleBefore = titlePage;
+  item = getRandomItem(pool["data_pages"]);
+  titlePage = item.title;
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', faker.lorem.paragraph({ min: 1, max: 2 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', item.body);
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-9-Editing-page-inputs.png`})
 
@@ -1093,8 +1184,9 @@ async function testEscenario16(page){
   //----------------THEN---------------------
 
 
-  await deletePage(page, titlePage);
+  await deletePage(page, titlePage)
   await logout(page, `${screenshotPath}-13-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
@@ -1107,6 +1199,9 @@ async function testEscenario17(page){
   console.log('-------------------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPageJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/pages-escenario17';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -1126,10 +1221,11 @@ async function testEscenario17(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  var titlePage = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_pages"]);
+  const titlePage = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1168,8 +1264,9 @@ async function testEscenario17(page){
   //----------------THEN---------------------
 
 
-  await deletePage(page, titlePage);
+  await deletePage(page, titlePage)
   await logout(page, `${screenshotPath}-10-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
@@ -1182,6 +1279,9 @@ async function testEscenario18(page){
   console.log('-------------------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPageJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/pages-escenario18';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -1201,10 +1301,11 @@ async function testEscenario18(page){
   console.log('Clicked on button new page')
 
   // Rellena los inputs de title y description
-  var titlePage = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_pages"]);
+  const titlePage = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-page.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePage);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   console.log('Writed about inputs title and description')
 
   // Despliega la opción de publish
@@ -1230,7 +1331,7 @@ async function testEscenario18(page){
   await page.screenshot({path:`${screenshotPath}-8-verify-created-page.png`})
   console.log('Verify list of page')
 
-  // Delete post
+  // Delete page
   await page.getByText(titlePage, { exact: true }).click();
   await new Promise(r => setTimeout(r, 200));
   await page.screenshot({path:`${screenshotPath}-9-Enter-page-created.png`})
@@ -1263,6 +1364,7 @@ async function testEscenario18(page){
 
   // Hace el logout
   await logout(page, `${screenshotPath}-13-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
@@ -1275,6 +1377,9 @@ async function testEscenario19(page){
   console.log('------------------------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPostJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/drafts-escenario19';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -1294,10 +1399,11 @@ async function testEscenario19(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  var titlePost = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_posts"]);
+  var titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   await page.screenshot({path:`${screenshotPath}-4-Editing-post-inputs.png`})
   console.log('Writed about inputs title and description')
 
@@ -1308,9 +1414,10 @@ async function testEscenario19(page){
 
   await page.getByText(titlePost, { exact: true }).click();
   let titleBefore = titlePost;
-  titlePost = faker.lorem.sentence();
+  item = getRandomItem(pool["data_posts"]);
+  titlePost = item.title;
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', faker.lorem.paragraph({ min: 1, max: 2 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor', item.body);
   console.log('Editing inputs title and description')
   await page.screenshot({path:`${screenshotPath}-6-Editing-post-inputs.png`})
 
@@ -1332,8 +1439,9 @@ async function testEscenario19(page){
   //----------------THEN---------------------
 
 
-  await deletePost(page, titlePost);
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-8-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
 
@@ -1346,6 +1454,9 @@ async function testEscenario20(page){
   console.log('------------------------------------------------')
 
   //----------------GIVEN---------------------
+  writeDataPostJson();
+  await new Promise(r => setTimeout(r, 500));
+  var pool = readDataJson();
   var screenshotPath = './imagenes-test/drafts-escenario20';
   // Hace el login
   await login(page, `${screenshotPath}-`);
@@ -1365,10 +1476,11 @@ async function testEscenario20(page){
   console.log('Clicked on button new post')
 
   // Rellena los inputs de title an description
-  var titlePost = faker.lorem.sentence();
+  var item = getRandomItem(pool["data_posts"]);
+  const titlePost = item.title;
   await page.screenshot({path:`${screenshotPath}-3-empty-new-post.png`})
   await page.type('css=.gh-editor-title.ember-text-area.gh-input.ember-view', titlePost);
-  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', faker.lorem.paragraph({ min: 8, max: 12 }));
+  await page.type('css=.koenig-editor__editor.__mobiledoc-editor.__has-no-content', item.body);
   await page.screenshot({path:`${screenshotPath}-4-Editing-post-inputs.png`})
   console.log('Writed about inputs title and description')
 
@@ -1413,11 +1525,11 @@ async function testEscenario20(page){
   //----------------THEN---------------------
 
 
-  await deletePost(page, titlePost);
+  await deletePost(page, titlePost)
   await logout(page, `${screenshotPath}-11-`);
+  deleteDataJson();
   await new Promise(r => setTimeout(r, 2000));
 }
-
 
 
 //-------------------------------------------------------

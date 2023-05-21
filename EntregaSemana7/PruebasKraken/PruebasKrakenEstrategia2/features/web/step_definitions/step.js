@@ -10,6 +10,7 @@ let pool = {
 }; 
 
 BeforeAll(function () {
+  // El pool cambia cada vez que se ejecuta el escenario
   console.log('Executing before all scenarios...');
   getData();
   console.log(pool);
@@ -21,7 +22,12 @@ function getData() {
       [`name${i}`] : faker.lorem.word(),
       [`body${i}`] : faker.lorem.paragraph()
     };
+    let pageData = {
+      [`name${i}`] : faker.lorem.word(),
+      [`body${i}`] : faker.lorem.paragraph()
+    };
     pool.data_posts.push(postData);
+    pool.data_pages.push(pageData);
   }
 }
 
@@ -388,36 +394,44 @@ When("I click New page button", async function () {
   return await element.click();
 });
 
-When("I enter in the page name {string}", async function (value) {
+
+When("I enter in the page name the {string} from the pool", async function (value) {
   let element = await this.driver.$("textarea.gh-editor-title");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postName = pool['data_pages'][elementIndex][value]
+  return await element.setValue(postName);
 });
+
 
 When("I click page button", async function () {
   let element = await this.driver.$("a.blue.link.fw4");
   return await element.click();
 });
 
-When("I enter in the page body {string}", async function (value) {
+When("I enter in the page body the {string} from the pool", async function (value) {
   let element = await this.driver.$("article.koenig-editor");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_pages'][elementIndex][value]
+  return await element.setValue(postBody);
 });
 
-When("I click in the page with name {string}", async function (value) {
+
+When("I click in the page with name {string} from the pool", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  pageName = pool['data_pages'][elementIndex][value]
 
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
 
-    if (text.includes(value)) {
+    if (text.includes(pageName)) {
       await element.click();
       return;
     }
   }
 });
-
 
 When("I click on Delete Page", async function () {
   const deleteButtonSelector = ".settings-menu-delete-button";
@@ -431,30 +445,32 @@ When("I click on Delete Page confirmation", async function () {
   return await element.click();
 });
 
-Then("I see the page with name {string}", async function (value) {
+Then("I see the page with name {string} from the pool", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
-
+  elementIndex = parseInt(value.slice(-1)) - 1
+  pageName = pool['data_pages'][elementIndex][value]
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
 
-    if (text.includes(value)) {
+    if (text.includes(pageName)) {
       return await element;
     }
   }
 });
 
-Then("I don't see the page with name {string}", async function (value) {
+Then("I don't see the page with name {string} from the pool", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
-
+  elementIndex = parseInt(value.slice(-1)) - 1
+  pageName = pool['data_pages'][elementIndex][value]
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
 
-    if (text.includes(value)) {
-      throw new Error(`Page with name "${value}" is present, but it should not be.`);
+    if (text.includes(pageName)) {
+      throw new Error(`Page with name "${pageName}" is present, but it should not be.`);
     }
   }
 });

@@ -110,6 +110,8 @@ async function testScenario1(page){
   //#region THEN
   await expect.expect(page.getByText('There is no user with that email address.')).toBeVisible();
   console.log('Expect ok');
+  await page.reload()
+  await new Promise(r => setTimeout(r, 1000));
   //#endregion
 
 }
@@ -186,7 +188,6 @@ async function testScenario3(page){
   console.log('Clicked on ghost user')
 
   //Edit fields
-  var editedUserName = 'Ghost_edited_user'
   await page.fill('css=#user-email', item.email);
   await page.locator('select#new-user-role').selectOption({ label: 'Contributor' })
   await page.fill('css=#user-location', item.country);
@@ -196,10 +197,11 @@ async function testScenario3(page){
   console.log('Edited user fields')
   await new Promise(r => setTimeout(r, 2000));
   await page.getByRole('button', { name: 'Save' }).click();
+  await new Promise(r => setTimeout(r, 1000));
+  await page.screenshot({path:`${screenshotPath}-4-editedUserSave.png`});
   
   await page.reload()
-  await new Promise(r => setTimeout(r, 2000));
-  await page.screenshot({path:`${screenshotPath}-4-editedUserSave.png`});
+  await new Promise(r => setTimeout(r, 1000));
   console.log('Saved edited user');
   //#endregion
 
@@ -251,8 +253,8 @@ async function testScenario4(page){
   console.log('Clicked on send invitation')
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-4-clickSendInvite.png`})
-  await page.getByTitle('Close').click();
-  await new Promise(r => setTimeout(r, 4000));
+  await page.reload();
+  await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({path:`${screenshotPath}-5-userListAfterAdd.png`})
   console.log('Added new user')
 

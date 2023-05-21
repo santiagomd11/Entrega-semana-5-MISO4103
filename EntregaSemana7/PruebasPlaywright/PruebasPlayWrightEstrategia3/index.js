@@ -61,8 +61,8 @@ const url = 'http://localhost:2368/ghost';
 async function login(page, screenshotPath){
   if(!screenshotPath)
     screenshotPath = './imagenes-test/0-login'
-  await page.type('css=.email.ember-text-field.gh-input.ember-view', 't.rodriguezh@uniandes.edu.co');
-  await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Miso1234567890');
+  await page.type('css=.email.ember-text-field.gh-input.ember-view', 'myjachis@gmail.com');
+  await page.type('css=.password.ember-text-field.gh-input.ember-view', 'Mr.hellno19 ');
   await page.click('css=.login.gh-btn.gh-btn-blue')
   await new Promise(r => setTimeout(r, 7000));
   console.log(`Clicked on login button, URL is now ${page.url()}`)

@@ -257,16 +257,17 @@ Then("I see the post with the random name for {string}", async function (value) 
   }
 });
 
-Then("I don't see the post with name {string}", async function (value) {
+Then("I don't see the post with the random name for {string}", async function (value) {
   const postSelector = `li.gh-list-row.gh-posts-list-item`;
   const elements = await this.driver.$$(postSelector);
+  const postName = posts_data[value]["name"];
 
   for (const element of elements) {
     const titleElement = await element.$("h3.gh-content-entry-title");
     const text = await titleElement.getText();
 
-    if (text.includes(value)) {
-      throw new Error(`Post with name "${value}" is present, but it should not be.`);
+    if (text.includes(postName)) {
+      throw new Error(`Post with name "${postName}" is present, but it should not be.`);
     }
   }
 });
@@ -380,14 +381,6 @@ When("I click New page button", async function () {
   let element = await this.driver.$("a.gh-btn.gh-btn-green");
   return await element.click();
 });
-When("I enter in the post name a random name for {string}", async function (value) {
-  let element = await this.driver.$("textarea.gh-editor-title");
-  let name = faker.lorem.word();
-  posts_data[value]["name"] = name;
-  return await element.setValue(name);
-});
-
-
 
 When("I enter in the page a random name for {string}", async function (value) {
   let element = await this.driver.$("textarea.gh-editor-title");
@@ -432,21 +425,6 @@ When("I click on Delete Page", async function () {
 When("I click on Delete Page confirmation", async function () {
   let element = await this.driver.$("button.gh-btn.gh-btn-red.gh-btn-icon.ember-view");
   return await element.click();
-});
-
-Then("I see the post with the random name for {string}", async function (value) {
-  const postSelector = `li.gh-list-row.gh-posts-list-item`;
-  const elements = await this.driver.$$(postSelector);
-  const postName = posts_data[value]["name"];
-
-  for (const element of elements) {
-    const titleElement = await element.$("h3.gh-content-entry-title");
-    const text = await titleElement.getText();
-
-    if (text.includes(postName)) {
-      return await element;
-    }
-  }
 });
 
 Then("I see the page with the random name for {string}", async function (value) {

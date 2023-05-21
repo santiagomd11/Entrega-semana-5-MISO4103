@@ -274,33 +274,50 @@ When("I click staff {string} button", async function (value) {
   return await element.click();
 });
 
-When("I enter the user name input field {string}", async function (value) {
+When("I enter the user name input field {string} from the pool", async function (value) {
   let element = await this.driver.$("input#user-name");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_staff'][elementIndex][value]
+  return await element.setValue(postBody);
 });
 
 Then ("I see the suspended badge", async function () {
   let element = await this.driver.$("span.gh-badge.suspended");
   return await element.getValue();
 });
-When("I enter the email input field {string}", async function (value) {
+When("I enter the email input field {string} from the pool", async function (value) {
   let element = await this.driver.$("input#user-email");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_staff'][elementIndex][value]
+  return await element.setValue(postBody);
 });
 
-When("I enter the user location input field {string}", async function (value) {
+
+When("I enter in the invite form email {string} from the pool", async function (value) {
+  let element = await this.driver.$(`input.email.ember-text-field.gh-input[type="email"]`);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_staff'][elementIndex][value]
+  return await element.setValue(postBody);
+});
+When("I enter the user location input field {string} from the pool", async function (value) {
   let element = await this.driver.$("input#user-location");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_staff'][elementIndex][value]
+  return await element.setValue(postBody);
 });
 
-When("I enter the user new password input field {string}", async function (value) {
+When("I enter the user new password input field {string} from the pool", async function (value) {
   let element = await this.driver.$("input#user-password-new");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_staff'][elementIndex][value]
+  return await element.setValue(postBody);
 });
 
-When("I enter the user password verification input field {string}", async function (value) {
+When("I enter the user password verification input field {string} from the pool", async function (value) {
   let element = await this.driver.$("input#user-new-password-verification");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  postBody = pool['data_staff'][elementIndex][value]
+  return await element.setValue(postBody);
 });
 
 When("I click save change password button", async function () {

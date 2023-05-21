@@ -43,6 +43,6 @@
       "body5": "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam sit amet quam ut elit convallis facilisis. In hac habitasse platea dictumst. Integer vulputate leo id augue pretium vulputate."
     }
   ],
-  "data_staff": [],
+  "data_staff": [{"name1": "ghost", "email1": "random@mail.com", "location1": "Bogota", "password1": "Amelie.Lens12"}],
   "data_tags": []
 }

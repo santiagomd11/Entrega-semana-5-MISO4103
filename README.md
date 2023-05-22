@@ -73,6 +73,20 @@ Para esta semana se aplicaron las siguientes tecnicas de generacion de datos, pa
   6. Correr el comando npx kraken-node run
   7. En caso de tener problemas con faker al ejecutar npx kraken-node run. Ejecutar npm install faker o npm install faker@5.5.3, si es necesario tambien ejecutar npm audit fix --force.
  
+ **Playwright**
+
+  1. Ubicarse en la carpeta de EntregaSemana7 desde el directorio raíz sería cd EntregaSemana7
+  2. Luego ubicarse en el directroio de PruebasPlaywright, que el comando sería cd PruebasPlaywright
+  3. Tener corriendo en la máquina local Ghost (para ello instale Ghost en su máquina local la versión con la que actualmente se corren estas pruebas es la v3.41.1 con NodeJS v 14.19.0 y una vez instalado corra el comando ghost start  ), para la correcta ejecución de las pruebas es importante que el usuario creado en Ghost tenga unas credenciales que correspondan con las especificadas en la pruebas:
+      ```
+        email: myjachis@gmail.com
+        password: Mr.hellno19 
+      ```
+  3. Abrir la carpeta de la semana 7 cd EntregaSemana7/PruebasPlaywright
+  4. Escoger la estrategia que desea ejecutar, ej: cd PruebasPlawrightEstrategia1
+  5. Hacer npm install
+  7. En caso de tener problemas con faker al ejecutar correr los escenarios de pruebas, ejecute npm install faker o npm install faker@5.5.3.
+  8. Luego ejecute node index.js y verá como los escenarios de pruebas empiezan a ejecutarse uno a uno
 
 ## Semana  6
 

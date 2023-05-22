@@ -84,7 +84,7 @@ Para esta semana se aplicaron las siguientes tecnicas de generacion de datos, pa
       ```
   4. Escoger la estrategia que desea ejecutar ingresando a ese directorio, ej: cd PruebasPlaywrightEstrategia1
   5. Hacer npm install
-  7. En caso de tener problemas con faker al ejecutar correr los escenarios de pruebas, ejecute npm install faker o npm install faker@5.5.3.
+  7. En caso de tener problemas con faker al intentar ejecutar los escenarios de pruebas, ejecute npm install faker o npm install faker@5.5.3.
   8. Luego ejecute node index.js y verá como los escenarios de pruebas empiezan a ejecutarse uno a uno
 
 ## Semana  6

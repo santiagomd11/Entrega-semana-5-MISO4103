@@ -36,6 +36,15 @@ function getData() {
     pool.data_pages.push(pageData);
     pool.data_tags.push(tagData);
   }
+
+  let staffData = {
+    "new_name": faker.internet.userName(), 
+    "email1": faker.internet.email(),
+    "email2": faker.internet.email(),
+    "location": faker.address.city(),
+    "password": faker.internet.password()
+  };
+  pool.data_staff.push(staffData);
 }
 
 When("I enter email {string}", async function (email) {
@@ -321,7 +330,8 @@ When("I click staff {string} button", async function (value) {
 
 When("I enter the user name input field {string}", async function (value) {
   let element = await this.driver.$("input#user-name");
-  return await element.setValue(value);
+  userName = pool['data_staff'][0][value];
+  return await element.setValue(userName);
 });
 
 Then ("I see the suspended badge", async function () {
@@ -330,22 +340,26 @@ Then ("I see the suspended badge", async function () {
 });
 When("I enter the email input field {string}", async function (value) {
   let element = await this.driver.$("input#user-email");
-  return await element.setValue(value);
+  email = pool['data_staff'][0][value];
+  return await element.setValue(email);
 });
 
 When("I enter the user location input field {string}", async function (value) {
   let element = await this.driver.$("input#user-location");
-  return await element.setValue(value);
+  location = pool['data_staff'][0][value];
+  return await element.setValue(location);
 });
 
 When("I enter the user new password input field {string}", async function (value) {
   let element = await this.driver.$("input#user-password-new");
-  return await element.setValue(value);
+  password = pool['data_staff'][0][value];
+  return await element.setValue(password);
 });
 
 When("I enter the user password verification input field {string}", async function (value) {
   let element = await this.driver.$("input#user-new-password-verification");
-  return await element.setValue(value);
+  password = pool['data_staff'][0][value];
+  return await element.setValue(password);
 });
 
 When("I click save change password button", async function () {
@@ -392,8 +406,9 @@ When("I select the user role to Contributor", async function () {
   return await element.selectByIndex(3);
 });
 
-When("I enter in the invite form email {string}", async function (email) {
+When("I enter in the invite form email {string}", async function (value) {
   let element = await this.driver.$(`input.email.ember-text-field.gh-input[type="email"]`);
+  email = pool['data_staff'][0][value];
   return await element.setValue(email);
 });
 

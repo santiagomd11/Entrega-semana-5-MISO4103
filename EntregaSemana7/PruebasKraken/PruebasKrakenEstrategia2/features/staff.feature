@@ -13,11 +13,11 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I wait for 2 seconds 
   And I click staff "ghost" button 
   And I wait for 2 seconds 
-  And I enter the user name input field "GhostEditado"
-  And I enter the email input field "emaileditado@gmail.com"
+  And I enter the user name input field "new_name"
+  And I enter the email input field "email1"
   And I wait for 2 seconds 
   And I change the user role to Editor
-  And I enter the user location input field "Bogota"
+  And I enter the user location input field "location"
   And I click save edit staff button  
   And I wait for 4 seconds
   And I click staff button
@@ -38,8 +38,8 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I wait for 2 seconds 
   And I click staff "ghost" button
   And I wait for 2 seconds 
-  And I enter the user new password input field "Mr.hellno19"
-  And I enter the user password verification input field "Mr.hellno19"
+  And I enter the user new password input field "password"
+  And I enter the user password verification input field "password"
   And I click save change password button
   Then I see the password changed notification
 
@@ -82,6 +82,6 @@ And I wait for 2 seconds
 And I click staff button
 And I wait for 2 seconds 
 And I click the invite people button
-And I enter in the invite form email "test@mail.com"
+And I enter in the invite form email "email2"
 And I select the user role to Contributor
 Then I click the send invitation button

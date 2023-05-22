@@ -8,21 +8,21 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I enter password "Mr.hellno19"
   And I wait for 1 seconds
   And I click login button
-  And I wait for 2 seconds 
+  And I wait for 4 seconds 
   And I click staff button
   And I wait for 2 seconds 
   And I click staff "ghost" button 
   And I wait for 2 seconds 
-  And I enter the user name input field "GhostEditado"
-  And I enter the email input field "emaileditado@gmail.com"
+  And I enter the user name input field a random user name
+  And I enter the email input field a random email
   And I wait for 2 seconds 
   And I change the user role to Editor
-  And I enter the user location input field "Bogota"
+  And I enter the user location input field a random location
   And I click save edit staff button  
   And I wait for 4 seconds
   And I click staff button
   Then I click staff "ghost" button 
-    And I enter the user name input field "ghost"
+    And I enter the user name input field a random user name
     And I click save edit staff button
 
 @web @user2
@@ -33,13 +33,13 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I enter password "Mr.hellno19"
   And I wait for 1 seconds
   And I click login button
-  And I wait for 2 seconds 
+  And I wait for 4 seconds 
   And I click staff button
   And I wait for 2 seconds 
   And I click staff "ghost" button
   And I wait for 2 seconds 
-  And I enter the user new password input field "Mr.hellno19"
-  And I enter the user password verification input field "Mr.hellno19"
+  And I enter the user new password input field a random password
+  And I enter the user password verification input field the random password
   And I click save change password button
   Then I see the password changed notification
 
@@ -52,7 +52,7 @@ Scenario: Como usuario quiero loguearme en la pagina, ver los usuarios de staff 
   And I enter password "Mr.hellno19"
   And I wait for 1 seconds
   And I click login button
-  And I wait for 2 seconds 
+  And I wait for 4 seconds 
   And I click staff button
   And I wait for 2 seconds 
   And I click staff "ghost" button 
@@ -78,10 +78,10 @@ When I enter email "myjachis@gmail.com"
 And I enter password "Mr.hellno19"
 And I wait for 1 seconds
 And I click login button
-And I wait for 2 seconds 
+And I wait for 4 seconds 
 And I click staff button
 And I wait for 2 seconds 
 And I click the invite people button
-And I enter in the invite form email "test@mail.com"
+And I enter in the invite form email a random email
 And I select the user role to Contributor
 Then I click the send invitation button

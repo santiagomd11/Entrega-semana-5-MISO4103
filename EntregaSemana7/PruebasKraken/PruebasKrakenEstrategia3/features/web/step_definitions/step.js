@@ -23,6 +23,8 @@ let tags_data = {
   "scenario4": {},
 }
 
+let staff_data = {};
+
 BeforeAll(function () {
   console.log(posts_data);
   console.log(pages_data);
@@ -303,33 +305,39 @@ When("I click staff {string} button", async function (value) {
   return await element.click();
 });
 
-When("I enter the user name input field {string}", async function (value) {
+When("I enter the user name input field a random user name", async function () {
   let element = await this.driver.$("input#user-name");
-  return await element.setValue(value);
+  let userName = faker.internet.userName();
+  return await element.setValue(userName);
 });
 
 Then ("I see the suspended badge", async function () {
   let element = await this.driver.$("span.gh-badge.suspended");
   return await element.getValue();
 });
-When("I enter the email input field {string}", async function (value) {
+When("I enter the email input field a random email", async function () {
   let element = await this.driver.$("input#user-email");
-  return await element.setValue(value);
+  let email = faker.internet.email();
+  return await element.setValue(email);
 });
 
-When("I enter the user location input field {string}", async function (value) {
+When("I enter the user location input field a random location", async function () {
   let element = await this.driver.$("input#user-location");
-  return await element.setValue(value);
+  let location = faker.address.city();
+  return await element.setValue(location);
 });
 
-When("I enter the user new password input field {string}", async function (value) {
+When("I enter the user new password input field a random password", async function () {
   let element = await this.driver.$("input#user-password-new");
-  return await element.setValue(value);
+  let password = faker.internet.password();
+  staff_data["password"] = password;
+  return await element.setValue(password);
 });
 
-When("I enter the user password verification input field {string}", async function (value) {
+When("I enter the user password verification input field the random password", async function () {
   let element = await this.driver.$("input#user-new-password-verification");
-  return await element.setValue(value);
+  let password = staff_data["password"];
+  return await element.setValue(password);
 });
 
 When("I click save change password button", async function () {
@@ -376,8 +384,9 @@ When("I select the user role to Contributor", async function () {
   return await element.selectByIndex(3);
 });
 
-When("I enter in the invite form email {string}", async function (email) {
+When("I enter in the invite form email a random email", async function () {
   let element = await this.driver.$(`input.email.ember-text-field.gh-input[type="email"]`);
+  let email = faker.internet.email();
   return await element.setValue(email);
 });
 

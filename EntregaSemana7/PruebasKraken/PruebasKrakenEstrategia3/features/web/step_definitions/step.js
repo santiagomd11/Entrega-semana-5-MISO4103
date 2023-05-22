@@ -9,7 +9,6 @@ let posts_data = {
   "scenario4": {},
 };
 
-
 let pages_data = {
   "scenario1": {},
   "scenario2": {},
@@ -17,8 +16,17 @@ let pages_data = {
   "scenario4": {},
 };
 
+let tags_data = {
+  "scenario1": {},
+  "scenario2": {},
+  "scenario3": {},
+  "scenario4": {},
+}
+
 BeforeAll(function () {
   console.log(posts_data);
+  console.log(pages_data);
+  console.log(tags_data);
 });
 
 When("I enter email {string}", async function (email) {
@@ -51,29 +59,36 @@ Then("I click New Tags button", async function () {
   return await element.click();
 });
 
-Then("I see the tag {string}", async function (value) {
-  let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
+Then("I see the tag for {string}", async function (value) {
+  let slug = tags_data[value]["slug"]
+  let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${slug}/"]`);
   return await element;
 });
 
-When("I enter the name input field {string}", async function (value) {
+When("I enter the name input field a random name", async function () {
   let element = await this.driver.$("input#tag-name");
-  return await element.setValue(value);
+  let name = faker.lorem.word();
+  return await element.setValue(name);
 });
 
-When("I enter the slug input field {string}", async function (value) {
+When("I enter the slug input field a random slug for {string}", async function (value) {
   let element = await this.driver.$("input#tag-slug");
-  return await element.setValue(value);
+  await element.setValue("");
+  let slug = faker.datatype.uuid();
+  tags_data[value]["slug"] = slug;
+  return await element.setValue(slug);
 });
 
-When("I enter the color input field {string}", async function (value) {
+When("I enter the color input field a random color", async function () {
     let element = await this.driver.$(`input[name="accent-color"]`);
-    return await element.setValue(value);
+    let color = faker.internet.color().slice(1);
+    return await element.setValue(color);
 });
 
-When("I enter the description input field {string}", async function (value) {
+When("I enter the description input field a random description", async function () {
     let element = await this.driver.$("textarea#tag-description");
-    return await element.setValue(value);
+    let description = faker.lorem.paragraph();
+    return await element.setValue(description);
 });
 
 When("I click save button", async function () {
@@ -82,7 +97,8 @@ When("I click save button", async function () {
 });
 
 When("I click the tag {string} button", async function (value) {
-    let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
+    let slug = tags_data[value]["slug"]
+    let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${slug}/"]`);
     return await element.click();
 });
 

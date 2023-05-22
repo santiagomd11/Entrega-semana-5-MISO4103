@@ -26,8 +26,15 @@ function getData() {
       [`name${i}`] : faker.lorem.word(),
       [`body${i}`] : faker.lorem.paragraph()
     };
+    let tagData = {
+      [`name${i}`]: faker.lorem.word(),
+      [`slug${i}`]: faker.datatype.uuid(),
+      [`color${i}`]: faker.internet.color().slice(1),
+      [`description${i}`]: faker.lorem.paragraph()
+    }
     pool.data_posts.push(postData);
     pool.data_pages.push(pageData);
+    pool.data_tags.push(tagData);
   }
 }
 
@@ -62,28 +69,39 @@ Then("I click New Tags button", async function () {
 });
 
 Then("I see the tag {string}", async function (value) {
-  let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  tagSlug = pool['data_tags'][elementIndex][value]
+  let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${tagSlug}/"]`);
   return await element;
 });
 
-When("I enter the name input field {string}", async function (value) {
+When("I enter the name input field with the {string}", async function (value) {
   let element = await this.driver.$("input#tag-name");
-  return await element.setValue(value);
+  elementIndex = parseInt(value.slice(-1)) - 1
+  tagName = pool['data_tags'][elementIndex][value]
+  return await element.setValue(tagName);
 });
 
-When("I enter the slug input field {string}", async function (value) {
+When("I enter the slug input field with the {string}", async function (value) {
   let element = await this.driver.$("input#tag-slug");
-  return await element.setValue(value);
+  await element.setValue("");
+  elementIndex = parseInt(value.slice(-1)) - 1
+  tagSlug = pool['data_tags'][elementIndex][value]
+  return await element.setValue(tagSlug);
 });
 
-When("I enter the color input field {string}", async function (value) {
+When("I enter the color input field the {string}", async function (value) {
     let element = await this.driver.$(`input[name="accent-color"]`);
-    return await element.setValue(value);
+    elementIndex = parseInt(value.slice(-1)) - 1
+    tagColor = pool['data_tags'][elementIndex][value]
+    return await element.setValue(tagColor);
 });
 
-When("I enter the description input field {string}", async function (value) {
+When("I enter the description input field the {string}", async function (value) {
     let element = await this.driver.$("textarea#tag-description");
-    return await element.setValue(value);
+    elementIndex = parseInt(value.slice(-1)) - 1
+    tagDescription = pool['data_tags'][elementIndex][value]
+    return await element.setValue(tagDescription);
 });
 
 When("I click save button", async function () {
@@ -92,7 +110,9 @@ When("I click save button", async function () {
 });
 
 When("I click the tag {string} button", async function (value) {
-    let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${value}/"]`);
+    elementIndex = parseInt(value.slice(-1)) - 1
+    tagSlug = pool['data_tags'][elementIndex][value]
+    let element = await this.driver.$(`a.gh-list-data.gh-tag-list-title.ember-view[href="#/tags/${tagSlug}/"]`);
     return await element.click();
 });
 

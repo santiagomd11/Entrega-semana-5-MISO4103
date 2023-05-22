@@ -12,15 +12,20 @@ Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas y crear u
   And I click tags button
   And I wait for 2 seconds 
   And I click New Tags button
-  And I enter the name input field "test"
-  And I enter the slug input field "test"
-  And I enter the color input field "e84565"
-  And I enter the description input field "A test description"
+  And I wait for 2 seconds 
+  And I enter the name input field with the "name1"
+  And I wait for 2 seconds 
+  And I enter the slug input field with the "slug1"
+  And I wait for 2 seconds 
+  And I enter the color input field the "color1"
+  And I wait for 2 seconds 
+  And I enter the description input field the "description1"
+  And I wait for 4 seconds 
   And I click save button
   And I wait for 3 seconds 
   And I click tags button
   And I wait for 3 seconds 
-  Then I see the tag "test" 
+  Then I see the tag "slug1"
 
 @web @user2
 Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas, crear una etiqueta y editarla
@@ -34,20 +39,34 @@ Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas, crear un
   And I click tags button
   And I wait for 2 seconds 
   And I click New Tags button
-  And I enter the name input field "test2"
-  And I enter the color input field "e84565"
-  And I enter the description input field "A test description"
+  And I wait for 2 seconds 
+  And I enter the name input field with the "name2"
+  And I wait for 2 seconds 
+  And I enter the slug input field with the "slug2"
+  And I wait for 2 seconds 
+  And I enter the color input field the "color2"
+  And I wait for 2 seconds 
+  And I enter the description input field the "description2"
+  And I wait for 4 seconds 
   And I click save button
   And I wait for 2 seconds 
   And I click tags button
   And I wait for 4 seconds 
-  And I click the tag "test2" button
-  And I wait for 5 seconds
-  And I enter the name input field "test2Editado"
+  And I click the tag "slug2" button
+  And I wait for 2 seconds
+  And I enter the name input field with the "name5"
+  And I wait for 2 seconds 
+  And I enter the slug input field with the "slug5"
+  And I wait for 2 seconds 
+  And I enter the color input field the "color5"
+  And I wait for 2 seconds 
+  And I enter the description input field the "description5"
+  And I wait for 4 seconds 
   And I click save button
+  And I wait for 2 seconds 
   And I click tags button
   And I wait for 3 seconds
-  Then I see the tag "test2Editado"
+  Then I see the tag "slug5"
 
 
 @web @user3
@@ -62,14 +81,21 @@ Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas, crear un
   And I click tags button
   And I wait for 2 seconds 
   And I click New Tags button
-  And I enter the name input field "borrame"
-  And I enter the color input field "e84565"
-  And I enter the description input field "A test description"
+  And I wait for 2 seconds 
+  And I enter the name input field with the "name3"
+  And I wait for 2 seconds 
+  And I enter the slug input field with the "slug3"
+  And I wait for 2 seconds 
+  And I enter the color input field the "color3"
+  And I wait for 2 seconds 
+  And I enter the description input field the "description3"
+  And I wait for 4 seconds 
   And I click save button
   And I wait for 3 seconds 
   And I click tags button
   And I wait for 2 seconds 
-  And I click the tag "borrame" button
+  And I click the tag "slug3" button
+  And I wait for 2 seconds 
   And I click the delete tag button
   And I wait for 2 seconds 
   And I click the confirm delete tag button
@@ -90,11 +116,19 @@ Scenario: Como usuario quiero loguearme en la pagina, listar etiquetas y crear u
   And I wait for 2 seconds
   And I click the internal tags button 
   And I click New Tags button
-  And I enter the name input field "#internalTest"
-  And I enter the color input field "e84565"
-  And I enter the description input field "A internalTest description"
+  And I wait for 2 seconds 
+  And I enter the name input field with the "name4"
+  And I wait for 2 seconds 
+  And I enter the slug input field with the "slug4"
+  And I wait for 2 seconds 
+  And I enter the color input field the "color4"
+  And I wait for 2 seconds 
+  And I enter the description input field the "description4"
+  And I wait for 4 seconds 
   And I click save button
   And I wait for 2 seconds
   And I click tags button from internal
+  And I wait for 2 seconds
   And I click the internal tags button 
-  Then I see the tag "internalTest"
+  And I wait for 3 seconds
+  Then I see the tag "slug4"

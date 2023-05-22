@@ -72,6 +72,7 @@ KRAKEN
   4. Escoger la estrategia que desea ejecutar, ej: cd PruebasKrakenEstrategia1
   5. Dado que kraken tiene problemas al correr los escenarios de cada feature de manera secuencial, se siguio la recomendacion que se menciono en slack: [link](https://uniandes-miso.slack.com/archives/C04V1M6EC3Y/p1683384377176309?thread_ts=1683383737.972989&cid=C04V1M6EC3Y). Por lo cual, puede encontrar las features siguiendo el path ./features/features. Selecciona la feature que quiere ejecutar y la coloca al nivel de ./features . En caso de que ya haya una feature debe moverla al directorio ./features/features y dejar solo la feature que que quiere ejecutar en ./features
   6. Correr el comando npx kraken-node run
+  7. En caso de tener problemas con faker al ejecutar npx kraken-node run. Ejecutar npm install faker o npm install faker@5.5.3, si es necesario tambien ejecutar npm audit fix --force.
  
 
 ## Semana  6

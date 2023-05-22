@@ -58,7 +58,7 @@ Para esta semana se aplicaron las siguientes tecnicas de generacion de datos, pa
   * Login en la pagina, crear un post draft, y publicarlo.
   * Login en la pagina, crear un post draft, y eliminarlo.
 
-## INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS
+### INSTRUCCIONES PARA EJECUCIÓN DE ESCENARIOS
 **KRAKEN**
 
   1. Pararse en la carpeta de PruebasKraken desde el directorio raíz sería cd PruebasKraken

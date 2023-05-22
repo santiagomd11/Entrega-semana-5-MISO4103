@@ -82,8 +82,7 @@ Para esta semana se aplicaron las siguientes tecnicas de generacion de datos, pa
         email: myjachis@gmail.com
         password: Mr.hellno19 
       ```
-  3. Abrir la carpeta de la semana 7 cd EntregaSemana7/PruebasPlaywright
-  4. Escoger la estrategia que desea ejecutar, ej: cd PruebasPlawrightEstrategia1
+  4. Escoger la estrategia que desea ejecutar ingresando a ese directorio, ej: cd PruebasPlaywrightEstrategia1
   5. Hacer npm install
   7. En caso de tener problemas con faker al ejecutar correr los escenarios de pruebas, ejecute npm install faker o npm install faker@5.5.3.
   8. Luego ejecute node index.js y verá como los escenarios de pruebas empiezan a ejecutarse uno a uno
